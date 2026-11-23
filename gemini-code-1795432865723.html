@@ -1,0 +1,2740 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>QuizVid 9:16 Pro — Broadcast Portrait Studio</title>
+<style>
+  :root {
+    --bg: #04070f;
+    --panel: rgba(12, 18, 32, 0.94);
+    --panel-2: #162038;
+    --border: #243456;
+    --text: #f8fafc;
+    --muted: #8ca0ba;
+    --primary: #6366f1;
+    --accent: #06b6d4;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-font-smoothing: antialiased; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', 'Nirmala UI', 'Noto Sans Devanagari', system-ui, sans-serif;
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ==================== ULTRA-CLEAN TOP BAR ==================== */
+  header.topbar {
+    height: 52px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-shrink: 0;
+    z-index: 30;
+  }
+  .brand { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 0.98rem; color: #fff; }
+  .badge-pro {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    font-size: 0.62rem; padding: 2px 7px; border-radius: 5px; text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .sync-pill {
+    font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 99px;
+    background: var(--panel-2); border: 1px solid var(--border); color: var(--muted);
+    cursor: pointer; transition: 0.2s; white-space: nowrap;
+  }
+  .sync-pill.online { border-color: rgba(16, 185, 129, 0.45); color: #6ee7b7; background: rgba(16, 185, 129, 0.1); }
+  .sync-pill.syncing { border-color: rgba(245, 158, 11, 0.45); color: #fde68a; background: rgba(245, 158, 11, 0.1); }
+
+  .top-center { display: flex; align-items: center; gap: 6px; }
+  .hud-chip {
+    background: #080d1a; border: 1px solid var(--border); padding: 4px 10px;
+    border-radius: 7px; font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+  }
+  .hud-chip b { color: var(--accent); }
+
+  .top-right { display: flex; align-items: center; gap: 6px; }
+
+  /* ==================== STATIC 9:16 PORTRAIT VIEWPORT ==================== */
+  main.stage-area {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background: radial-gradient(circle at center, #111b33 0%, #03050a 100%);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .portrait-frame {
+    height: 100%;
+    aspect-ratio: 9 / 16;
+    max-width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  canvas#stageCanvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 0 1.5px var(--border);
+    cursor: pointer;
+    background: #060a14;
+    display: block;
+    touch-action: manipulation;
+  }
+
+  /* Recording Indicator (DOM-only, never recorded) */
+  .rec-pill {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: rgba(10, 15, 28, 0.92);
+    border: 1.5px solid var(--danger);
+    color: #fecaca;
+    padding: 4px 11px;
+    border-radius: 99px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    z-index: 15;
+    pointer-events: none;
+  }
+  .rec-pill.active { display: inline-flex; }
+  .rec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--danger); animation: blink 1s infinite; }
+  .rec-pill.paused .rec-dot { background: var(--warning); animation: none; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  /* ==================== CREATOR CHEAT NOTE (DOM-ONLY · NEVER RECORDED) ==================== */
+  .cheat-note {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    background: rgba(7, 12, 24, 0.93);
+    border: 1.5px solid rgba(245, 158, 11, 0.72);
+    border-radius: 11px;
+    padding: 7px 10px;
+    z-index: 20;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .cheat-note.pos-top {
+    bottom: auto;
+    top: 40px;
+  }
+  .cheat-note.hidden { display: none; }
+
+  .cheat-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .cheat-tag {
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #fde68a;
+    background: rgba(245, 158, 11, 0.16);
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .cheat-actions { display: flex; gap: 4px; }
+  .cheat-mini-btn {
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.66rem;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .cheat-mini-btn:hover { background: var(--primary); }
+  .cheat-ans {
+    font-size: 0.78rem;
+    font-weight: 900;
+    color: #6ee7b7;
+    line-height: 1.25;
+  }
+  .cheat-exp {
+    font-size: 0.7rem;
+    color: #cbd5e1;
+    line-height: 1.25;
+  }
+  .cheat-next {
+    font-size: 0.65rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ==================== YOUTUBE SHORTS SAFE-ZONE GUIDE (DOM-ONLY · NEVER RECORDED) ==================== */
+  .yt-safe-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 12;
+    display: none;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .yt-safe-overlay.active { display: block; }
+  .yt-zone-right {
+    position: absolute;
+    right: 0;
+    bottom: 12%;
+    width: 16%;
+    height: 36%;
+    background: rgba(239, 68, 68, 0.16);
+    border: 1px dashed rgba(239, 68, 68, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.58rem;
+    font-weight: 800;
+    color: #fecaca;
+    writing-mode: vertical-rl;
+  }
+  .yt-zone-bottom {
+    position: absolute;
+    left: 0;
+    right: 16%;
+    bottom: 0;
+    height: 14%;
+    background: rgba(239, 68, 68, 0.14);
+    border-top: 1px dashed rgba(239, 68, 68, 0.75);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 4px;
+    font-size: 0.58rem;
+    font-weight: 800;
+    color: #fecaca;
+  }
+
+  /* Hidden Video Element for Active Camera Decoding (NOT display:none so mobile Safari/Chrome decodes frames) */
+  #camVideo {
+    position: fixed;
+    top: -10px;
+    left: -10px;
+    width: 2px;
+    height: 2px;
+    opacity: 0.001;
+    pointer-events: none;
+  }
+
+  /* ==================== BOTTOM CONTROL DOCK ==================== */
+  footer.dock {
+    height: 60px;
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-shrink: 0;
+    z-index: 30;
+    overflow-x: auto;
+  }
+  .dock-group { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+  .btn {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 7px 11px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: 0.14s ease;
+    white-space: nowrap;
+  }
+  .btn:hover:not(:disabled) { background: #1f2e4d; border-color: #3d5588; }
+  .btn:active:not(:disabled) { transform: scale(0.96); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn-success { background: var(--success); border-color: var(--success); color: #032b1b; font-weight: 800; }
+  .btn-warning { background: rgba(245, 158, 11, 0.18); border-color: var(--warning); color: #fde68a; }
+  .btn-danger { background: rgba(239, 68, 68, 0.18); border-color: var(--danger); color: #fca5a5; }
+  .btn-mic-on { background: rgba(239, 68, 68, 0.22); border-color: var(--danger); color: #fecaca; }
+  .btn-cam-on { background: rgba(6, 182, 212, 0.22); border-color: var(--accent); color: #cffafe; }
+  .btn-cheat-on { background: rgba(245, 158, 11, 0.2); border-color: var(--warning); color: #fef08a; }
+  .btn-sm { padding: 4px 8px; font-size: 0.72rem; }
+
+  .seg-switch {
+    display: flex;
+    background: #070b14;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2px;
+  }
+  .seg-switch button {
+    background: transparent; border: none; color: var(--muted);
+    padding: 5px 9px; border-radius: 6px; font-size: 0.74rem; font-weight: 700; cursor: pointer;
+  }
+  .seg-switch button.active { background: var(--primary); color: #fff; }
+
+  /* ==================== DRAWERS ==================== */
+  .backdrop {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.68);
+    backdrop-filter: blur(3px); z-index: 90; display: none;
+  }
+  .backdrop.open { display: block; }
+
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(820px, 96vw);
+    background: #0c1220;
+    border-left: 1px solid var(--border);
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer.narrow { width: min(440px, 96vw); }
+
+  .drawer-head {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--panel-2);
+  }
+  .drawer-head h2 { font-size: 0.95rem; color: #fff; }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 14px; user-select: text; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1.15fr; gap: 12px; }
+  @media (max-width: 720px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .top-center { display: none; }
+  }
+
+  .box {
+    background: #070b14;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+  .box h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); margin-bottom: 8px; }
+
+  label { display: block; font-size: 0.74rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  input[type="text"], input[type="url"], input[type="number"], select, textarea {
+    width: 100%; background: #0c1322; border: 1px solid var(--border); color: var(--text);
+    padding: 7px 9px; border-radius: 7px; font-size: 0.83rem; outline: none; user-select: text;
+  }
+  input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+  input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+  textarea { resize: vertical; font-family: 'Consolas', monospace; line-height: 1.4; }
+
+  .row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .row > * { flex: 1; }
+
+  .thumb-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .thumb-box {
+    width: 46px; height: 46px; border-radius: 8px; background: #0c1322;
+    border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0; font-size: 0.7rem; color: var(--muted);
+  }
+  .thumb-box img { width: 100%; height: 100%; object-fit: contain; }
+
+  .format-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.72rem; font-weight: 800; padding: 3px 9px; border-radius: 99px;
+    background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.45); color: #6ee7b7;
+  }
+
+  .q-list { display: flex; flex-direction: column; gap: 6px; max-height: 480px; overflow-y: auto; }
+  .q-card {
+    background: #0c1322; border: 1px solid var(--border); border-radius: 8px; padding: 9px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .q-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
+  .q-card-title { font-size: 0.84rem; font-weight: 700; line-height: 1.35; cursor: pointer; }
+  .q-card-title:hover { color: var(--accent); }
+  .q-opts-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 0.73rem; color: var(--muted); }
+  .q-opts-mini span.ans { color: #6ee7b7; font-weight: 800; }
+
+  .check-row { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text); cursor: pointer; margin: 6px 0; }
+  .check-row input { width: 15px; height: 15px; accent-color: var(--primary); }
+
+  .toast {
+    position: fixed; bottom: 72px; right: 14px;
+    background: var(--panel-2); border: 1px solid var(--accent); color: #fff;
+    padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+    z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.7); display: none;
+  }
+</style>
+</head>
+<body>
+
+<video id="camVideo" autoplay playsinline muted></video>
+
+<!-- ==================== TOP BAR ==================== -->
+<header class="topbar">
+  <div class="brand">
+    <span>⚡ QuizVid 9:16</span>
+    <span class="badge-pro">Pro Studio</span>
+    <span class="sync-pill" id="syncChip" title="Click to Sync Google Sheet">⏳ Syncing...</span>
+  </div>
+
+  <div class="top-center">
+    <div class="hud-chip">Q: <b id="hudQIndex">1/1</b></div>
+    <div class="hud-chip">Score: <b id="hudScore" style="color:var(--success)">0</b></div>
+    <div class="hud-chip">Streak: <b id="hudStreak" style="color:var(--warning)">0🔥</b></div>
+    <select id="topicFilterSelect" style="width:135px; padding:4px 8px; font-size:0.75rem;">
+      <option value="ALL">📚 All Topics</option>
+    </select>
+  </div>
+
+  <div class="top-right">
+    <button class="btn" id="btnOpenBank">📥 Bank (<span id="totalQCount">0</span>)</button>
+    <button class="btn" id="btnOpenSettings">⚙️ Studio</button>
+    <button class="btn" id="btnFullscreen" title="Fullscreen">⛶</button>
+  </div>
+</header>
+
+<!-- ==================== LOCKED 9:16 PORTRAIT STAGE ==================== -->
+<main class="stage-area">
+  <div class="portrait-frame">
+    <!-- Recording Pill (DOM-only, never recorded) -->
+    <div class="rec-pill" id="recIndicator">
+      <span class="rec-dot"></span>
+      <span id="recStateLabel">REC</span>
+      <span id="recTimeLabel">00:00</span>
+    </div>
+
+    <!-- YouTube Shorts Safe-Zone Guide (DOM-only, never recorded) -->
+    <div class="yt-safe-overlay" id="ytSafeOverlay">
+      <div class="yt-zone-right">YT BUTTONS</div>
+      <div class="yt-zone-bottom">YOUTUBE CAPTION ZONE</div>
+    </div>
+
+    <!-- Creator Cheat Note (DOM-only, 100% excluded from canvas capture & MP4 export) -->
+    <div class="cheat-note" id="cheatOverlay">
+      <div class="cheat-head">
+        <span class="cheat-tag">🔒 Cheat Note · Not in MP4</span>
+        <div class="cheat-actions">
+          <button class="cheat-mini-btn" id="btnCheatPos" title="Move Top / Bottom">↕ Move</button>
+          <button class="cheat-mini-btn" id="btnCheatClose" title="Hide Cheat Note (C)">✕</button>
+        </div>
+      </div>
+      <div class="cheat-ans" id="cheatAnsText">✅ ANS: —</div>
+      <div class="cheat-exp" id="cheatExpText"></div>
+      <div class="cheat-next" id="cheatNextText"></div>
+    </div>
+
+    <canvas id="stageCanvas" width="720" height="1280"></canvas>
+  </div>
+</main>
+
+<!-- ==================== BOTTOM DOCK ==================== -->
+<footer class="dock">
+  <div class="dock-group">
+    <div class="seg-switch">
+      <button class="active" id="modeInteractiveBtn">🎓 Teach</button>
+      <button id="modeAutoBtn">🤖 Auto</button>
+    </div>
+    <button class="btn btn-warning" id="btnReviseWrong" style="display:none;">🔁 Wrong (<span id="wrongBadgeCount">0</span>)</button>
+  </div>
+
+  <div class="dock-group">
+    <button class="btn" id="btnPrevQ" title="Previous (Left Arrow)">⏮</button>
+    <button class="btn btn-primary" id="btnPlayPause" style="min-width:112px;">▶ Start</button>
+    <button class="btn" id="btnRevealNow" title="Reveal Answer (R)">👁 Reveal</button>
+    <button class="btn" id="btn5050" title="50:50 Lifeline (F)">½ 50:50</button>
+    <button class="btn" id="btnNextQ" title="Next (Right Arrow / Enter)">⏭</button>
+  </div>
+
+  <div class="dock-group">
+    <button class="btn" id="btnCamToggle" title="Toggle Live Bottom-Left Camera">📷 Cam Off</button>
+    <button class="btn" id="btnCamFlip" title="Switch Front / Back Main Camera" style="display:none;">🔄 Flip</button>
+    <button class="btn btn-cheat-on" id="btnCheatToggle" title="Toggle Creator Cheat Note (C) — Never Recorded">🕵️ Cheat</button>
+    <button class="btn" id="btnMicToggle" title="Toggle Microphone Voiceover in Recording">🎙️ Mic Off</button>
+    <button class="btn btn-success" id="btnRecStart">⏺ Record</button>
+    <button class="btn btn-warning" id="btnRecPause" style="display:none;">⏸ Pause</button>
+    <button class="btn btn-danger" id="btnRecStop" style="display:none;">⏹ Save</button>
+    <a id="btnDownloadVideo" class="btn btn-primary" style="display:none; text-decoration:none;" download="quiz_shorts_9x16.mp4">⬇ Download MP4</a>
+  </div>
+</footer>
+
+<!-- ==================== DRAWER 1: QUESTION BANK & GOOGLE SHEET ==================== -->
+<div class="backdrop" id="drawerBackdrop"></div>
+
+<aside class="drawer" id="bankDrawer">
+  <div class="drawer-head">
+    <h2>📚 Question Bank, Bulk Import & Google Sheet Sync</h2>
+    <button class="btn btn-sm btn-danger" id="btnCloseBank">✕ Close</button>
+  </div>
+  <div class="drawer-body">
+    <div class="box" style="border-color: rgba(6, 182, 212, 0.4);">
+      <h3>☁️ Google Apps Script Live Backend</h3>
+      <div class="row">
+        <input type="url" id="sheetApiUrl" value="https://script.google.com/macros/s/AKfycbwDxOgbjCa4N4bAcnA8rNaSfponcn9zmxeDMlNYuOrRJJOYrW-c_r6m5JGIGKlvxW-J5Q/exec">
+      </div>
+      <div class="row" style="margin-bottom:0;">
+        <button class="btn btn-success" id="btnCloudPush">⬆ Push to Sheet</button>
+        <button class="btn btn-primary" id="btnCloudPull">⬇ Pull from Sheet</button>
+        <label class="check-row" style="margin:0; flex:0 0 auto;">
+          <input type="checkbox" id="autoCloudSync" checked> Auto-Sync
+        </label>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="box">
+          <h3>📥 Smart Bulk Import (Text / JSON / CSV)</h3>
+          <textarea id="bulkTextInput" rows="6" placeholder="Q1. CPU का पूरा नाम क्या है? [Computer]
+A) Central Process Unit
+B) Central Processing Unit
+C) Computer Personal Unit
+D) Central Processor Utility
+Ans: B
+Exp: CPU कंप्यूटर का मुख्य प्रोसेसर होता है।"></textarea>
+          <div class="row" style="margin-top:6px;">
+            <button class="btn btn-primary" id="btnBulkAppend">➕ Append</button>
+            <button class="btn" id="btnBulkReplace">🔄 Replace All</button>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <label class="btn" style="margin:0;">
+              📂 Upload File
+              <input type="file" id="fileUploadInput" accept=".txt,.json,.csv" hidden>
+            </label>
+            <button class="btn" id="btnExportJson">💾 JSON</button>
+            <button class="btn" id="btnExportCsv">📊 CSV</button>
+          </div>
+        </div>
+
+        <div class="box">
+          <h3 id="editorHeading">✏️ Add / Edit Single Question</h3>
+          <input type="hidden" id="editIndexInput" value="-1">
+          <div class="row">
+            <div><label>Category</label><input type="text" id="edCat" placeholder="Computer Science"></div>
+            <div><label>Correct Answer</label>
+              <select id="edAns">
+                <option value="0">Option A</option>
+                <option value="1">Option B</option>
+                <option value="2">Option C</option>
+                <option value="3">Option D</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:6px;"><label>Question</label><textarea id="edQ" rows="2"></textarea></div>
+          <div class="row">
+            <div><label>Option A</label><input type="text" id="edA"></div>
+            <div><label>Option B</label><input type="text" id="edB"></div>
+          </div>
+          <div class="row">
+            <div><label>Option C</label><input type="text" id="edC"></div>
+            <div><label>Option D</label><input type="text" id="edD"></div>
+          </div>
+          <div style="margin-bottom:8px;"><label>Explanation</label><input type="text" id="edExp"></div>
+          <div class="row" style="margin-bottom:0;">
+            <button class="btn btn-primary" id="btnSaveSingleQ">💾 Save Question</button>
+            <button class="btn" id="btnClearEditor">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="box" style="display:flex; flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h3 style="margin:0;">📋 Active Deck</h3>
+          <div style="display:flex; gap:5px;">
+            <button class="btn btn-sm" id="btnShuffleDeck">🔀 Shuffle</button>
+            <button class="btn btn-sm btn-danger" id="btnWipeDeck">🗑 Clear</button>
+          </div>
+        </div>
+        <input type="text" id="bankSearchInput" placeholder="Search question or category..." style="margin-bottom:8px;">
+        <div class="q-list" id="bankListContainer"></div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ==================== DRAWER 2: STUDIO SETTINGS ==================== -->
+<aside class="drawer narrow" id="settingsDrawer">
+  <div class="drawer-head">
+    <h2>⚙️ Studio, Camera & YouTube Export</h2>
+    <button class="btn btn-sm btn-danger" id="btnCloseSettings">✕ Close</button>
+  </div>
+  <div class="drawer-body">
+
+    <!-- LIVE CAMERA OVERLAY (BOTTOM-LEFT HALF) -->
+    <div class="box" style="border-color: rgba(6, 182, 212, 0.55);">
+      <h3>📹 Live Camera (Bottom-Left Overlay)</h3>
+      <div class="row">
+        <button class="btn btn-primary" id="btnDrawerCamToggle">📷 Turn Camera ON</button>
+        <button class="btn" id="btnDrawerCamFlip">🔄 Front / Back</button>
+      </div>
+      <div class="row">
+        <div>
+          <label>Camera Lens</label>
+          <select id="cfgCamFacing">
+            <option value="user">🤳 Front Camera (Selfie)</option>
+            <option value="environment">🎥 Back Main Camera</option>
+          </select>
+        </div>
+        <div>
+          <label>Frame Shape</label>
+          <select id="cfgCamShape">
+            <option value="circle">Circle (Avatar)</option>
+            <option value="rounded">Rounded Square</option>
+            <option value="portrait">Portrait Card</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:6px;">
+        <label>Camera Size (<span id="valCamSize">128</span>px)</label>
+        <input type="range" id="cfgCamSize" min="84" max="180" value="128">
+      </div>
+      <label class="check-row"><input type="checkbox" id="cfgCamMirror" checked> Mirror Front Camera (Natural Selfie View)</label>
+      <div id="camStatusText" style="font-size:0.73rem; color:var(--muted);">Camera is OFF (tap to enable in bottom-left)</div>
+    </div>
+
+    <!-- CREATOR CHEAT NOTE & YOUTUBE GUIDE -->
+    <div class="box" style="border-color: rgba(245, 158, 11, 0.45);">
+      <h3>🕵️ Creator Cheat Note & Guides (Never Recorded)</h3>
+      <label class="check-row"><input type="checkbox" id="cfgCheatShow" checked> Show Answer Cheat Note (Excluded from MP4)</label>
+      <label class="check-row" style="margin-bottom:0;"><input type="checkbox" id="cfgYtSafeGuide"> Preview YouTube Shorts UI Safe-Zones</label>
+    </div>
+
+    <!-- CUSTOM LOGO PNG & WATERMARK SYSTEM -->
+    <div class="box" style="border-color: rgba(99, 102, 241, 0.45);">
+      <h3>🏷️ Custom Logo PNG & Export Watermark</h3>
+      <div class="thumb-row">
+        <div class="thumb-box" id="logoThumbBox">PNG</div>
+        <div style="flex:1; display:flex; gap:6px;">
+          <label class="btn btn-primary" style="margin:0; flex:1;">
+            ✨ Upload Logo PNG
+            <input type="file" id="logoUploadInput" accept="image/png,image/webp,image/*" hidden>
+          </label>
+          <button class="btn btn-danger" id="btnClearLogo">✕</button>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Logo Placement</label>
+          <select id="cfgLogoPos">
+            <option value="top-right">Top Right</option>
+            <option value="top-left">Top Left</option>
+            <option value="bottom-right">Bottom Right</option>
+            <option value="center-ghost">Center Ghost</option>
+          </select>
+        </div>
+        <div>
+          <label>Logo Size (<span id="valLogoSize">82</span>px)</label>
+          <input type="range" id="cfgLogoSize" min="48" max="150" value="82">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Logo Opacity (<span id="valLogoOpacity">90</span>%)</label>
+          <input type="range" id="cfgLogoOpacity" min="15" max="100" value="90">
+        </div>
+        <div>
+          <label>Export Watermark Style</label>
+          <select id="cfgWatermarkMode">
+            <option value="diagonal">Center Diagonal + Footer</option>
+            <option value="tiled">Tiled Subtle + Footer</option>
+            <option value="footer">Footer Handle Only</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label>Background Watermark Opacity (<span id="valWmOpacity">11</span>%)</label>
+        <input type="range" id="cfgWmOpacity" min="4" max="35" value="11">
+      </div>
+    </div>
+
+    <!-- BRANDING & THEME -->
+    <div class="box">
+      <h3>🎨 Branding & Visual Theme</h3>
+      <div style="margin-bottom:8px;">
+        <label>Series Header Title</label>
+        <input type="text" id="cfgTitle" value="Top GK & Computer Science MCQs">
+      </div>
+      <div style="margin-bottom:8px;">
+        <label>Channel Watermark Text</label>
+        <input type="text" id="cfgChannel" value="@AbhishekDigitalStudio">
+      </div>
+      <div>
+        <label>Color Palette</label>
+        <select id="cfgTheme">
+          <option value="obsidian">Obsidian Cyber Neon (Default)</option>
+          <option value="emerald">Emerald Matrix Gold</option>
+          <option value="crimson">Royal Crimson Velvet</option>
+          <option value="daylight">Clean Daylight Paper</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- YOUTUBE-READY VIDEO EXPORT ENGINE -->
+    <div class="box" style="border-color: rgba(16, 185, 129, 0.45);">
+      <h3>🎬 YouTube Shorts Export Engine (9:16 HD)</h3>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <span style="font-size:0.78rem; color:var(--muted);">Export Codec:</span>
+        <span class="format-badge" id="exportFormatBadge">Checking...</span>
+      </div>
+      <div id="exportCodecDetail" style="font-size:0.7rem; color:var(--muted); margin-bottom:8px;">720×1280 · 9:16 Vertical · YouTube Verified</div>
+      <div class="row" style="margin-bottom:0;">
+        <div>
+          <label>Video Bitrate</label>
+          <select id="cfgBitrate">
+            <option value="4500000">4.5 Mbps (Fast Upload / Low RAM)</option>
+            <option value="6000000" selected>6.0 Mbps (YouTube HD Ideal)</option>
+          </select>
+        </div>
+        <div>
+          <label>Capture FPS</label>
+          <select id="cfgFps">
+            <option value="30" selected>30 FPS (Best Stability)</option>
+            <option value="60">60 FPS (High CPU)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMERS & RANGE -->
+    <div class="box">
+      <h3>⏱️ Timers & Question Range</h3>
+      <div class="row">
+        <div>
+          <label>Countdown (Sec)</label>
+          <input type="number" id="cfgThinkSec" min="3" max="60" value="7">
+        </div>
+        <div>
+          <label>Reveal Hold (Sec)</label>
+          <input type="number" id="cfgHoldSec" min="2" max="20" value="4">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Range From Q#</label>
+          <input type="number" id="cfgRangeFrom" min="1" value="1">
+        </div>
+        <div>
+          <label>Range To Q#</label>
+          <input type="number" id="cfgRangeTo" min="1" value="50">
+        </div>
+        <div style="flex:0 0 auto; align-self:flex-end;">
+          <button class="btn btn-primary" id="btnApplyRange">Apply</button>
+        </div>
+      </div>
+      <label class="check-row"><input type="checkbox" id="cfgShowExp" checked> Show Explanation Card on Reveal</label>
+      <label class="check-row"><input type="checkbox" id="cfgAutoStartTimer" checked> Auto-Start Timer on Question Change</label>
+    </div>
+
+    <!-- AUDIO -->
+    <div class="box">
+      <h3>🔊 Studio Audio & Background Music</h3>
+      <label class="check-row"><input type="checkbox" id="cfgSoundTicks" checked> Soft Broadcast Woodblock Tick & Chime</label>
+      <div style="margin-top:8px;">
+        <label>Background Music (MP3 / WAV — Auto-Mixed in Video)</label>
+        <div class="row" style="margin-bottom:4px;">
+          <label class="btn" style="margin:0;">
+            🎵 Load BGM
+            <input type="file" id="bgmUpload" accept="audio/*" hidden>
+          </label>
+          <button class="btn btn-danger" id="btnStopBgm">🔇 Clear BGM</button>
+        </div>
+        <div id="bgmStatusText" style="font-size:0.74rem; color:var(--muted);">No background music loaded</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  /* ==================== 1. STATE & PERMANENT SYNC ==================== */
+  const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDxOgbjCa4N4bAcnA8rNaSfponcn9zmxeDMlNYuOrRJJOYrW-c_r6m5JGIGKlvxW-J5Q/exec';
+  const LS_DECK_KEY   = 'quizvid_pro_9x16_v6';
+  const LS_URL_KEY    = 'quizvid_pro_url_v6';
+  const LS_ASSETS_KEY = 'quizvid_pro_assets_v7';
+
+  let questions = [];
+  let meta = { title: 'Top GK & Computer Science MCQs', channel: '@AbhishekDigitalStudio' };
+
+  // Persistent Studio Assets (Live Camera Config + Custom PNG Logo + Watermark + Cheat Note Prefs)
+  let brandAssets = {
+    camFacing: 'user',     // 'user' (Front) | 'environment' (Back Main)
+    camShape: 'circle',    // 'circle' | 'rounded' | 'portrait'
+    camSize: 128,
+    camMirror: true,
+    cheatShow: true,
+    cheatPos: 'bottom',    // 'bottom' | 'top'
+    logoDataUrl: '',
+    logoPos: 'top-right',
+    logoSize: 82,
+    logoOpacity: 90,
+    wmMode: 'diagonal',
+    wmOpacity: 11
+  };
+  let logoImg = null;
+
+  // Live Camera State
+  const camVideo = document.getElementById('camVideo');
+  let camStream = null;
+  let camActive = false;
+
+  let activePool = [];
+  let curIdx = 0;
+  let score = 0;
+  let streak = 0;
+  let wrongIds = new Set();
+
+  // Animation & Timer Clocks
+  let playMode = 'interactive'; // 'interactive' | 'auto'
+  let phase = 'thinking';       // 'thinking' | 'revealed'
+  let isRunning = false;
+  let phaseElapsedMs = 0;
+  let enterAnimMs = 0;
+  let revealAnimMs = 0;
+  let lastFrameTime = performance.now();
+  let lastWholeSecondBeep = -1;
+
+  let selectedOption = -1;
+  let hiddenOptions = new Set();
+  let optionHitBoxes = [];
+  let revealParticles = [];
+
+  const starterQuestions = [
+    { id: 101, category: 'Computer Science', q: 'Which data structure follows the LIFO (Last In, First Out) principle?', options: ['Queue', 'Stack', 'Linked List', 'Binary Tree'], ans: 1, exp: 'Stack में डेटा ऊपर (Top) से ही जुड़ता और हटता है।' },
+    { id: 102, category: 'General Knowledge', q: 'सौरमंडल में किस ग्रह के पास सबसे अधिक प्रमाणित उपग्रह (Moons) हैं?', options: ['बृहस्पति (Jupiter)', 'शनि (Saturn)', 'अरुण (Uranus)', 'वरुण (Neptune)'], ans: 1, exp: 'शनि (Saturn) के पास 140 से अधिक प्रमाणित उपग्रह हैं।' },
+    { id: 103, category: 'Networking', q: 'सुरक्षित वेब ब्राउज़िंग (HTTPS) के लिए डिफ़ॉल्ट पोर्ट नंबर क्या है?', options: ['Port 80', 'Port 21', 'Port 443', 'Port 8080'], ans: 2, exp: 'HTTPS एन्क्रिप्टेड संचार के लिए TCP Port 443 का उपयोग करता है।' },
+    { id: 104, category: 'Indian Polity', q: 'भारतीय संविधान के किस अनुच्छेद को डॉ. अंबेडकर ने "संविधान की आत्मा" कहा था?', options: ['अनुच्छेद 14', 'अनुच्छेद 19', 'अनुच्छेद 21', 'अनुच्छेद 32'], ans: 3, exp: 'अनुच्छेद 32 संवैधानिक उपचारों का अधिकार प्रदान करता है।' }
+  ];
+
+  if (navigator.storage && navigator.storage.persist) {
+    navigator.storage.persist().catch(() => {});
+  }
+
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.style.display = 'block';
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.style.display = 'none', 2600);
+  }
+
+  function setSyncStatus(state, text) {
+    const chip = document.getElementById('syncChip');
+    chip.className = 'sync-pill' + (state ? ' ' + state : '');
+    chip.textContent = text;
+  }
+
+  /* ==================== LIVE FRONT & BACK CAMERA CONTROLLER ==================== */
+  async function startLiveCamera(facingMode = brandAssets.camFacing) {
+    // Always stop previous stream first so Android devices release the sensor cleanly
+    stopLiveCamera(false);
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      showToast('Camera API requires HTTPS or localhost');
+      return false;
+    }
+
+    const attempts = [
+      { video: { facingMode: { exact: facingMode }, width: { ideal: 480 }, height: { ideal: 480 }, frameRate: { ideal: 30, max: 30 } }, audio: false },
+      { video: { facingMode, width: { ideal: 480 }, height: { ideal: 480 }, frameRate: { ideal: 30, max: 30 } }, audio: false },
+      { video: { width: { ideal: 480 }, height: { ideal: 480 } }, audio: false }
+    ];
+
+    let stream = null;
+    for (const constraints of attempts) {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        break;
+      } catch (err) {
+        if (err && (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError')) {
+          showToast('Camera permission denied');
+          updateCameraUI();
+          return false;
+        }
+      }
+    }
+
+    if (!stream) {
+      showToast('No camera detected on this device');
+      updateCameraUI();
+      return false;
+    }
+
+    camStream = stream;
+    camVideo.srcObject = stream;
+    try { await camVideo.play(); } catch (e) {}
+
+    brandAssets.camFacing = facingMode;
+    document.getElementById('cfgCamFacing').value = facingMode;
+    camActive = true;
+    saveBrandAssets();
+    updateCameraUI();
+    computeSmartPortraitLayout();
+    showToast(facingMode === 'environment' ? '🎥 Back Main Camera LIVE' : '🤳 Front Camera LIVE');
+    return true;
+  }
+
+  function stopLiveCamera(notify = true) {
+    if (camStream) {
+      camStream.getTracks().forEach(t => t.stop());
+      camStream = null;
+    }
+    camVideo.srcObject = null;
+    camActive = false;
+    updateCameraUI();
+    computeSmartPortraitLayout();
+    if (notify) showToast('📷 Camera turned OFF');
+  }
+
+  async function flipLiveCamera() {
+    const nextFacing = brandAssets.camFacing === 'user' ? 'environment' : 'user';
+    brandAssets.camFacing = nextFacing;
+    document.getElementById('cfgCamFacing').value = nextFacing;
+    saveBrandAssets();
+    if (camActive) {
+      await startLiveCamera(nextFacing);
+    } else {
+      await startLiveCamera(nextFacing);
+    }
+  }
+
+  function updateCameraUI() {
+    const dockBtn = document.getElementById('btnCamToggle');
+    const flipBtn = document.getElementById('btnCamFlip');
+    const drawerBtn = document.getElementById('btnDrawerCamToggle');
+    const statusTxt = document.getElementById('camStatusText');
+
+    if (camActive) {
+      const label = brandAssets.camFacing === 'environment' ? 'Back' : 'Front';
+      dockBtn.classList.add('btn-cam-on');
+      dockBtn.textContent = `📹 ${label} ON`;
+      flipBtn.style.display = 'inline-flex';
+      drawerBtn.classList.remove('btn-primary');
+      drawerBtn.classList.add('btn-danger');
+      drawerBtn.textContent = '⏹ Turn Camera OFF';
+      statusTxt.style.color = '#6ee7b7';
+      statusTxt.textContent = `LIVE: ${brandAssets.camFacing === 'environment' ? 'Back Main Camera' : 'Front Camera'} (Bottom-Left)`;
+    } else {
+      dockBtn.classList.remove('btn-cam-on');
+      dockBtn.textContent = '📷 Cam Off';
+      flipBtn.style.display = 'none';
+      drawerBtn.classList.remove('btn-danger');
+      drawerBtn.classList.add('btn-primary');
+      drawerBtn.textContent = '📷 Turn Camera ON';
+      statusTxt.style.color = 'var(--muted)';
+      statusTxt.textContent = 'Camera is OFF (tap to enable in bottom-left)';
+    }
+  }
+
+  /* ==================== CREATOR CHEAT NOTE (UNRECORDED DOM HUD) ==================== */
+  function applyCheatNoteVisibility() {
+    const overlay = document.getElementById('cheatOverlay');
+    const dockBtn = document.getElementById('btnCheatToggle');
+    const chk = document.getElementById('cfgCheatShow');
+
+    chk.checked = brandAssets.cheatShow;
+    overlay.classList.toggle('hidden', !brandAssets.cheatShow);
+    overlay.classList.toggle('pos-top', brandAssets.cheatPos === 'top');
+
+    if (brandAssets.cheatShow) {
+      dockBtn.classList.add('btn-cheat-on');
+      dockBtn.textContent = '🕵️ Cheat ON';
+    } else {
+      dockBtn.classList.remove('btn-cheat-on');
+      dockBtn.textContent = '🕵️ Cheat Off';
+    }
+  }
+
+  function updateCheatNoteContent() {
+    const letters = ['A', 'B', 'C', 'D'];
+    const qObj = activePool[curIdx] || starterQuestions[0];
+    const ansIdx = Math.max(0, Math.min(3, qObj.ans || 0));
+    const ansVal = (qObj.options && qObj.options[ansIdx]) ? qObj.options[ansIdx] : '';
+
+    document.getElementById('cheatAnsText').textContent = `✅ ANS: ${letters[ansIdx]}) ${ansVal}`;
+
+    const expEl = document.getElementById('cheatExpText');
+    if (qObj.exp) {
+      expEl.style.display = 'block';
+      expEl.textContent = `💡 ${qObj.exp}`;
+    } else {
+      expEl.style.display = 'none';
+    }
+
+    const nextEl = document.getElementById('cheatNextText');
+    if (curIdx < activePool.length - 1) {
+      nextEl.textContent = `⏭ Next Q${curIdx + 2}: ${activePool[curIdx + 1].q}`;
+    } else {
+      nextEl.textContent = `🏁 Last question in active deck`;
+    }
+  }
+
+  /* ==================== LOGO PNG OPTIMIZER & BRAND PERSISTENCE ==================== */
+  function resizePngToDataUrl(file, maxDim) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = reject;
+        img.onload = () => {
+          let w = img.naturalWidth;
+          let h = img.naturalHeight;
+          if (w > maxDim || h > maxDim) {
+            const ratio = Math.min(maxDim / w, maxDim / h);
+            w = Math.max(1, Math.round(w * ratio));
+            h = Math.max(1, Math.round(h * ratio));
+          }
+          const c = document.createElement('canvas');
+          c.width = w;
+          c.height = h;
+          const cx = c.getContext('2d');
+          cx.drawImage(img, 0, 0, w, h);
+          resolve(c.toDataURL('image/png'));
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function loadBrandImage(dataUrl, onDone) {
+    if (!dataUrl) { onDone(null); return; }
+    const img = new Image();
+    img.onload = () => onDone(img);
+    img.onerror = () => onDone(null);
+    img.src = dataUrl;
+  }
+
+  function updateLogoPreview() {
+    const lBox = document.getElementById('logoThumbBox');
+    lBox.innerHTML = brandAssets.logoDataUrl ? `<img src="${brandAssets.logoDataUrl}" alt="Logo">` : 'PNG';
+  }
+
+  function saveBrandAssets() {
+    try {
+      localStorage.setItem(LS_ASSETS_KEY, JSON.stringify(brandAssets));
+    } catch (e) {
+      showToast('Logo too large for browser storage; active for this session.');
+    }
+    rebuildBackgroundCache();
+  }
+
+  function loadBrandAssets() {
+    try {
+      const raw = localStorage.getItem(LS_ASSETS_KEY);
+      if (raw) {
+        Object.assign(brandAssets, JSON.parse(raw));
+      }
+    } catch (e) {}
+
+    document.getElementById('cfgCamFacing').value = brandAssets.camFacing;
+    document.getElementById('cfgCamShape').value = brandAssets.camShape;
+    document.getElementById('cfgCamSize').value = brandAssets.camSize;
+    document.getElementById('valCamSize').textContent = brandAssets.camSize;
+    document.getElementById('cfgCamMirror').checked = brandAssets.camMirror;
+
+    document.getElementById('cfgLogoPos').value = brandAssets.logoPos;
+    document.getElementById('cfgLogoSize').value = brandAssets.logoSize;
+    document.getElementById('valLogoSize').textContent = brandAssets.logoSize;
+    document.getElementById('cfgLogoOpacity').value = brandAssets.logoOpacity;
+    document.getElementById('valLogoOpacity').textContent = brandAssets.logoOpacity;
+
+    document.getElementById('cfgWatermarkMode').value = brandAssets.wmMode;
+    document.getElementById('cfgWmOpacity').value = brandAssets.wmOpacity;
+    document.getElementById('valWmOpacity').textContent = brandAssets.wmOpacity;
+
+    updateLogoPreview();
+    applyCheatNoteVisibility();
+    updateCameraUI();
+    loadBrandImage(brandAssets.logoDataUrl, (img) => { logoImg = img; rebuildBackgroundCache(); });
+  }
+
+  let syncTimer = null;
+  function saveLocalAndSync(pushCloud = true) {
+    meta.title = document.getElementById('cfgTitle').value.trim() || 'Live Quiz Session';
+    meta.channel = document.getElementById('cfgChannel').value.trim() || '';
+    const url = document.getElementById('sheetApiUrl').value.trim() || DEFAULT_SCRIPT_URL;
+    localStorage.setItem(LS_URL_KEY, url);
+    localStorage.setItem(LS_DECK_KEY, JSON.stringify({ meta, questions, ts: Date.now() }));
+    rebuildBackgroundCache();
+
+    if (pushCloud && document.getElementById('autoCloudSync').checked) {
+      clearTimeout(syncTimer);
+      setSyncStatus('syncing', '⏳ Saving...');
+      syncTimer = setTimeout(() => pushToSheet(true), 1200);
+    }
+  }
+
+  function loadLocalData() {
+    const savedUrl = localStorage.getItem(LS_URL_KEY) || DEFAULT_SCRIPT_URL;
+    document.getElementById('sheetApiUrl').value = savedUrl;
+    try {
+      const raw = localStorage.getItem(LS_DECK_KEY);
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (data.meta) {
+          meta = data.meta;
+          document.getElementById('cfgTitle').value = meta.title || '';
+          document.getElementById('cfgChannel').value = meta.channel || '';
+        }
+        if (Array.isArray(data.questions) && data.questions.length) {
+          questions = data.questions;
+          return;
+        }
+      }
+    } catch (e) {}
+    questions = JSON.parse(JSON.stringify(starterQuestions));
+  }
+
+  async function pushToSheet(silent = false) {
+    const url = document.getElementById('sheetApiUrl').value.trim() || DEFAULT_SCRIPT_URL;
+    setSyncStatus('syncing', '⬆ Syncing...');
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ meta, questions })
+      });
+      const out = await res.json();
+      if (out.status === 'saved') {
+        setSyncStatus('online', `☁️ Synced (${out.count})`);
+        if (!silent) showToast(`Saved ${out.count} questions to Google Sheet!`);
+      } else throw new Error();
+    } catch (e) {
+      setSyncStatus('', '💾 Local Saved');
+      if (!silent) showToast('Saved on device.');
+    }
+  }
+
+  async function pullFromSheet(silent = false) {
+    const url = document.getElementById('sheetApiUrl').value.trim() || DEFAULT_SCRIPT_URL;
+    setSyncStatus('syncing', '⬇ Loading...');
+    try {
+      const res = await fetch(url);
+      const out = await res.json();
+      if (out.status === 'ok' && Array.isArray(out.questions)) {
+        if (out.questions.length > 0) questions = out.questions;
+        if (out.meta) {
+          meta = out.meta;
+          document.getElementById('cfgTitle').value = meta.title || '';
+          document.getElementById('cfgChannel').value = meta.channel || '';
+        }
+        saveLocalAndSync(false);
+        document.getElementById('cfgRangeTo').value = questions.length;
+        rebuildActivePool();
+        renderBankDrawer();
+        setSyncStatus('online', `☁️ Synced (${questions.length})`);
+        if (!silent) showToast(`Loaded ${questions.length} questions from Google Sheet!`);
+      } else throw new Error();
+    } catch (e) {
+      setSyncStatus('', '💾 Local Ready');
+      if (!silent) showToast('Using local saved deck.');
+    }
+  }
+
+  /* ==================== 2. STUDIO AUDIO ENGINE + LIVE MIC MIXER ==================== */
+  class StudioAudioEngine {
+    constructor() {
+      this.ctx = null;
+      this.masterOut = null;
+      this.streamDest = null;
+      this.bgmBuffer = null;
+      this.bgmSource = null;
+      this.bgmGain = null;
+      this.micStream = null;
+      this.micNode = null;
+      this.micEnabled = false;
+    }
+
+    ensure() {
+      if (!this.ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AC();
+        this.streamDest = this.ctx.createMediaStreamDestination();
+
+        const comp = this.ctx.createDynamicsCompressor();
+        comp.threshold.setValueAtTime(-14, this.ctx.currentTime);
+        comp.ratio.setValueAtTime(4, this.ctx.currentTime);
+        comp.connect(this.ctx.destination);
+        comp.connect(this.streamDest);
+        this.masterOut = comp;
+
+        // Continuous sub-audible stereo carrier guarantees clean YouTube audio sync from frame 0
+        const carrier = this.ctx.createOscillator();
+        const cGain = this.ctx.createGain();
+        carrier.frequency.setValueAtTime(25, this.ctx.currentTime);
+        cGain.gain.setValueAtTime(0.00012, this.ctx.currentTime);
+        carrier.connect(cGain);
+        cGain.connect(this.streamDest);
+        carrier.start();
+      }
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+    }
+
+    async toggleMic() {
+      this.ensure();
+      if (this.micEnabled) {
+        if (this.micNode) { try { this.micNode.disconnect(); } catch (e) {} this.micNode = null; }
+        if (this.micStream) { this.micStream.getTracks().forEach(t => t.stop()); this.micStream = null; }
+        this.micEnabled = false;
+        return false;
+      } else {
+        try {
+          this.micStream = await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+          });
+          this.micNode = this.ctx.createMediaStreamSource(this.micStream);
+          this.micNode.connect(this.streamDest);
+          this.micEnabled = true;
+          return true;
+        } catch (err) {
+          showToast('Microphone permission denied');
+          return false;
+        }
+      }
+    }
+
+    tick(urgent = false) {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      const t = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      const f = urgent ? 860 : 600;
+      osc.frequency.setValueAtTime(f, t);
+      osc.frequency.exponentialRampToValueAtTime(f * 0.45, t + 0.042);
+
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(urgent ? 0.22 : 0.14, t + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.05);
+
+      osc.connect(gain);
+      gain.connect(this.masterOut);
+      osc.start(t);
+      osc.stop(t + 0.055);
+      osc.onended = () => { gain.disconnect(); osc.disconnect(); };
+    }
+
+    chimeSuccess() {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+        const t = this.ctx.currentTime + i * 0.05;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.16, t + 0.008);
+        gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.32);
+        osc.connect(gain);
+        gain.connect(this.masterOut);
+        osc.start(t);
+        osc.stop(t + 0.34);
+        osc.onended = () => { gain.disconnect(); osc.disconnect(); };
+      });
+    }
+
+    buzzWrong() {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      [210, 155].forEach((freq, i) => {
+        const t = this.ctx.currentTime + i * 0.075;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.18, t + 0.008);
+        gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.17);
+        osc.connect(gain);
+        gain.connect(this.masterOut);
+        osc.start(t);
+        osc.stop(t + 0.19);
+        osc.onended = () => { gain.disconnect(); osc.disconnect(); };
+      });
+    }
+
+    async decodeBGM(file) {
+      this.ensure();
+      const buf = await file.arrayBuffer();
+      this.bgmBuffer = await this.ctx.decodeAudioData(buf);
+    }
+
+    startBGM() {
+      if (!this.bgmBuffer) return;
+      this.stopBGM();
+      this.ensure();
+      this.bgmSource = this.ctx.createBufferSource();
+      this.bgmSource.buffer = this.bgmBuffer;
+      this.bgmSource.loop = true;
+      this.bgmGain = this.ctx.createGain();
+      this.bgmGain.gain.setValueAtTime(0.11, this.ctx.currentTime);
+      this.bgmSource.connect(this.bgmGain);
+      this.bgmGain.connect(this.masterOut);
+      this.bgmSource.start(0);
+    }
+
+    stopBGM() {
+      if (this.bgmSource) {
+        try { this.bgmSource.stop(); this.bgmSource.disconnect(); } catch (e) {}
+        this.bgmSource = null;
+      }
+      if (this.bgmGain) {
+        try { this.bgmGain.disconnect(); } catch (e) {}
+        this.bgmGain = null;
+      }
+    }
+  }
+  const audio = new StudioAudioEngine();
+
+  /* ==================== 3. SMART AUTO-FIT 9:16 PORTRAIT LAYOUT ENGINE ==================== */
+  const canvas = document.getElementById('stageCanvas');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  const W = 720;  // Exact mod-16 9:16 HD width for YouTube Shorts
+  const H = 1280; // Exact mod-16 9:16 HD height for YouTube Shorts
+
+  const bgCanvas = document.createElement('canvas');
+  bgCanvas.width = W;
+  bgCanvas.height = H;
+  const bgCtx = bgCanvas.getContext('2d', { alpha: false });
+
+  const THEMES = {
+    obsidian: { bg1: '#050912', bg2: '#0f1b33', card: '#152340', border: '#2b4270', text: '#ffffff', muted: '#94a3b8', accent: '#38bdf8', correct: '#10b981', wrong: '#ef4444' },
+    emerald:  { bg1: '#03120e', bg2: '#082820', card: '#0f382c', border: '#1e634f', text: '#ffffff', muted: '#a7f3d0', accent: '#34d399', correct: '#eab308', wrong: '#ef4444' },
+    crimson:  { bg1: '#14050e', bg2: '#2a0e20', card: '#3b142d', border: '#682552', text: '#ffffff', muted: '#f5d0fe', accent: '#fb7185', correct: '#10b981', wrong: '#f59e0b' },
+    daylight: { bg1: '#f1f5f9', bg2: '#e2e8f0', card: '#ffffff', border: '#94a3b8', text: '#0f172a', muted: '#475569', accent: '#4f46e5', correct: '#059669', wrong: '#dc2626' }
+  };
+
+  const FONT_STACK = "'Segoe UI', 'Nirmala UI', 'Noto Sans Devanagari', system-ui, sans-serif";
+  let cachedLayout = null;
+
+  // Pre-renders static gradient, grid, and background watermark once (0 FPS overhead)
+  function rebuildBackgroundCache() {
+    const th = THEMES[document.getElementById('cfgTheme').value] || THEMES.obsidian;
+    const grad = bgCtx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, th.bg1);
+    grad.addColorStop(1, th.bg2);
+    bgCtx.fillStyle = grad;
+    bgCtx.fillRect(0, 0, W, H);
+
+    bgCtx.strokeStyle = th.border;
+    bgCtx.globalAlpha = 0.13;
+    bgCtx.lineWidth = 1;
+    for (let x = 0; x < W; x += 60) { bgCtx.beginPath(); bgCtx.moveTo(x, 0); bgCtx.lineTo(x, H); bgCtx.stroke(); }
+    for (let y = 0; y < H; y += 60) { bgCtx.beginPath(); bgCtx.moveTo(0, y); bgCtx.lineTo(W, y); bgCtx.stroke(); }
+    bgCtx.globalAlpha = 1;
+
+    // Permanent Export Watermark Layer
+    const wmText = (meta.channel || '@AbhishekDigitalStudio').trim();
+    const wmAlpha = Math.max(0.04, Math.min(0.35, (brandAssets.wmOpacity || 11) / 100));
+
+    if (brandAssets.wmMode === 'diagonal' && wmText) {
+      bgCtx.save();
+      bgCtx.translate(W / 2, H / 2);
+      bgCtx.rotate(-Math.PI / 5);
+      bgCtx.fillStyle = th.text;
+      bgCtx.globalAlpha = wmAlpha;
+      bgCtx.font = `900 44px ${FONT_STACK}`;
+      bgCtx.textAlign = 'center';
+      bgCtx.textBaseline = 'middle';
+      bgCtx.fillText(wmText, 0, 0);
+      bgCtx.restore();
+    } else if (brandAssets.wmMode === 'tiled' && wmText) {
+      bgCtx.save();
+      bgCtx.fillStyle = th.text;
+      bgCtx.globalAlpha = wmAlpha * 0.85;
+      bgCtx.font = `800 26px ${FONT_STACK}`;
+      bgCtx.textAlign = 'center';
+      bgCtx.textBaseline = 'middle';
+      for (let y = 160; y < H; y += 260) {
+        for (let x = 140; x < W; x += 340) {
+          bgCtx.save();
+          bgCtx.translate(x + ((y / 260) % 2 ? 70 : 0), y);
+          bgCtx.rotate(-Math.PI / 6);
+          bgCtx.fillText(wmText, 0, 0);
+          bgCtx.restore();
+        }
+      }
+      bgCtx.restore();
+    }
+
+    if (logoImg && brandAssets.logoPos === 'center-ghost') {
+      const targetW = Math.min(340, brandAssets.logoSize * 2.6);
+      const scale = targetW / Math.max(1, logoImg.naturalWidth);
+      const dw = logoImg.naturalWidth * scale;
+      const dh = logoImg.naturalHeight * scale;
+      bgCtx.save();
+      bgCtx.globalAlpha = Math.min(0.28, (brandAssets.logoOpacity / 100) * 0.35);
+      bgCtx.drawImage(logoImg, (W - dw) / 2, (H - dh) / 2, dw, dh);
+      bgCtx.restore();
+    }
+
+    computeSmartPortraitLayout();
+  }
+
+  function wrapLines(context, text, maxWidth) {
+    const words = String(text || '').split(/\s+/);
+    const lines = [];
+    let line = '';
+    for (let i = 0; i < words.length; i++) {
+      const test = line ? line + ' ' + words[i] : words[i];
+      if (context.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = words[i];
+      } else {
+        line = test;
+      }
+    }
+    if (line) lines.push(line);
+    return lines.length ? lines : [''];
+  }
+
+  function computeSmartPortraitLayout() {
+    const pad = 34;
+    const contentW = W - pad * 2; // 652px
+    const qObj = activePool[curIdx] || starterQuestions[0];
+    const hasExp = Boolean(qObj.exp && document.getElementById('cfgShowExp').checked);
+    const hasCam = Boolean(camActive);
+    const camW = brandAssets.camSize || 128;
+    const camH = brandAssets.camShape === 'portrait' ? Math.round(camW * 1.25) : camW;
+
+    // 1. Auto-fit Question Font
+    let qFontPx = 38;
+    let qLineH = 48;
+    let qLines = [];
+    for (const size of [38, 34, 30, 26]) {
+      qFontPx = size;
+      qLineH = Math.round(size * 1.26);
+      ctx.font = `800 ${qFontPx}px ${FONT_STACK}`;
+      qLines = wrapLines(ctx, qObj.q, contentW - 44);
+      if (qLines.length <= 4) break;
+    }
+    qLines = qLines.slice(0, 6);
+
+    const qBoxY = 206;
+    const qBoxH = Math.max(138, qLines.length * qLineH + 40);
+
+    // 2. Explanation Box (shifts right cleanly when Bottom-Left Live Camera is ON)
+    const expX = hasCam ? (pad + camW + 14) : pad;
+    const expW = hasCam ? (contentW - camW - 14) : contentW;
+    let expLines = [];
+    let expBoxH = 0;
+    if (hasExp) {
+      ctx.font = `700 21px ${FONT_STACK}`;
+      expLines = wrapLines(ctx, `💡 ${qObj.exp}`, expW - 28).slice(0, 4);
+      expBoxH = expLines.length * 28 + 22;
+    }
+
+    // 3. Reserve bottom zone so options never touch Live Camera or Explanation
+    const camBottomReserve = hasCam ? (camH + 22) : 0;
+    const expBottomReserve = hasExp ? (expBoxH + 14) : 0;
+    const bottomReserve = Math.max(camBottomReserve, expBottomReserve);
+
+    const optStartY = qBoxY + qBoxH + 20;
+    const bottomLimit = H - 54 - bottomReserve;
+    const availOptSpace = Math.max(336, bottomLimit - optStartY);
+
+    const optGap = Math.max(12, Math.min(20, Math.floor(availOptSpace * 0.04)));
+    const optH = Math.max(72, Math.min(102, Math.floor((availOptSpace - optGap * 3) / 4)));
+
+    optionHitBoxes = [];
+    const optLayouts = (qObj.options || ['A', 'B', 'C', 'D']).map((optText, idx) => {
+      const ox = pad;
+      const oy = optStartY + idx * (optH + optGap);
+
+      let fSize = 29;
+      let lines = [];
+      for (const s of [29, 25, 21]) {
+        fSize = s;
+        ctx.font = `800 ${fSize}px ${FONT_STACK}`;
+        lines = wrapLines(ctx, optText, contentW - 108);
+        if (lines.length <= 2) break;
+      }
+      lines = lines.slice(0, 2);
+
+      optionHitBoxes.push({ x: ox, y: oy, w: contentW, h: optH, idx });
+      return { ox, oy, optW: contentW, optH, lines, fSize, idx };
+    });
+
+    const expY = optStartY + 4 * optH + 3 * optGap + 14;
+
+    cachedLayout = {
+      pad, contentW, qObj,
+      qBoxY, qBoxH, qFontPx, qLines, qLineH,
+      optLayouts, expX, expW, expY, expBoxH, expLines
+    };
+  }
+
+  function roundBox(c, x, y, w, h, r) {
+    c.beginPath();
+    if (c.roundRect) c.roundRect(x, y, w, h, r);
+    else c.rect(x, y, w, h);
+    c.closePath();
+  }
+
+  function easeOutBack(x) {
+    const c1 = 1.70158;
+    const c3 = c1 + 1;
+    return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+  }
+
+  function spawnRevealParticles(cx, cy, color) {
+    revealParticles = [];
+    for (let i = 0; i < 16; i++) {
+      const angle = (Math.PI * 2 * i) / 16;
+      const speed = 2.5 + Math.random() * 4.2;
+      revealParticles.push({
+        x: cx + (Math.random() - 0.5) * 180,
+        y: cy + (Math.random() - 0.5) * 40,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 1.5,
+        r: 4 + Math.random() * 3.5,
+        alpha: 1,
+        color
+      });
+    }
+  }
+
+  // Draws Live Front/Back Camera Feed in Bottom-Left Half (Baked into MP4 Export)
+  function drawBottomLeftCamera(th) {
+    if (!camActive || camVideo.readyState < 2 || !camVideo.videoWidth) return;
+
+    const boxW = brandAssets.camSize || 128;
+    const isPortrait = brandAssets.camShape === 'portrait';
+    const boxH = isPortrait ? Math.round(boxW * 1.25) : boxW;
+    const px = 30;
+    const py = H - boxH - 46;
+
+    ctx.save();
+    if (brandAssets.camShape === 'circle') {
+      const r = boxW / 2;
+      const cx = px + r;
+      const cy = py + r;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + 4, 0, Math.PI * 2);
+      ctx.fillStyle = th.accent;
+      ctx.globalAlpha = 0.28;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.clip();
+    } else {
+      const rad = 18;
+      roundBox(ctx, px - 3, py - 3, boxW + 6, boxH + 6, rad + 2);
+      ctx.fillStyle = th.accent;
+      ctx.globalAlpha = 0.25;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      roundBox(ctx, px, py, boxW, boxH, rad);
+      ctx.clip();
+    }
+
+    // Center cover-crop for camera video
+    const vw = camVideo.videoWidth;
+    const vh = camVideo.videoHeight;
+    const vidRatio = vw / Math.max(1, vh);
+    const boxRatio = boxW / boxH;
+    let sx = 0, sy = 0, sw = vw, sh = vh;
+    if (vidRatio > boxRatio) {
+      sw = sh * boxRatio;
+      sx = (vw - sw) / 2;
+    } else {
+      sh = sw / boxRatio;
+      sy = (vh - sh) / 2;
+    }
+
+    // Mirror horizontally ONLY for front camera when Mirror option is ON
+    const shouldMirror = brandAssets.camFacing === 'user' && brandAssets.camMirror;
+    if (shouldMirror) {
+      ctx.translate(px + boxW, py);
+      ctx.scale(-1, 1);
+      ctx.drawImage(camVideo, sx, sy, sw, sh, 0, 0, boxW, boxH);
+    } else {
+      ctx.drawImage(camVideo, sx, sy, sw, sh, px, py, boxW, boxH);
+    }
+    ctx.restore();
+
+    // Crisp outer border ring
+    ctx.save();
+    ctx.strokeStyle = th.accent;
+    ctx.lineWidth = 3.5;
+    if (brandAssets.camShape === 'circle') {
+      ctx.beginPath();
+      ctx.arc(px + boxW / 2, py + boxW / 2, boxW / 2, 0, Math.PI * 2);
+      ctx.stroke();
+    } else {
+      roundBox(ctx, px, py, boxW, boxH, 18);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Draws Custom PNG Logo Overlay (Top-Right / Top-Left / Bottom-Right)
+  function drawCustomLogo() {
+    if (!logoImg || brandAssets.logoPos === 'center-ghost') return;
+    const maxW = brandAssets.logoSize || 82;
+    const scale = maxW / Math.max(logoImg.naturalWidth, logoImg.naturalHeight);
+    const dw = Math.round(logoImg.naturalWidth * scale);
+    const dh = Math.round(logoImg.naturalHeight * scale);
+
+    let lx = W - dw - 24;
+    let ly = 96;
+    if (brandAssets.logoPos === 'top-left') {
+      lx = 24;
+      ly = 96;
+    } else if (brandAssets.logoPos === 'bottom-right') {
+      lx = W - dw - 26;
+      ly = H - dh - 44;
+    }
+
+    ctx.save();
+    ctx.globalAlpha = Math.max(0.15, Math.min(1, (brandAssets.logoOpacity || 90) / 100));
+    ctx.drawImage(logoImg, lx, ly, dw, dh);
+    ctx.restore();
+  }
+
+  /* ==================== 4. ZERO-BOTTLENECK BROADCAST RENDERER ==================== */
+  function drawPortraitFrame() {
+    if (!cachedLayout) computeSmartPortraitLayout();
+    const L = cachedLayout;
+    const th = THEMES[document.getElementById('cfgTheme').value] || THEMES.obsidian;
+    const thinkMax = Math.max(3, parseInt(document.getElementById('cfgThinkSec').value, 10) || 7);
+    const total = Math.max(1, activePool.length);
+
+    // 1. Pre-baked Background + Watermark (Single Blit)
+    ctx.drawImage(bgCanvas, 0, 0);
+
+    // 2. Top Progress Bar
+    ctx.fillStyle = th.border;
+    ctx.fillRect(0, 0, W, 10);
+    ctx.fillStyle = th.accent;
+    ctx.fillRect(0, 0, W * ((curIdx + 1) / total), 10);
+
+    // 3. Top Header Row
+    ctx.fillStyle = th.accent;
+    ctx.font = `900 24px ${FONT_STACK}`;
+    ctx.textAlign = 'left';
+    ctx.fillText(`QUESTION ${curIdx + 1} / ${total}`, L.pad, 48);
+
+    ctx.fillStyle = th.muted;
+    ctx.font = `800 20px ${FONT_STACK}`;
+    ctx.textAlign = 'right';
+    ctx.fillText((L.qObj.category || 'GENERAL').toUpperCase(), W - L.pad, 48);
+
+    ctx.fillStyle = th.text;
+    ctx.globalAlpha = 0.85;
+    ctx.font = `700 19px ${FONT_STACK}`;
+    ctx.textAlign = 'center';
+    ctx.fillText(meta.title, W / 2, 80);
+    ctx.globalAlpha = 1;
+
+    // 4. Center Countdown Ring
+    const ringX = W / 2;
+    const ringY = 140;
+    const ringR = 42;
+
+    const remSec = phase === 'revealed' ? 0 : Math.max(0, thinkMax - phaseElapsedMs / 1000);
+    const frac = phase === 'revealed' ? 1 : Math.max(0, remSec / thinkMax);
+
+    ctx.beginPath();
+    ctx.arc(ringX, ringY, ringR, 0, Math.PI * 2);
+    ctx.fillStyle = th.card;
+    ctx.fill();
+    ctx.strokeStyle = th.border;
+    ctx.lineWidth = 8;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(ringX, ringY, ringR, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * frac);
+    ctx.strokeStyle = phase === 'revealed' ? th.correct : (remSec <= 3 ? th.wrong : th.accent);
+    ctx.lineWidth = 8;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    ctx.fillStyle = th.text;
+    ctx.font = `900 30px ${FONT_STACK}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(phase === 'revealed' ? '✓' : Math.ceil(remSec), ringX, ringY + 2);
+    ctx.textBaseline = 'alphabetic';
+
+    // Slide-in entrance progress (0 -> 1 over 220ms)
+    const enterProg = Math.min(1, enterAnimMs / 220);
+    const slideOffset = (1 - enterProg) * 26;
+
+    // 5. Extra-Bold Question Card (Crisp Layered Depth — Zero shadowBlur CPU drain)
+    ctx.save();
+    ctx.globalAlpha = enterProg;
+    ctx.translate(0, slideOffset);
+
+    roundBox(ctx, L.pad, L.qBoxY + 6, L.contentW, L.qBoxH, 20);
+    ctx.fillStyle = 'rgba(0,0,0,0.34)';
+    ctx.fill();
+
+    roundBox(ctx, L.pad, L.qBoxY, L.contentW, L.qBoxH, 20);
+    ctx.fillStyle = th.card;
+    ctx.fill();
+    ctx.strokeStyle = th.accent;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    ctx.fillStyle = th.text;
+    ctx.font = `800 ${L.qFontPx}px ${FONT_STACK}`;
+    ctx.textAlign = 'center';
+    const qStartY = L.qBoxY + (L.qBoxH - (L.qLines.length - 1) * L.qLineH) / 2 + Math.round(L.qFontPx * 0.32);
+    L.qLines.forEach((ln, i) => {
+      ctx.fillText(ln, W / 2, qStartY + i * L.qLineH);
+    });
+    ctx.restore();
+
+    // 6. Options Stack with High-Zoom Answer Reveal
+    const letters = ['A', 'B', 'C', 'D'];
+    const zoomProg = phase === 'revealed' ? Math.min(1, revealAnimMs / 340) : 0;
+    const elastic = easeOutBack(zoomProg);
+
+    const drawOptionCard = (opt) => {
+      const idx = opt.idx;
+      const optEnter = Math.min(1, Math.max(0, (enterAnimMs - idx * 35) / 200));
+
+      if (hiddenOptions.has(idx) && phase !== 'revealed') {
+        roundBox(ctx, opt.ox, opt.oy, opt.optW, opt.optH, 16);
+        ctx.fillStyle = th.card;
+        ctx.globalAlpha = 0.2;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        return;
+      }
+
+      const isCorrect = phase === 'revealed' && idx === L.qObj.ans;
+      const isWrongPick = phase === 'revealed' && selectedOption === idx && idx !== L.qObj.ans;
+      const isDimmed = phase === 'revealed' && !isCorrect && !isWrongPick;
+
+      let scale = 1;
+      let alpha = optEnter;
+      if (isCorrect) {
+        const pulse = zoomProg >= 1 ? Math.sin(phaseElapsedMs / 200) * 0.012 : 0;
+        scale = 1 + 0.09 * elastic + pulse;
+      } else if (isDimmed) {
+        scale = 1 - 0.035 * zoomProg;
+        alpha = (1 - 0.58 * zoomProg) * optEnter;
+      }
+
+      const cx = opt.ox + opt.optW / 2;
+      const cy = opt.oy + opt.optH / 2 + (1 - optEnter) * 18;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+      ctx.translate(-cx, -(opt.oy + opt.optH / 2));
+
+      if (isCorrect) {
+        roundBox(ctx, opt.ox - 6, opt.oy - 6, opt.optW + 12, opt.optH + 12, 22);
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.28)';
+        ctx.fill();
+      }
+
+      roundBox(ctx, opt.ox, opt.oy, opt.optW, opt.optH, 18);
+      ctx.fillStyle = isCorrect ? th.correct : (isWrongPick ? th.wrong : th.card);
+      ctx.fill();
+
+      ctx.lineWidth = isCorrect ? 4.5 : (isWrongPick ? 3.5 : 2);
+      ctx.strokeStyle = (isCorrect || isWrongPick) ? '#ffffff' : th.border;
+      ctx.stroke();
+
+      const bSize = Math.min(54, opt.optH - 24);
+      const bx = opt.ox + 18;
+      const by = opt.oy + (opt.optH - bSize) / 2;
+      roundBox(ctx, bx, by, bSize, bSize, 13);
+      ctx.fillStyle = (isCorrect || isWrongPick) ? 'rgba(0,0,0,0.28)' : th.bg1;
+      ctx.fill();
+
+      ctx.fillStyle = (isCorrect || isWrongPick) ? '#ffffff' : th.accent;
+      ctx.font = `900 26px ${FONT_STACK}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(isCorrect ? '✓' : letters[idx], bx + bSize / 2, by + bSize / 2 + 2);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+
+      ctx.fillStyle = (isCorrect || isWrongPick) ? '#ffffff' : th.text;
+      const activeFontPx = isCorrect ? opt.fSize + 2 : opt.fSize;
+      ctx.font = `800 ${activeFontPx}px ${FONT_STACK}`;
+      const textX = bx + bSize + 18;
+      if (opt.lines.length === 1) {
+        ctx.fillText(opt.lines[0], textX, opt.oy + opt.optH / 2 + Math.round(activeFontPx * 0.34));
+      } else {
+        ctx.fillText(opt.lines[0], textX, opt.oy + opt.optH / 2 - 5);
+        ctx.fillText(opt.lines[1], textX, opt.oy + opt.optH / 2 + activeFontPx);
+      }
+
+      ctx.restore();
+    };
+
+    L.optLayouts.forEach(opt => { if (opt.idx !== L.qObj.ans) drawOptionCard(opt); });
+    if (L.optLayouts[L.qObj.ans]) drawOptionCard(L.optLayouts[L.qObj.ans]);
+
+    if (phase === 'revealed' && revealParticles.length) {
+      revealParticles.forEach(p => {
+        if (p.alpha <= 0.02) return;
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    // 7. Auto-Fit Explanation Card (Shifts Right Automatically When Live Camera is ON)
+    if (phase === 'revealed' && L.expLines.length) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(1, revealAnimMs / 240);
+      roundBox(ctx, L.expX, L.expY, L.expW, L.expBoxH, 15);
+      ctx.fillStyle = 'rgba(6, 182, 212, 0.16)';
+      ctx.fill();
+      ctx.strokeStyle = th.accent;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = th.text;
+      ctx.font = `700 21px ${FONT_STACK}`;
+      ctx.textAlign = 'left';
+      L.expLines.forEach((ln, i) => {
+        ctx.fillText(ln, L.expX + 14, L.expY + 30 + i * 28);
+      });
+      ctx.restore();
+    }
+
+    // 8. Live Front/Back Camera (Bottom-Left) & Custom PNG Logo
+    drawBottomLeftCamera(th);
+    drawCustomLogo();
+
+    // 9. Footer Channel Watermark
+    ctx.fillStyle = th.muted;
+    ctx.font = `800 19px ${FONT_STACK}`;
+    ctx.textAlign = 'center';
+    ctx.fillText(meta.channel || '@AbhishekDigitalStudio', W / 2, H - 16);
+    ctx.textAlign = 'left';
+  }
+
+  /* ==================== 5. DELTA-TIME MASTER LOOP ==================== */
+  function masterLoop(now) {
+    const dt = Math.min(100, now - lastFrameTime);
+    lastFrameTime = now;
+
+    if (enterAnimMs < 500) enterAnimMs += dt;
+
+    if (phase === 'revealed') {
+      revealAnimMs += dt;
+      if (revealParticles.length) {
+        let alive = false;
+        for (let i = 0; i < revealParticles.length; i++) {
+          const p = revealParticles[i];
+          if (p.alpha > 0.02) {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.12;
+            p.alpha *= 0.94;
+            alive = true;
+          }
+        }
+        if (!alive) revealParticles = [];
+      }
+    }
+
+    if (isRunning) {
+      phaseElapsedMs += dt;
+      const thinkMs = (Math.max(3, parseInt(document.getElementById('cfgThinkSec').value, 10) || 7)) * 1000;
+      const holdMs  = (Math.max(2, parseInt(document.getElementById('cfgHoldSec').value, 10) || 4)) * 1000;
+
+      if (phase === 'thinking') {
+        const remSec = Math.ceil(Math.max(0, (thinkMs - phaseElapsedMs) / 1000));
+        if (remSec > 0 && remSec !== lastWholeSecondBeep) {
+          lastWholeSecondBeep = remSec;
+          audio.tick(remSec <= 3);
+        }
+        if (phaseElapsedMs >= thinkMs) {
+          triggerReveal(-1);
+        }
+      } else if (phase === 'revealed') {
+        if (playMode === 'auto' && phaseElapsedMs >= holdMs) {
+          if (curIdx < activePool.length - 1) {
+            loadQuestionAtIndex(curIdx + 1, true);
+          } else {
+            pauseTimer();
+            if (isRecording) stopRecordingVideo();
+            showToast('🎉 Broadcast Sequence Complete!');
+          }
+        }
+      }
+    }
+
+    drawPortraitFrame();
+    requestAnimationFrame(masterLoop);
+  }
+
+  function loadQuestionAtIndex(idx, forceStartTimer = null) {
+    if (!activePool.length) return;
+    curIdx = Math.max(0, Math.min(activePool.length - 1, idx));
+    selectedOption = -1;
+    hiddenOptions.clear();
+    revealParticles = [];
+    phase = 'thinking';
+    phaseElapsedMs = 0;
+    enterAnimMs = 0;
+    revealAnimMs = 0;
+    lastWholeSecondBeep = -1;
+    lastFrameTime = performance.now();
+
+    computeSmartPortraitLayout();
+    updateCheatNoteContent();
+    updateHUD();
+
+    const shouldStart = forceStartTimer !== null
+      ? forceStartTimer
+      : document.getElementById('cfgAutoStartTimer').checked;
+
+    isRunning = Boolean(shouldStart);
+    updatePlayButtonUI();
+  }
+
+  function togglePlayPause() {
+    audio.ensure();
+    if (phase === 'revealed') {
+      if (curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1, true);
+      else loadQuestionAtIndex(0, true);
+      return;
+    }
+    isRunning = !isRunning;
+    lastFrameTime = performance.now();
+    updatePlayButtonUI();
+  }
+
+  function pauseTimer() {
+    isRunning = false;
+    updatePlayButtonUI();
+  }
+
+  function updatePlayButtonUI() {
+    const btn = document.getElementById('btnPlayPause');
+    if (phase === 'revealed') {
+      btn.textContent = '⏭ Next Q';
+    } else if (isRunning) {
+      btn.textContent = '⏸ Pause';
+    } else {
+      btn.textContent = phaseElapsedMs > 0 ? '▶ Resume' : '▶ Start';
+    }
+  }
+
+  function triggerReveal(chosenIdx = -1) {
+    if (phase === 'revealed') return;
+    audio.ensure();
+    selectedOption = chosenIdx;
+    phase = 'revealed';
+    phaseElapsedMs = 0;
+    revealAnimMs = 0;
+    lastFrameTime = performance.now();
+
+    const qObj = activePool[curIdx];
+    const ansBox = optionHitBoxes[qObj.ans];
+    if (ansBox) {
+      spawnRevealParticles(ansBox.x + ansBox.w / 2, ansBox.y + ansBox.h / 2, '#34d399');
+    }
+
+    if (chosenIdx === qObj.ans) {
+      score++;
+      streak++;
+      audio.chimeSuccess();
+    } else if (chosenIdx >= 0) {
+      streak = 0;
+      wrongIds.add(qObj.id);
+      audio.buzzWrong();
+    } else {
+      audio.chimeSuccess();
+    }
+
+    isRunning = (playMode === 'auto');
+    updateHUD();
+    updatePlayButtonUI();
+  }
+
+  function updateHUD() {
+    document.getElementById('hudQIndex').textContent = `${curIdx + 1}/${activePool.length || 1}`;
+    document.getElementById('hudScore').textContent = score;
+    document.getElementById('hudStreak').textContent = `${streak}🔥`;
+    document.getElementById('totalQCount').textContent = questions.length;
+
+    const wrongBtn = document.getElementById('btnReviseWrong');
+    if (wrongIds.size > 0) {
+      wrongBtn.style.display = 'inline-flex';
+      document.getElementById('wrongBadgeCount').textContent = wrongIds.size;
+    } else {
+      wrongBtn.style.display = 'none';
+    }
+  }
+
+  /* ==================== 6. CLICK, SWIPE & KEYBOARD SHORTCUTS ==================== */
+  canvas.addEventListener('click', (e) => {
+    if (phase === 'revealed') return;
+    const rect = canvas.getBoundingClientRect();
+    const cx = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const cy = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+    for (const box of optionHitBoxes) {
+      if (cx >= box.x && cx <= box.x + box.w && cy >= box.y && cy <= box.y + box.h) {
+        if (!hiddenOptions.has(box.idx)) triggerReveal(box.idx);
+        return;
+      }
+    }
+  });
+
+  let touchStartX = 0;
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  canvas.addEventListener('touchend', (e) => {
+    if (!touchStartX || !e.changedTouches.length) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 75) {
+      if (dx < 0 && curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1, true);
+      else if (dx > 0 && curIdx > 0) loadQuestionAtIndex(curIdx - 1, true);
+    }
+    touchStartX = 0;
+  }, { passive: true });
+
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+    if (document.querySelector('.drawer.open')) return;
+
+    const k = e.key.toUpperCase();
+    const optMap = { 'A': 0, '1': 0, 'B': 1, '2': 1, 'C': 2, '3': 2, 'D': 3, '4': 3 };
+
+    if (k in optMap && phase !== 'revealed') {
+      e.preventDefault();
+      const idx = optMap[k];
+      if (!hiddenOptions.has(idx)) triggerReveal(idx);
+    } else if (e.code === 'Space') {
+      e.preventDefault();
+      togglePlayPause();
+    } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
+      e.preventDefault();
+      if (curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1, true);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (curIdx > 0) loadQuestionAtIndex(curIdx - 1, true);
+    } else if (k === 'R') {
+      e.preventDefault();
+      triggerReveal(-1);
+    } else if (k === 'F') {
+      e.preventDefault();
+      use5050Lifeline();
+    } else if (k === 'C') {
+      e.preventDefault();
+      brandAssets.cheatShow = !brandAssets.cheatShow;
+      applyCheatNoteVisibility();
+      saveBrandAssets();
+    }
+  });
+
+  function use5050Lifeline() {
+    if (phase === 'revealed' || hiddenOptions.size > 0) return;
+    const ans = activePool[curIdx].ans;
+    const candidates = [0, 1, 2, 3].filter(i => i !== ans).sort(() => Math.random() - 0.5);
+    hiddenOptions.add(candidates[0]);
+    hiddenOptions.add(candidates[1]);
+    audio.tick(false);
+  }
+
+  /* ==================== 7. YOUTUBE-READY MP4 HARDWARE RECORDER ==================== */
+  let mediaRecorder = null;
+  let activeCanvasStream = null;
+  let recChunks = [];
+  let isRecording = false;
+  let recSeconds = 0;
+  let recClockInterval = null;
+  let lastVideoUrl = null;
+
+  function getYouTubeBestMimeType() {
+    // Strictly prioritize YouTube-verified MP4 (H.264 + AAC) first, then YouTube-verified WebM (VP9/VP8 + Opus)
+    const types = [
+      'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+      'video/mp4;codecs=avc1.4d002a,mp4a.40.2',
+      'video/mp4;codecs=avc1.640028,mp4a.40.2',
+      'video/mp4;codecs=avc1,mp4a.40.2',
+      'video/mp4;codecs=h264,aac',
+      'video/mp4',
+      'video/webm;codecs=vp9,opus',
+      'video/webm;codecs=vp8,opus',
+      'video/webm;codecs=h264,opus',
+      'video/webm'
+    ];
+    for (const t of types) {
+      if (window.MediaRecorder && MediaRecorder.isTypeSupported(t)) return t;
+    }
+    return '';
+  }
+
+  function refreshExportFormatBadge() {
+    const mime = getYouTubeBestMimeType();
+    const isMp4 = mime.includes('mp4');
+    const badge = document.getElementById('exportFormatBadge');
+    const detail = document.getElementById('exportCodecDetail');
+    badge.textContent = isMp4 ? '✅ YouTube MP4 (H.264 + AAC)' : '✅ YouTube WebM (VP9/VP8 + Opus)';
+    detail.textContent = `720×1280 · 9:16 HD · ${mime || 'Default Stream'} · Direct YouTube Upload Ready`;
+  }
+
+  function startRecordingVideo() {
+    if (isRecording) return;
+    audio.ensure();
+    if (audio.bgmBuffer) audio.startBGM();
+
+    // Ensure at least one fresh frame is painted before stream capture starts
+    drawPortraitFrame();
+
+    const fps = parseInt(document.getElementById('cfgFps').value, 10) || 30;
+    const bitrate = parseInt(document.getElementById('cfgBitrate').value, 10) || 6000000;
+
+    activeCanvasStream = canvas.captureStream(fps);
+    const tracks = [...activeCanvasStream.getVideoTracks()];
+    if (audio.streamDest) {
+      tracks.push(...audio.streamDest.stream.getAudioTracks());
+    }
+
+    const combined = new MediaStream(tracks);
+    const mime = getYouTubeBestMimeType();
+    recChunks = [];
+
+    const options = mime
+      ? { mimeType: mime, videoBitsPerSecond: bitrate, audioBitsPerSecond: 128000 }
+      : { videoBitsPerSecond: bitrate, audioBitsPerSecond: 128000 };
+
+    mediaRecorder = new MediaRecorder(combined, options);
+
+    mediaRecorder.ondataavailable = (ev) => {
+      if (ev.data && ev.data.size > 0) recChunks.push(ev.data);
+    };
+
+    mediaRecorder.onstop = () => {
+      audio.stopBGM();
+      clearInterval(recClockInterval);
+      if (activeCanvasStream) {
+        activeCanvasStream.getTracks().forEach(t => t.stop());
+        activeCanvasStream = null;
+      }
+
+      const finalMime = mediaRecorder.mimeType || mime || 'video/webm';
+      const isMp4 = finalMime.toLowerCase().includes('mp4');
+      const ext = isMp4 ? 'mp4' : 'webm';
+      const blob = new Blob(recChunks, { type: finalMime });
+      recChunks = [];
+
+      if (lastVideoUrl) URL.revokeObjectURL(lastVideoUrl);
+      lastVideoUrl = URL.createObjectURL(blob);
+
+      const dl = document.getElementById('btnDownloadVideo');
+      dl.href = lastVideoUrl;
+      dl.download = `${(meta.title || 'quiz_shorts').replace(/[^a-z0-9]/gi, '_').toLowerCase()}_9x16_yt.${ext}`;
+      dl.textContent = `⬇ Download ${ext.toUpperCase()}`;
+      dl.style.display = 'inline-flex';
+      showToast(`🎬 YouTube-Ready ${ext.toUpperCase()} saved! Cheat Note was excluded.`);
+    };
+
+    // 1000ms timeslice avoids micro-fragmentation for smoother YouTube ingestion
+    mediaRecorder.start(1000);
+    isRecording = true;
+    recSeconds = 0;
+
+    document.getElementById('btnDownloadVideo').style.display = 'none';
+    document.getElementById('btnRecStart').style.display = 'none';
+    document.getElementById('btnRecPause').style.display = 'inline-flex';
+    document.getElementById('btnRecStop').style.display = 'inline-flex';
+
+    const ind = document.getElementById('recIndicator');
+    ind.classList.add('active');
+    ind.classList.remove('paused');
+    document.getElementById('recStateLabel').textContent = 'REC';
+    document.getElementById('recTimeLabel').textContent = '00:00';
+
+    recClockInterval = setInterval(() => {
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        recSeconds++;
+        const m = String(Math.floor(recSeconds / 60)).padStart(2, '0');
+        const s = String(recSeconds % 60).padStart(2, '0');
+        document.getElementById('recTimeLabel').textContent = `${m}:${s}`;
+      }
+    }, 1000);
+
+    loadQuestionAtIndex(curIdx, true);
+  }
+
+  function togglePauseRecording() {
+    if (!mediaRecorder) return;
+    const ind = document.getElementById('recIndicator');
+    const btn = document.getElementById('btnRecPause');
+    if (mediaRecorder.state === 'recording') {
+      mediaRecorder.pause();
+      pauseTimer();
+      ind.classList.add('paused');
+      document.getElementById('recStateLabel').textContent = 'PAUSED';
+      btn.textContent = '▶ Resume';
+    } else if (mediaRecorder.state === 'paused') {
+      mediaRecorder.resume();
+      if (!isRunning) togglePlayPause();
+      ind.classList.remove('paused');
+      document.getElementById('recStateLabel').textContent = 'REC';
+      btn.textContent = '⏸ Pause';
+    }
+  }
+
+  function stopRecordingVideo() {
+    if (!mediaRecorder) return;
+    isRecording = false;
+    if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    document.getElementById('recIndicator').classList.remove('active');
+    document.getElementById('btnRecStart').style.display = 'inline-flex';
+    document.getElementById('btnRecPause').style.display = 'none';
+    document.getElementById('btnRecStop').style.display = 'none';
+    document.getElementById('btnRecPause').textContent = '⏸ Pause';
+  }
+
+  /* ==================== 8. SMART BULK PARSER & DECK MANAGEMENT ==================== */
+  function parseSmartBulk(raw) {
+    const trimmed = raw.trim();
+    if (!trimmed) return [];
+
+    if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+      try {
+        const j = JSON.parse(trimmed);
+        const arr = Array.isArray(j) ? j : (j.questions || []);
+        return arr.map((x, i) => ({
+          id: Date.now() + i + Math.random(),
+          category: x.category || 'General',
+          q: String(x.q || x.question || '').trim(),
+          options: (x.options || [x.a, x.b, x.c, x.d]).map(o => String(o || '').trim()),
+          ans: typeof x.ans === 'number' ? x.ans : ['A','B','C','D'].indexOf(String(x.ans || x.answer).toUpperCase().trim()),
+          exp: String(x.exp || x.explanation || '').trim()
+        })).filter(x => x.q && x.options.length >= 2);
+      } catch (e) {}
+    }
+
+    const lines = trimmed.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const out = [];
+    let cur = null;
+    const optRx = /^(?:\(?([A-Da-d1-4])[\)\.\:\-]\s*)(.+)$/;
+    const ansRx = /^(?:Ans(?:wer)?|Correct|उत्तर)\s*[\:\-\=]\s*\(?([A-Da-d1-4])\)?(?:[\)\.\:\-\s]+(.*))?$/i;
+    const expRx = /^(?:Exp(?:lanation)?|Note|व्याख्या)\s*[\:\-\=]\s*(.+)$/i;
+    const qRx   = /^(?:Q(?:uestion)?\s*\d*[\.\)\:\-]\s*|\d+[\.\)]\s*|प्र(?:श्न)?\s*\d*[\.\)\:\-]\s*)(.+)$/i;
+
+    const flush = () => {
+      if (cur && cur.q && cur.options.length >= 2) {
+        while (cur.options.length < 4) cur.options.push('—');
+        if (cur.ans < 0 || cur.ans > 3) cur.ans = 0;
+        out.push(cur);
+      }
+      cur = null;
+    };
+
+    for (const line of lines) {
+      const em = line.match(expRx);
+      if (em && cur) { cur.exp = em[1].trim(); continue; }
+
+      const am = line.match(ansRx);
+      if (am && cur) {
+        const m = { 'A':0, 'B':1, 'C':2, 'D':3, '1':0, '2':1, '3':2, '4':3 };
+        cur.ans = m[am[1].toUpperCase()] ?? 0;
+        if (am[2] && !cur.exp) cur.exp = am[2].trim();
+        continue;
+      }
+
+      const om = line.match(optRx);
+      if (om && cur) {
+        const m = { 'A':0, 'B':1, 'C':2, 'D':3, '1':0, '2':1, '3':2, '4':3 };
+        cur.options[m[om[1].toUpperCase()]] = om[2].trim();
+        continue;
+      }
+
+      if (cur && cur.options.length >= 2) flush();
+      if (!cur) {
+        let qText = line;
+        const qm = line.match(qRx);
+        if (qm) qText = qm[1].trim();
+        let category = 'General';
+        const tm = qText.match(/\[([^\]]+)\]\s*$/);
+        if (tm) {
+          category = tm[1].trim();
+          qText = qText.replace(/\[([^\]]+)\]\s*$/, '').trim();
+        }
+        cur = { id: Date.now() + out.length + Math.random(), category, q: qText, options: [], ans: 0, exp: '' };
+      } else {
+        cur.q += ' ' + line;
+      }
+    }
+    flush();
+    return out;
+  }
+
+  function rebuildActivePool(customList = null) {
+    if (customList) {
+      activePool = customList;
+    } else {
+      const top = document.getElementById('topicFilterSelect').value;
+      const base = top === 'ALL' ? [...questions] : questions.filter(q => (q.category || 'General') === top);
+      activePool = base.length ? base : [...questions];
+    }
+
+    const topics = ['ALL', ...new Set(questions.map(q => q.category || 'General'))];
+    const sel = document.getElementById('topicFilterSelect');
+    const prev = sel.value;
+    sel.innerHTML = topics.map(t => `<option value="${t}">${t === 'ALL' ? '📚 All Topics' : t}</option>`).join('');
+    if (topics.includes(prev)) sel.value = prev;
+
+    curIdx = 0;
+    loadQuestionAtIndex(0, false);
+  }
+
+  function renderBankDrawer() {
+    const container = document.getElementById('bankListContainer');
+    const qSearch = document.getElementById('bankSearchInput').value.toLowerCase();
+    const letters = ['A', 'B', 'C', 'D'];
+
+    const filtered = questions.filter(q => !qSearch || q.q.toLowerCase().includes(qSearch) || (q.category || '').toLowerCase().includes(qSearch));
+    document.getElementById('totalQCount').textContent = questions.length;
+
+    container.innerHTML = filtered.map((item) => {
+      const realIdx = questions.findIndex(x => x.id === item.id);
+      return `
+        <div class="q-card">
+          <div class="q-card-top">
+            <div class="q-card-title" onclick="jumpToQuestion(${realIdx})">
+              <span style="color:var(--accent)">#${realIdx + 1}</span> [${escapeHtml(item.category || 'General')}] ${escapeHtml(item.q)}
+            </div>
+            <div style="display:flex; gap:4px;">
+              <button class="btn btn-sm" onclick="editBankItem(${realIdx})">✏️</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteBankItem(${realIdx})">✕</button>
+            </div>
+          </div>
+          <div class="q-opts-mini">
+            ${item.options.map((o, i) => `<span class="${i === item.ans ? 'ans' : ''}">${letters[i]}) ${escapeHtml(o)}</span>`).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  }
+
+  window.jumpToQuestion = (idx) => {
+    document.getElementById('topicFilterSelect').value = 'ALL';
+    rebuildActivePool();
+    loadQuestionAtIndex(idx, false);
+    closeAllDrawers();
+  };
+
+  window.editBankItem = (idx) => {
+    const q = questions[idx];
+    document.getElementById('editIndexInput').value = idx;
+    document.getElementById('editorHeading').textContent = `✏️ Editing Question #${idx + 1}`;
+    document.getElementById('edCat').value = q.category || 'General';
+    document.getElementById('edQ').value = q.q;
+    document.getElementById('edA').value = q.options[0] || '';
+    document.getElementById('edB').value = q.options[1] || '';
+    document.getElementById('edC').value = q.options[2] || '';
+    document.getElementById('edD').value = q.options[3] || '';
+    document.getElementById('edAns').value = q.ans;
+    document.getElementById('edExp').value = q.exp || '';
+  };
+
+  window.deleteBankItem = (idx) => {
+    questions.splice(idx, 1);
+    saveLocalAndSync(true);
+    rebuildActivePool();
+    renderBankDrawer();
+  };
+
+  /* ==================== 9. UI EVENT BINDINGS ==================== */
+  function closeAllDrawers() {
+    document.getElementById('drawerBackdrop').classList.remove('open');
+    document.getElementById('bankDrawer').classList.remove('open');
+    document.getElementById('settingsDrawer').classList.remove('open');
+  }
+
+  document.getElementById('btnOpenBank').onclick = () => {
+    renderBankDrawer();
+    document.getElementById('drawerBackdrop').classList.add('open');
+    document.getElementById('bankDrawer').classList.add('open');
+  };
+  document.getElementById('btnOpenSettings').onclick = () => {
+    refreshExportFormatBadge();
+    document.getElementById('drawerBackdrop').classList.add('open');
+    document.getElementById('settingsDrawer').classList.add('open');
+  };
+  document.getElementById('btnCloseBank').onclick = closeAllDrawers;
+  document.getElementById('btnCloseSettings').onclick = closeAllDrawers;
+  document.getElementById('drawerBackdrop').onclick = closeAllDrawers;
+
+  document.getElementById('btnFullscreen').onclick = () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+    else document.exitFullscreen().catch(() => {});
+  };
+
+  // Live Camera Controls (Dock + Drawer)
+  const toggleCameraHandler = () => {
+    if (camActive) stopLiveCamera(true);
+    else startLiveCamera(brandAssets.camFacing);
+  };
+  document.getElementById('btnCamToggle').onclick = toggleCameraHandler;
+  document.getElementById('btnDrawerCamToggle').onclick = toggleCameraHandler;
+  document.getElementById('btnCamFlip').onclick = flipLiveCamera;
+  document.getElementById('btnDrawerCamFlip').onclick = flipLiveCamera;
+
+  document.getElementById('cfgCamFacing').onchange = (e) => {
+    brandAssets.camFacing = e.target.value;
+    saveBrandAssets();
+    if (camActive) startLiveCamera(brandAssets.camFacing);
+  };
+  document.getElementById('cfgCamShape').onchange = (e) => {
+    brandAssets.camShape = e.target.value;
+    saveBrandAssets();
+  };
+  document.getElementById('cfgCamSize').oninput = (e) => {
+    brandAssets.camSize = parseInt(e.target.value, 10) || 128;
+    document.getElementById('valCamSize').textContent = brandAssets.camSize;
+    saveBrandAssets();
+  };
+  document.getElementById('cfgCamMirror').onchange = (e) => {
+    brandAssets.camMirror = e.target.checked;
+    saveBrandAssets();
+  };
+
+  // Creator Cheat Note & YouTube Guide Controls
+  const toggleCheatHandler = () => {
+    brandAssets.cheatShow = !brandAssets.cheatShow;
+    applyCheatNoteVisibility();
+    saveBrandAssets();
+  };
+  document.getElementById('btnCheatToggle').onclick = toggleCheatHandler;
+  document.getElementById('btnCheatClose').onclick = toggleCheatHandler;
+  document.getElementById('cfgCheatShow').onchange = (e) => {
+    brandAssets.cheatShow = e.target.checked;
+    applyCheatNoteVisibility();
+    saveBrandAssets();
+  };
+  document.getElementById('btnCheatPos').onclick = () => {
+    brandAssets.cheatPos = brandAssets.cheatPos === 'bottom' ? 'top' : 'bottom';
+    applyCheatNoteVisibility();
+    saveBrandAssets();
+  };
+  document.getElementById('cfgYtSafeGuide').onchange = (e) => {
+    document.getElementById('ytSafeOverlay').classList.toggle('active', e.target.checked);
+  };
+
+  // Custom PNG Logo & Watermark Controls
+  document.getElementById('logoUploadInput').onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const dataUrl = await resizePngToDataUrl(file, 360);
+      brandAssets.logoDataUrl = dataUrl;
+      loadBrandImage(dataUrl, (img) => {
+        logoImg = img;
+        updateLogoPreview();
+        saveBrandAssets();
+        showToast('✨ Custom PNG Logo applied!');
+      });
+    } catch (err) {
+      showToast('Failed to load PNG logo');
+    }
+    e.target.value = '';
+  };
+
+  document.getElementById('btnClearLogo').onclick = () => {
+    brandAssets.logoDataUrl = '';
+    logoImg = null;
+    updateLogoPreview();
+    saveBrandAssets();
+    showToast('Logo removed');
+  };
+
+  document.getElementById('cfgLogoPos').onchange = (e) => {
+    brandAssets.logoPos = e.target.value;
+    saveBrandAssets();
+  };
+  document.getElementById('cfgLogoSize').oninput = (e) => {
+    brandAssets.logoSize = parseInt(e.target.value, 10) || 82;
+    document.getElementById('valLogoSize').textContent = brandAssets.logoSize;
+    saveBrandAssets();
+  };
+  document.getElementById('cfgLogoOpacity').oninput = (e) => {
+    brandAssets.logoOpacity = parseInt(e.target.value, 10) || 90;
+    document.getElementById('valLogoOpacity').textContent = brandAssets.logoOpacity;
+    saveBrandAssets();
+  };
+  document.getElementById('cfgWatermarkMode').onchange = (e) => {
+    brandAssets.wmMode = e.target.value;
+    saveBrandAssets();
+  };
+  document.getElementById('cfgWmOpacity').oninput = (e) => {
+    brandAssets.wmOpacity = parseInt(e.target.value, 10) || 11;
+    document.getElementById('valWmOpacity').textContent = brandAssets.wmOpacity;
+    saveBrandAssets();
+  };
+
+  // Mode & Playback Controls
+  document.getElementById('modeInteractiveBtn').onclick = () => {
+    playMode = 'interactive';
+    document.getElementById('modeInteractiveBtn').classList.add('active');
+    document.getElementById('modeAutoBtn').classList.remove('active');
+    showToast('🎓 Teach Mode Active');
+  };
+  document.getElementById('modeAutoBtn').onclick = () => {
+    playMode = 'auto';
+    document.getElementById('modeAutoBtn').classList.add('active');
+    document.getElementById('modeInteractiveBtn').classList.remove('active');
+    showToast('🤖 Auto-Video Sequence Mode Active');
+  };
+
+  document.getElementById('btnPlayPause').onclick = togglePlayPause;
+  document.getElementById('btnRevealNow').onclick = () => triggerReveal(-1);
+  document.getElementById('btn5050').onclick = use5050Lifeline;
+  document.getElementById('btnPrevQ').onclick = () => { if (curIdx > 0) loadQuestionAtIndex(curIdx - 1, true); };
+  document.getElementById('btnNextQ').onclick = () => { if (curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1, true); };
+
+  document.getElementById('btnMicToggle').onclick = async () => {
+    const active = await audio.toggleMic();
+    const btn = document.getElementById('btnMicToggle');
+    if (active) {
+      btn.classList.add('btn-mic-on');
+      btn.textContent = '🎙️ Mic LIVE';
+      showToast('🎙️ Mic Live: Your voice will be recorded in the video!');
+    } else {
+      btn.classList.remove('btn-mic-on');
+      btn.textContent = '🎙️ Mic Off';
+      showToast('🔇 Microphone Muted');
+    }
+  };
+
+  document.getElementById('btnApplyRange').onclick = () => {
+    const from = Math.max(1, parseInt(document.getElementById('cfgRangeFrom').value, 10) || 1) - 1;
+    const to = Math.min(questions.length, parseInt(document.getElementById('cfgRangeTo').value, 10) || questions.length);
+    const slice = questions.slice(from, to);
+    if (!slice.length) return showToast('Invalid question range');
+    rebuildActivePool(slice);
+    closeAllDrawers();
+    showToast(`Loaded Q${from + 1} to Q${to}`);
+  };
+
+  document.getElementById('btnReviseWrong').onclick = () => {
+    const list = questions.filter(q => wrongIds.has(q.id));
+    if (list.length) {
+      wrongIds.clear();
+      rebuildActivePool(list);
+      showToast(`Revising ${list.length} wrong questions!`);
+    }
+  };
+
+  document.getElementById('topicFilterSelect').onchange = () => rebuildActivePool();
+
+  document.getElementById('btnRecStart').onclick = startRecordingVideo;
+  document.getElementById('btnRecPause').onclick = togglePauseRecording;
+  document.getElementById('btnRecStop').onclick = stopRecordingVideo;
+
+  document.getElementById('btnCloudPush').onclick = () => pushToSheet(false);
+  document.getElementById('btnCloudPull').onclick = () => pullFromSheet(false);
+  document.getElementById('syncChip').onclick = () => pullFromSheet(false);
+
+  document.getElementById('btnBulkAppend').onclick = () => {
+    const parsed = parseSmartBulk(document.getElementById('bulkTextInput').value);
+    if (!parsed.length) return showToast('No valid MCQs detected');
+    questions.push(...parsed);
+    document.getElementById('bulkTextInput').value = '';
+    saveLocalAndSync(true);
+    rebuildActivePool();
+    renderBankDrawer();
+    showToast(`Added ${parsed.length} questions!`);
+  };
+
+  document.getElementById('btnBulkReplace').onclick = () => {
+    const parsed = parseSmartBulk(document.getElementById('bulkTextInput').value);
+    if (!parsed.length) return showToast('No valid MCQs detected');
+    questions = parsed;
+    document.getElementById('bulkTextInput').value = '';
+    saveLocalAndSync(true);
+    rebuildActivePool();
+    renderBankDrawer();
+    showToast(`Replaced with ${parsed.length} questions!`);
+  };
+
+  document.getElementById('btnSaveSingleQ').onclick = () => {
+    const idx = parseInt(document.getElementById('editIndexInput').value, 10);
+    const qText = document.getElementById('edQ').value.trim();
+    if (!qText) return showToast('Question text required');
+    const obj = {
+      id: idx >= 0 ? questions[idx].id : Date.now(),
+      category: document.getElementById('edCat').value.trim() || 'General',
+      q: qText,
+      options: [
+        document.getElementById('edA').value.trim() || 'Option A',
+        document.getElementById('edB').value.trim() || 'Option B',
+        document.getElementById('edC').value.trim() || 'Option C',
+        document.getElementById('edD').value.trim() || 'Option D'
+      ],
+      ans: parseInt(document.getElementById('edAns').value, 10) || 0,
+      exp: document.getElementById('edExp').value.trim()
+    };
+    if (idx >= 0) questions[idx] = obj;
+    else questions.push(obj);
+    document.getElementById('btnClearEditor').click();
+    saveLocalAndSync(true);
+    rebuildActivePool();
+    renderBankDrawer();
+    showToast('Question saved!');
+  };
+
+  document.getElementById('btnClearEditor').onclick = () => {
+    document.getElementById('editIndexInput').value = '-1';
+    document.getElementById('editorHeading').textContent = '✏️ Add / Edit Single Question';
+    ['edCat','edQ','edA','edB','edC','edD','edExp'].forEach(id => document.getElementById(id).value = '');
+  };
+
+  document.getElementById('btnShuffleDeck').onclick = () => {
+    questions.sort(() => Math.random() - 0.5);
+    saveLocalAndSync(true);
+    rebuildActivePool();
+    renderBankDrawer();
+    showToast('Deck shuffled!');
+  };
+
+  document.getElementById('btnWipeDeck').onclick = () => {
+    if (!confirm('Clear all questions?')) return;
+    questions = [];
+    saveLocalAndSync(true);
+    rebuildActivePool();
+    renderBankDrawer();
+  };
+
+  document.getElementById('bankSearchInput').oninput = renderBankDrawer;
+
+  document.getElementById('fileUploadInput').onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const parsed = parseSmartBulk(ev.target.result);
+      if (parsed.length) {
+        questions.push(...parsed);
+        saveLocalAndSync(true);
+        rebuildActivePool();
+        renderBankDrawer();
+        showToast(`Imported ${parsed.length} questions!`);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
+  document.getElementById('btnExportJson').onclick = () => {
+    const url = URL.createObjectURL(new Blob([JSON.stringify({ meta, questions }, null, 2)], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quizvid-deck.json';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  document.getElementById('btnExportCsv').onclick = () => {
+    const letters = ['A','B','C','D'];
+    const rows = ['Question,Option A,Option B,Option C,Option D,Answer,Explanation,Category'];
+    questions.forEach(q => {
+      rows.push([q.q, q.options[0], q.options[1], q.options[2], q.options[3], letters[q.ans], q.exp || '', q.category || 'General']
+        .map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(','));
+    });
+    const url = URL.createObjectURL(new Blob([rows.join('\n')], { type: 'text/csv' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quizvid-deck.csv';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  ['cfgTitle', 'cfgChannel'].forEach(id => document.getElementById(id).oninput = () => saveLocalAndSync(true));
+  document.getElementById('cfgTheme').onchange = rebuildBackgroundCache;
+  document.getElementById('cfgShowExp').onchange = computeSmartPortraitLayout;
+
+  document.getElementById('bgmUpload').onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      await audio.decodeBGM(file);
+      document.getElementById('bgmStatusText').textContent = `Loaded: ${file.name}`;
+      showToast('Background music ready!');
+    } catch (err) {
+      showToast('Failed to decode audio file');
+    }
+  };
+  document.getElementById('btnStopBgm').onclick = () => {
+    audio.stopBGM();
+    audio.bgmBuffer = null;
+    document.getElementById('bgmStatusText').textContent = 'No background music loaded';
+  };
+
+  /* ==================== 10. INIT ==================== */
+  loadLocalData();
+  loadBrandAssets();
+  refreshExportFormatBadge();
+  rebuildBackgroundCache();
+  rebuildActivePool();
+  requestAnimationFrame(masterLoop);
+  pullFromSheet(true);
+})();
+</script>
+</body>
+</html>
