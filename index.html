@@ -3,15 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>QuizVid 9:16 Pro — Broadcast Portrait Studio</title>
+<title>QuizVid KBC 9:16 Pro — Real Host Director Studio</title>
 <style>
   :root {
-    --bg: #04070f;
-    --panel: rgba(12, 18, 32, 0.94);
-    --panel-2: #162038;
-    --border: #243456;
+    --bg: #040614;
+    --panel: rgba(10, 14, 34, 0.96);
+    --panel-2: #141c40;
+    --border: #2a3970;
+    --gold: #f59e0b;
+    --gold-light: #fde047;
     --text: #f8fafc;
-    --muted: #8ca0ba;
+    --muted: #93a4c7;
     --primary: #6366f1;
     --accent: #06b6d4;
     --success: #10b981;
@@ -31,50 +33,55 @@
     flex-direction: column;
   }
 
-  /* ==================== ULTRA-CLEAN TOP BAR ==================== */
+  /* ==================== TOP BAR ==================== */
   header.topbar {
-    height: 52px;
+    height: 48px;
     background: var(--panel);
     border-bottom: 1px solid var(--border);
-    padding: 0 14px;
+    padding: 0 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
     flex-shrink: 0;
     z-index: 30;
   }
-  .brand { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 0.98rem; color: #fff; }
+  .brand { display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 0.92rem; color: #fff; }
   .badge-pro {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    font-size: 0.62rem; padding: 2px 7px; border-radius: 5px; text-transform: uppercase; letter-spacing: 0.6px;
+    background: linear-gradient(135deg, #d97706, #fde047);
+    color: #1e1002;
+    font-size: 0.6rem; font-weight: 900; padding: 2px 6px; border-radius: 5px; text-transform: uppercase; letter-spacing: 0.5px;
   }
   .sync-pill {
-    font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 99px;
+    font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 99px;
     background: var(--panel-2); border: 1px solid var(--border); color: var(--muted);
     cursor: pointer; transition: 0.2s; white-space: nowrap;
   }
   .sync-pill.online { border-color: rgba(16, 185, 129, 0.45); color: #6ee7b7; background: rgba(16, 185, 129, 0.1); }
   .sync-pill.syncing { border-color: rgba(245, 158, 11, 0.45); color: #fde68a; background: rgba(245, 158, 11, 0.1); }
 
-  .top-center { display: flex; align-items: center; gap: 6px; }
+  .top-center { display: flex; align-items: center; gap: 5px; }
   .hud-chip {
-    background: #080d1a; border: 1px solid var(--border); padding: 4px 10px;
-    border-radius: 7px; font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+    background: #080d22; border: 1px solid var(--border); padding: 3px 8px;
+    border-radius: 7px; font-size: 0.72rem; font-weight: 700; white-space: nowrap;
   }
   .hud-chip b { color: var(--accent); }
+  .hud-chip.prize-chip { border-color: rgba(245, 158, 11, 0.55); background: rgba(245, 158, 11, 0.1); }
+  .hud-chip.prize-chip b { color: var(--gold-light); }
+  .hud-chip.stage-chip { border-color: rgba(99, 102, 241, 0.55); background: rgba(99, 102, 241, 0.12); }
+  .hud-chip.stage-chip b { color: #c7d2fe; }
 
-  .top-right { display: flex; align-items: center; gap: 6px; }
+  .top-right { display: flex; align-items: center; gap: 5px; }
 
-  /* ==================== STATIC 9:16 PORTRAIT VIEWPORT ==================== */
+  /* ==================== LOCKED 9:16 PORTRAIT STAGE ==================== */
   main.stage-area {
     flex: 1;
     min-height: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
-    background: radial-gradient(circle at center, #111b33 0%, #03050a 100%);
+    padding: 6px;
+    background: radial-gradient(circle at center, #161447 0%, #03040d 100%);
     overflow: hidden;
     position: relative;
   }
@@ -93,31 +100,19 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    border-radius: 16px;
+    border-radius: 15px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 0 1.5px var(--border);
     cursor: pointer;
-    background: #060a14;
+    background: #06091e;
     display: block;
     touch-action: manipulation;
   }
 
   /* Recording Indicator (DOM-only, never recorded) */
   .rec-pill {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    display: none;
-    align-items: center;
-    gap: 6px;
-    background: rgba(10, 15, 28, 0.92);
-    border: 1.5px solid var(--danger);
-    color: #fecaca;
-    padding: 4px 11px;
-    border-radius: 99px;
-    font-size: 0.72rem;
-    font-weight: 800;
-    z-index: 15;
-    pointer-events: none;
+    position: absolute; top: 10px; left: 10px; display: none; align-items: center; gap: 6px;
+    background: rgba(10, 15, 28, 0.92); border: 1.5px solid var(--danger); color: #fecaca;
+    padding: 4px 10px; border-radius: 99px; font-size: 0.7rem; font-weight: 800; z-index: 15; pointer-events: none;
   }
   .rec-pill.active { display: inline-flex; }
   .rec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--danger); animation: blink 1s infinite; }
@@ -126,136 +121,61 @@
 
   /* ==================== CREATOR CHEAT NOTE (DOM-ONLY · NEVER RECORDED) ==================== */
   .cheat-note {
-    position: absolute;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    background: rgba(7, 12, 24, 0.93);
-    border: 1.5px solid rgba(245, 158, 11, 0.72);
-    border-radius: 11px;
-    padding: 7px 10px;
-    z-index: 20;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(6px);
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
+    position: absolute; left: 8px; right: 8px; bottom: 8px;
+    background: rgba(7, 11, 28, 0.94); border: 1.5px solid rgba(245, 158, 11, 0.78);
+    border-radius: 11px; padding: 7px 10px; z-index: 20;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px);
+    display: flex; flex-direction: column; gap: 3px;
   }
-  .cheat-note.pos-top {
-    bottom: auto;
-    top: 40px;
-  }
+  .cheat-note.pos-top { bottom: auto; top: 38px; }
   .cheat-note.hidden { display: none; }
 
-  .cheat-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-  }
+  .cheat-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
   .cheat-tag {
-    font-size: 0.62rem;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: #fde68a;
-    background: rgba(245, 158, 11, 0.16);
-    border: 1px solid rgba(245, 158, 11, 0.45);
-    padding: 1px 6px;
-    border-radius: 4px;
+    font-size: 0.6rem; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;
+    color: #fde68a; background: rgba(245, 158, 11, 0.16); border: 1px solid rgba(245, 158, 11, 0.45);
+    padding: 1px 6px; border-radius: 4px;
   }
   .cheat-actions { display: flex; gap: 4px; }
   .cheat-mini-btn {
-    background: rgba(30, 41, 59, 0.9);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-size: 0.66rem;
-    font-weight: 800;
-    padding: 1px 6px;
-    border-radius: 5px;
-    cursor: pointer;
+    background: rgba(30, 41, 59, 0.9); border: 1px solid var(--border); color: var(--text);
+    font-size: 0.64rem; font-weight: 800; padding: 1px 6px; border-radius: 5px; cursor: pointer;
   }
   .cheat-mini-btn:hover { background: var(--primary); }
-  .cheat-ans {
-    font-size: 0.78rem;
-    font-weight: 900;
-    color: #6ee7b7;
-    line-height: 1.25;
-  }
-  .cheat-exp {
-    font-size: 0.7rem;
-    color: #cbd5e1;
-    line-height: 1.25;
-  }
-  .cheat-next {
-    font-size: 0.65rem;
-    color: var(--muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  .cheat-ans { font-size: 0.76rem; font-weight: 900; color: #6ee7b7; line-height: 1.25; }
+  .cheat-exp { font-size: 0.68rem; color: #cbd5e1; line-height: 1.25; }
+  .cheat-next { font-size: 0.63rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* ==================== YOUTUBE SHORTS SAFE-ZONE GUIDE (DOM-ONLY · NEVER RECORDED) ==================== */
   .yt-safe-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 12;
-    display: none;
-    border-radius: 16px;
-    overflow: hidden;
+    position: absolute; inset: 0; pointer-events: none; z-index: 12; display: none;
+    border-radius: 15px; overflow: hidden;
   }
   .yt-safe-overlay.active { display: block; }
   .yt-zone-right {
-    position: absolute;
-    right: 0;
-    bottom: 12%;
-    width: 16%;
-    height: 36%;
-    background: rgba(239, 68, 68, 0.16);
-    border: 1px dashed rgba(239, 68, 68, 0.75);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.58rem;
-    font-weight: 800;
-    color: #fecaca;
-    writing-mode: vertical-rl;
+    position: absolute; right: 0; bottom: 12%; width: 16%; height: 36%;
+    background: rgba(239, 68, 68, 0.16); border: 1px dashed rgba(239, 68, 68, 0.75);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.56rem; font-weight: 800; color: #fecaca; writing-mode: vertical-rl;
   }
   .yt-zone-bottom {
-    position: absolute;
-    left: 0;
-    right: 16%;
-    bottom: 0;
-    height: 14%;
-    background: rgba(239, 68, 68, 0.14);
-    border-top: 1px dashed rgba(239, 68, 68, 0.75);
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 4px;
-    font-size: 0.58rem;
-    font-weight: 800;
-    color: #fecaca;
+    position: absolute; left: 0; right: 16%; bottom: 0; height: 14%;
+    background: rgba(239, 68, 68, 0.14); border-top: 1px dashed rgba(239, 68, 68, 0.75);
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px;
+    font-size: 0.56rem; font-weight: 800; color: #fecaca;
   }
 
-  /* Hidden Video Element for Active Camera Decoding (NOT display:none so mobile Safari/Chrome decodes frames) */
   #camVideo {
-    position: fixed;
-    top: -10px;
-    left: -10px;
-    width: 2px;
-    height: 2px;
-    opacity: 0.001;
-    pointer-events: none;
+    position: fixed; top: -10px; left: -10px; width: 2px; height: 2px;
+    opacity: 0.001; pointer-events: none;
   }
 
-  /* ==================== BOTTOM CONTROL DOCK ==================== */
-  footer.dock {
-    height: 60px;
-    background: var(--panel);
-    border-top: 1px solid var(--border);
-    padding: 0 12px;
+  /* ==================== REAL HOST DIRECTOR STRIP (TIP-TO-TOE CONTROL) ==================== */
+  section.director-bar {
+    height: 44px;
+    background: linear-gradient(90deg, #0b1130 0%, #121a45 50%, #0b1130 100%);
+    border-top: 1px solid rgba(245, 158, 11, 0.45);
+    padding: 0 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -264,49 +184,87 @@
     z-index: 30;
     overflow-x: auto;
   }
-  .dock-group { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .dir-group { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .dir-divider { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
+
+  /* ==================== BOTTOM CONTROL DOCK ==================== */
+  footer.dock {
+    height: 52px;
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-shrink: 0;
+    z-index: 30;
+    overflow-x: auto;
+  }
+  .dock-group { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
 
   .btn {
     background: var(--panel-2);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 7px 11px;
+    padding: 6px 9px;
     border-radius: 8px;
-    font-size: 0.78rem;
+    font-size: 0.74rem;
     font-weight: 700;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 4px;
     transition: 0.14s ease;
     white-space: nowrap;
   }
-  .btn:hover:not(:disabled) { background: #1f2e4d; border-color: #3d5588; }
+  .btn:hover:not(:disabled) { background: #1f2d61; border-color: #4b65b0; }
   .btn:active:not(:disabled) { transform: scale(0.96); }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn:disabled { opacity: 0.36; cursor: not-allowed; }
 
   .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn-hero {
+    background: linear-gradient(135deg, #4f46e5, #06b6d4);
+    border-color: #67e8f9;
+    color: #fff;
+    font-weight: 900;
+    box-shadow: 0 0 14px rgba(6, 182, 212, 0.35);
+  }
+  .btn-gold { background: linear-gradient(135deg, #b45309, #f59e0b); border-color: #fde047; color: #fff; font-weight: 800; }
   .btn-success { background: var(--success); border-color: var(--success); color: #032b1b; font-weight: 800; }
   .btn-warning { background: rgba(245, 158, 11, 0.18); border-color: var(--warning); color: #fde68a; }
   .btn-danger { background: rgba(239, 68, 68, 0.18); border-color: var(--danger); color: #fca5a5; }
-  .btn-mic-on { background: rgba(239, 68, 68, 0.22); border-color: var(--danger); color: #fecaca; }
+  .btn-mic-on { background: rgba(239, 68, 68, 0.24); border-color: var(--danger); color: #fecaca; }
   .btn-cam-on { background: rgba(6, 182, 212, 0.22); border-color: var(--accent); color: #cffafe; }
+  .btn-bgm-on { background: rgba(16, 185, 129, 0.22); border-color: var(--success); color: #a7f3d0; }
   .btn-cheat-on { background: rgba(245, 158, 11, 0.2); border-color: var(--warning); color: #fef08a; }
-  .btn-sm { padding: 4px 8px; font-size: 0.72rem; }
+  .btn-active-pill { background: rgba(99, 102, 241, 0.28); border-color: #818cf8; color: #e0e7ff; }
+  .btn-sm { padding: 4px 7px; font-size: 0.7rem; }
+
+  .lock-chip {
+    background: #0c1438; border: 1px solid #35498a; color: #fde047;
+    width: 28px; height: 28px; border-radius: 7px; font-size: 0.75rem; font-weight: 900;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .lock-chip:hover { background: #ea580c; color: #fff; border-color: #fde047; }
+  .lock-chip.locked { background: #ea580c; color: #fff; border-color: #fde047; }
 
   .seg-switch {
-    display: flex;
-    background: #070b14;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 2px;
+    display: flex; background: #070b1a; border: 1px solid var(--border);
+    border-radius: 8px; padding: 2px;
   }
   .seg-switch button {
     background: transparent; border: none; color: var(--muted);
-    padding: 5px 9px; border-radius: 6px; font-size: 0.74rem; font-weight: 700; cursor: pointer;
+    padding: 4px 8px; border-radius: 6px; font-size: 0.71rem; font-weight: 700; cursor: pointer;
   }
   .seg-switch button.active { background: var(--primary); color: #fff; }
+
+  .vol-mini {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #080d22; border: 1px solid var(--border); border-radius: 8px; padding: 3px 7px;
+  }
+  .vol-mini input[type="range"] { width: 54px; height: 4px; accent-color: var(--gold); }
 
   /* ==================== DRAWERS ==================== */
   .backdrop {
@@ -318,7 +276,7 @@
   .drawer {
     position: fixed; top: 0; right: 0; bottom: 0;
     width: min(820px, 96vw);
-    background: #0c1220;
+    background: #0a0f26;
     border-left: 1px solid var(--border);
     z-index: 100;
     transform: translateX(100%);
@@ -327,17 +285,13 @@
     flex-direction: column;
   }
   .drawer.open { transform: translateX(0); }
-  .drawer.narrow { width: min(440px, 96vw); }
+  .drawer.narrow { width: min(460px, 96vw); }
 
   .drawer-head {
-    padding: 13px 16px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--panel-2);
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; background: var(--panel-2);
   }
-  .drawer-head h2 { font-size: 0.95rem; color: #fff; }
+  .drawer-head h2 { font-size: 0.94rem; color: #fff; }
   .drawer-body { flex: 1; overflow-y: auto; padding: 14px; user-select: text; }
 
   .grid-2 { display: grid; grid-template-columns: 1fr 1.15fr; gap: 12px; }
@@ -347,21 +301,18 @@
   }
 
   .box {
-    background: #070b14;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    margin-bottom: 10px;
+    background: #060a1a; border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px; margin-bottom: 10px;
   }
-  .box h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); margin-bottom: 8px; }
+  .box h3 { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gold-light); margin-bottom: 8px; }
 
-  label { display: block; font-size: 0.74rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  label { display: block; font-size: 0.73rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
   input[type="text"], input[type="url"], input[type="number"], select, textarea {
-    width: 100%; background: #0c1322; border: 1px solid var(--border); color: var(--text);
-    padding: 7px 9px; border-radius: 7px; font-size: 0.83rem; outline: none; user-select: text;
+    width: 100%; background: #0c1330; border: 1px solid var(--border); color: var(--text);
+    padding: 7px 9px; border-radius: 7px; font-size: 0.82rem; outline: none; user-select: text;
   }
-  input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
-  input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+  input[type="range"] { width: 100%; accent-color: var(--gold); cursor: pointer; }
+  input:focus, select:focus, textarea:focus { border-color: var(--gold); }
   textarea { resize: vertical; font-family: 'Consolas', monospace; line-height: 1.4; }
 
   .row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
@@ -369,7 +320,7 @@
 
   .thumb-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
   .thumb-box {
-    width: 46px; height: 46px; border-radius: 8px; background: #0c1322;
+    width: 46px; height: 46px; border-radius: 8px; background: #0c1330;
     border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
     overflow: hidden; flex-shrink: 0; font-size: 0.7rem; color: var(--muted);
   }
@@ -377,29 +328,29 @@
 
   .format-badge {
     display: inline-flex; align-items: center; gap: 5px;
-    font-size: 0.72rem; font-weight: 800; padding: 3px 9px; border-radius: 99px;
+    font-size: 0.71rem; font-weight: 800; padding: 3px 9px; border-radius: 99px;
     background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.45); color: #6ee7b7;
   }
 
   .q-list { display: flex; flex-direction: column; gap: 6px; max-height: 480px; overflow-y: auto; }
   .q-card {
-    background: #0c1322; border: 1px solid var(--border); border-radius: 8px; padding: 9px;
+    background: #0c1330; border: 1px solid var(--border); border-radius: 8px; padding: 9px;
     display: flex; flex-direction: column; gap: 4px;
   }
   .q-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
   .q-card-title { font-size: 0.84rem; font-weight: 700; line-height: 1.35; cursor: pointer; }
-  .q-card-title:hover { color: var(--accent); }
+  .q-card-title:hover { color: var(--gold-light); }
   .q-opts-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 0.73rem; color: var(--muted); }
   .q-opts-mini span.ans { color: #6ee7b7; font-weight: 800; }
 
-  .check-row { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text); cursor: pointer; margin: 6px 0; }
-  .check-row input { width: 15px; height: 15px; accent-color: var(--primary); }
+  .check-row { display: flex; align-items: center; gap: 8px; font-size: 0.79rem; color: var(--text); cursor: pointer; margin: 6px 0; }
+  .check-row input { width: 15px; height: 15px; accent-color: var(--gold); }
 
   .toast {
-    position: fixed; bottom: 72px; right: 14px;
-    background: var(--panel-2); border: 1px solid var(--accent); color: #fff;
-    padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
-    z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.7); display: none;
+    position: fixed; bottom: 106px; right: 14px;
+    background: var(--panel-2); border: 1px solid var(--gold); color: #fff;
+    padding: 8px 14px; border-radius: 8px; font-size: 0.78rem; font-weight: 700;
+    z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.75); display: none;
   }
 </style>
 </head>
@@ -410,16 +361,18 @@
 <!-- ==================== TOP BAR ==================== -->
 <header class="topbar">
   <div class="brand">
-    <span>⚡ QuizVid 9:16</span>
-    <span class="badge-pro">Pro Studio</span>
+    <span>🏆 QuizVid KBC</span>
+    <span class="badge-pro">Host Studio</span>
     <span class="sync-pill" id="syncChip" title="Click to Sync Google Sheet">⏳ Syncing...</span>
   </div>
 
   <div class="top-center">
+    <div class="hud-chip prize-chip">Prize: <b id="hudPrize">₹1,000</b></div>
     <div class="hud-chip">Q: <b id="hudQIndex">1/1</b></div>
+    <div class="hud-chip stage-chip">Stage: <b id="hudStage">Q ONLY</b></div>
     <div class="hud-chip">Score: <b id="hudScore" style="color:var(--success)">0</b></div>
     <div class="hud-chip">Streak: <b id="hudStreak" style="color:var(--warning)">0🔥</b></div>
-    <select id="topicFilterSelect" style="width:135px; padding:4px 8px; font-size:0.75rem;">
+    <select id="topicFilterSelect" style="width:124px; padding:3px 7px; font-size:0.73rem;">
       <option value="ALL">📚 All Topics</option>
     </select>
   </div>
@@ -465,33 +418,78 @@
   </div>
 </main>
 
-<!-- ==================== BOTTOM DOCK ==================== -->
+<!-- ==================== REAL HOST DIRECTOR BAR (TIP-TO-TOE LIVE CONTROL) ==================== -->
+<section class="director-bar">
+  <!-- Primary Step-by-Step Host Cue -->
+  <div class="dir-group">
+    <button class="btn" id="btnPrevQ" title="Previous Question (Left Arrow)">⏮</button>
+    <button class="btn btn-hero" id="btnHostNextCue" style="min-width:146px;" title="Next Host Step (Space)">👁 View Options</button>
+    <button class="btn" id="btnNextQ" title="Next Question (Right Arrow)">⏭</button>
+  </div>
+
+  <div class="dir-divider"></div>
+
+  <!-- Explicit Stage Triggers -->
+  <div class="dir-group">
+    <button class="btn" id="btnShowQOnly" title="Show Question Only (Hide Options) [Q]">📢 Q Only</button>
+    <button class="btn btn-primary" id="btnViewOptions" title="Trigger Animated Options [O]">👁 View Options</button>
+    <button class="btn" id="btnTimerToggle" title="Start / Pause Countdown Timer [T]">⏱ Start Timer</button>
+    <button class="btn btn-sm" id="btnTimerReset" title="Reset Countdown Timer">↺</button>
+  </div>
+
+  <div class="dir-divider"></div>
+
+  <!-- Direct Host Option Lock Buttons & Reveal -->
+  <div class="dir-group">
+    <span style="font-size:0.68rem; color:var(--muted); font-weight:800;">LOCK:</span>
+    <button class="lock-chip" id="btnLockA" title="Lock Option A">A</button>
+    <button class="lock-chip" id="btnLockB" title="Lock Option B">B</button>
+    <button class="lock-chip" id="btnLockC" title="Lock Option C">C</button>
+    <button class="lock-chip" id="btnLockD" title="Lock Option D">D</button>
+    <button class="btn btn-gold" id="btnRevealNow" title="Reveal Answer [R]">✨ Reveal</button>
+    <button class="btn" id="btnToggleExpLive" title="Show/Hide Explanation Card [X]">💡 Exp</button>
+  </div>
+
+  <div class="dir-divider"></div>
+
+  <!-- Live Host Soundboard & Broadcast Slate -->
+  <div class="dir-group">
+    <button class="btn btn-sm" id="btnShowIntroCard" title="Toggle KBC Broadcast Intro Slate [I]">🎬 Intro</button>
+    <button class="btn btn-sm" id="btnSfxDrum" title="Play Suspense Drumroll [D]">🥁 Drum</button>
+    <button class="btn btn-sm" id="btnSfxClap" title="Play Audience Applause [K]">👏 Clap</button>
+  </div>
+</section>
+
+<!-- ==================== BOTTOM DOCK (LIFELINES, CAMERA, BGM, RECORDING) ==================== -->
 <footer class="dock">
   <div class="dock-group">
     <div class="seg-switch">
-      <button class="active" id="modeInteractiveBtn">🎓 Teach</button>
+      <button class="active" id="modeInteractiveBtn">🎓 Host</button>
       <button id="modeAutoBtn">🤖 Auto</button>
     </div>
     <button class="btn btn-warning" id="btnReviseWrong" style="display:none;">🔁 Wrong (<span id="wrongBadgeCount">0</span>)</button>
   </div>
 
   <div class="dock-group">
-    <button class="btn" id="btnPrevQ" title="Previous (Left Arrow)">⏮</button>
-    <button class="btn btn-primary" id="btnPlayPause" style="min-width:112px;">▶ Start</button>
-    <button class="btn" id="btnRevealNow" title="Reveal Answer (R)">👁 Reveal</button>
-    <button class="btn" id="btn5050" title="50:50 Lifeline (F)">½ 50:50</button>
-    <button class="btn" id="btnNextQ" title="Next (Right Arrow / Enter)">⏭</button>
+    <button class="btn" id="btn5050" title="KBC 50:50 Lifeline [F]">½ 50:50</button>
+    <button class="btn" id="btnPoll" title="KBC Audience Poll Lifeline [P]">📊 Poll</button>
+    <button class="btn" id="btnExpert" title="KBC Expert Advice Lifeline [E]">📞 Expert</button>
+    <button class="btn" id="btnLadder" title="Show/Hide KBC Prize Ladder [L]">🪜 Ladder</button>
   </div>
 
   <div class="dock-group">
-    <button class="btn" id="btnCamToggle" title="Toggle Live Bottom-Left Camera">📷 Cam Off</button>
-    <button class="btn" id="btnCamFlip" title="Switch Front / Back Main Camera" style="display:none;">🔄 Flip</button>
-    <button class="btn btn-cheat-on" id="btnCheatToggle" title="Toggle Creator Cheat Note (C) — Never Recorded">🕵️ Cheat</button>
-    <button class="btn" id="btnMicToggle" title="Toggle Microphone Voiceover in Recording">🎙️ Mic Off</button>
+    <div class="vol-mini" title="Quick BGM Toggle & Volume">
+      <button class="btn btn-sm" id="btnQuickBgm" style="padding:2px 6px;">🎵</button>
+      <input type="range" id="quickBgmVol" min="0" max="100" value="35">
+    </div>
+    <button class="btn" id="btnCamToggle" title="Toggle Live Bottom-Left Camera">📷 Cam</button>
+    <button class="btn" id="btnCamFlip" title="Switch Front / Back Main Camera" style="display:none;">🔄</button>
+    <button class="btn btn-cheat-on" id="btnCheatToggle" title="Toggle Creator Cheat Note [C] — Never Recorded">🕵️ Cheat</button>
+    <button class="btn" id="btnMicToggle" title="Toggle Microphone Voiceover in Recording">🎙️ Mic</button>
     <button class="btn btn-success" id="btnRecStart">⏺ Record</button>
     <button class="btn btn-warning" id="btnRecPause" style="display:none;">⏸ Pause</button>
     <button class="btn btn-danger" id="btnRecStop" style="display:none;">⏹ Save</button>
-    <a id="btnDownloadVideo" class="btn btn-primary" style="display:none; text-decoration:none;" download="quiz_shorts_9x16.mp4">⬇ Download MP4</a>
+    <a id="btnDownloadVideo" class="btn btn-primary" style="display:none; text-decoration:none;" download="kbc_quiz_9x16.mp4">⬇ Download MP4</a>
   </div>
 </footer>
 
@@ -592,10 +590,94 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
 <!-- ==================== DRAWER 2: STUDIO SETTINGS ==================== -->
 <aside class="drawer narrow" id="settingsDrawer">
   <div class="drawer-head">
-    <h2>⚙️ Studio, Camera & YouTube Export</h2>
+    <h2>⚙️ Host Director, Animations & Export</h2>
     <button class="btn btn-sm btn-danger" id="btnCloseSettings">✕ Close</button>
   </div>
   <div class="drawer-body">
+
+    <!-- REAL HOST STAGE FLOW & OPTION ANIMATIONS -->
+    <div class="box" style="border-color: rgba(6, 182, 212, 0.65);">
+      <h3>🎭 Host Flow & Option Entrance Animations</h3>
+      <div class="row">
+        <div>
+          <label>Option Reveal Trigger</label>
+          <select id="cfgOptTrigger">
+            <option value="manual">👆 Button Click ("View Options")</option>
+            <option value="auto1s">⏱️ Auto After Delay (Hands-Free)</option>
+          </select>
+        </div>
+        <div>
+          <label>Option Reveal Style</label>
+          <select id="cfgOptStepMode">
+            <option value="all">All 4 Staggered Cascade</option>
+            <option value="onebyone">1-by-1 (A → B → C → D)</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Delay Before Options (<span id="valOptDelay">1.0</span>s)</label>
+          <input type="range" id="cfgOptDelay" min="0" max="3" step="0.5" value="1">
+        </div>
+        <div>
+          <label>Option Animation Style</label>
+          <select id="cfgOptAnim">
+            <option value="mix">✨ Mix All 6 (Dynamic per Option)</option>
+            <option value="rtl">⬅️ Right to Left</option>
+            <option value="ltr">➡️ Left to Right</option>
+            <option value="utd">⬇️ Up to Down</option>
+            <option value="dtu">⬆️ Down to Up</option>
+            <option value="popup">💥 Pop Up (Zoom In)</option>
+            <option value="popdown">🎯 Pop Down (Drop Zoom)</option>
+          </select>
+        </div>
+      </div>
+      <label class="check-row"><input type="checkbox" id="cfgStartTimerAfterOpts" checked> Start Countdown Timer Automatically After Options Arrive</label>
+      <label class="check-row" style="margin-bottom:0;"><input type="checkbox" id="cfgAutoStartTimer"> Legacy Mode: Skip Q-Only Wait (Not Recommended for Host)</label>
+    </div>
+
+    <!-- KBC SHOW MODE & LIFELINES -->
+    <div class="box" style="border-color: rgba(245, 158, 11, 0.65);">
+      <h3>🏆 KBC Show Experience</h3>
+      <label class="check-row"><input type="checkbox" id="cfgKbcStyle" checked> KBC Hexagonal Gold Lozenges & Spotlights</label>
+      <label class="check-row"><input type="checkbox" id="cfgLockMode" checked> "Lock Kiya Jaye" Suspense Phase Before Reveal</label>
+      <label class="check-row"><input type="checkbox" id="cfgShowPrize" checked> Show KBC Prize Banner & Lifeline Strip</label>
+      <div class="row" style="margin-top:6px; margin-bottom:0;">
+        <button class="btn btn-gold" id="btnDrawerLadder">🪜 Toggle Prize Ladder</button>
+        <button class="btn" id="btnResetLifelines">♻️ Reset Lifelines</button>
+      </div>
+    </div>
+
+    <!-- STUDIO AUDIO MIXER & BGM VOLUME CONTROL -->
+    <div class="box" style="border-color: rgba(16, 185, 129, 0.55);">
+      <h3>🔊 KBC Audio Mixer & Live Volume Control</h3>
+      <label class="check-row"><input type="checkbox" id="cfgSoundTicks" checked> KBC Ghadi Tick, Option Whoosh, Lock & Fanfare SFX</label>
+      <label class="check-row"><input type="checkbox" id="cfgSynthBgm" checked> Built-in Royalty-Free KBC Suspense BGM</label>
+
+      <div style="margin-top:8px;">
+        <label>🎵 BGM Volume (<span id="valBgmVol">35</span>%)</label>
+        <input type="range" id="cfgBgmVol" min="0" max="100" value="35">
+      </div>
+      <div style="margin-top:6px;">
+        <label>🔔 KBC Sound Effects Volume (<span id="valSfxVol">75</span>%)</label>
+        <input type="range" id="cfgSfxVol" min="0" max="100" value="75">
+      </div>
+      <div style="margin-top:6px; margin-bottom:8px;">
+        <label>🎙️ Microphone Voice Gain (<span id="valMicVol">120</span>%)</label>
+        <input type="range" id="cfgMicVol" min="50" max="200" value="120">
+      </div>
+
+      <label>Custom BGM Track (MP3 / WAV — Overrides Built-in BGM)</label>
+      <div class="row" style="margin-bottom:4px;">
+        <label class="btn btn-primary" style="margin:0;">
+          🎵 Upload MP3/WAV
+          <input type="file" id="bgmUpload" accept="audio/*" hidden>
+        </label>
+        <button class="btn btn-success" id="btnToggleBgmLive">▶ Play BGM</button>
+        <button class="btn btn-danger" id="btnStopBgm" style="flex:0 0 auto;">✕</button>
+      </div>
+      <div id="bgmStatusText" style="font-size:0.73rem; color:var(--muted);">Using Built-in Royalty-Free KBC Suspense BGM</div>
+    </div>
 
     <!-- LIVE CAMERA OVERLAY (BOTTOM-LEFT HALF) -->
     <div class="box" style="border-color: rgba(6, 182, 212, 0.55);">
@@ -622,8 +704,8 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
         </div>
       </div>
       <div style="margin-bottom:6px;">
-        <label>Camera Size (<span id="valCamSize">128</span>px)</label>
-        <input type="range" id="cfgCamSize" min="84" max="180" value="128">
+        <label>Camera Size (<span id="valCamSize">124</span>px)</label>
+        <input type="range" id="cfgCamSize" min="84" max="176" value="124">
       </div>
       <label class="check-row"><input type="checkbox" id="cfgCamMirror" checked> Mirror Front Camera (Natural Selfie View)</label>
       <div id="camStatusText" style="font-size:0.73rem; color:var(--muted);">Camera is OFF (tap to enable in bottom-left)</div>
@@ -660,8 +742,8 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
           </select>
         </div>
         <div>
-          <label>Logo Size (<span id="valLogoSize">82</span>px)</label>
-          <input type="range" id="cfgLogoSize" min="48" max="150" value="82">
+          <label>Logo Size (<span id="valLogoSize">80</span>px)</label>
+          <input type="range" id="cfgLogoSize" min="48" max="150" value="80">
         </div>
       </div>
       <div class="row">
@@ -689,7 +771,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       <h3>🎨 Branding & Visual Theme</h3>
       <div style="margin-bottom:8px;">
         <label>Series Header Title</label>
-        <input type="text" id="cfgTitle" value="Top GK & Computer Science MCQs">
+        <input type="text" id="cfgTitle" value="KAUN BANEGA TOPPER — GK & CS">
       </div>
       <div style="margin-bottom:8px;">
         <label>Channel Watermark Text</label>
@@ -698,7 +780,8 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       <div>
         <label>Color Palette</label>
         <select id="cfgTheme">
-          <option value="obsidian">Obsidian Cyber Neon (Default)</option>
+          <option value="kbc">KBC Royal Indigo & Gold (Default)</option>
+          <option value="obsidian">Obsidian Cyber Neon</option>
           <option value="emerald">Emerald Matrix Gold</option>
           <option value="crimson">Royal Crimson Velvet</option>
           <option value="daylight">Clean Daylight Paper</option>
@@ -706,14 +789,14 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       </div>
     </div>
 
-    <!-- YOUTUBE-READY VIDEO EXPORT ENGINE -->
+    <!-- YOUTUBE-READY VIDEO EXPORT ENGINE (DURATION-FIXED) -->
     <div class="box" style="border-color: rgba(16, 185, 129, 0.45);">
-      <h3>🎬 YouTube Shorts Export Engine (9:16 HD)</h3>
+      <h3>🎬 YouTube Shorts Export Engine (Duration-Fixed)</h3>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
         <span style="font-size:0.78rem; color:var(--muted);">Export Codec:</span>
         <span class="format-badge" id="exportFormatBadge">Checking...</span>
       </div>
-      <div id="exportCodecDetail" style="font-size:0.7rem; color:var(--muted); margin-bottom:8px;">720×1280 · 9:16 Vertical · YouTube Verified</div>
+      <div id="exportCodecDetail" style="font-size:0.7rem; color:var(--muted); margin-bottom:8px;">720×1280 · Constant-FPS Heartbeat + MP4 Duration Fixer Active</div>
       <div class="row" style="margin-bottom:0;">
         <div>
           <label>Video Bitrate</label>
@@ -738,7 +821,11 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       <div class="row">
         <div>
           <label>Countdown (Sec)</label>
-          <input type="number" id="cfgThinkSec" min="3" max="60" value="7">
+          <input type="number" id="cfgThinkSec" min="3" max="60" value="10">
+        </div>
+        <div>
+          <label>Lock Suspense (Sec)</label>
+          <input type="number" id="cfgLockSec" min="1" max="10" value="2">
         </div>
         <div>
           <label>Reveal Hold (Sec)</label>
@@ -759,24 +846,6 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
         </div>
       </div>
       <label class="check-row"><input type="checkbox" id="cfgShowExp" checked> Show Explanation Card on Reveal</label>
-      <label class="check-row"><input type="checkbox" id="cfgAutoStartTimer" checked> Auto-Start Timer on Question Change</label>
-    </div>
-
-    <!-- AUDIO -->
-    <div class="box">
-      <h3>🔊 Studio Audio & Background Music</h3>
-      <label class="check-row"><input type="checkbox" id="cfgSoundTicks" checked> Soft Broadcast Woodblock Tick & Chime</label>
-      <div style="margin-top:8px;">
-        <label>Background Music (MP3 / WAV — Auto-Mixed in Video)</label>
-        <div class="row" style="margin-bottom:4px;">
-          <label class="btn" style="margin:0;">
-            🎵 Load BGM
-            <input type="file" id="bgmUpload" accept="audio/*" hidden>
-          </label>
-          <button class="btn btn-danger" id="btnStopBgm">🔇 Clear BGM</button>
-        </div>
-        <div id="bgmStatusText" style="font-size:0.74rem; color:var(--muted);">No background music loaded</div>
-      </div>
     </div>
   </div>
 </aside>
@@ -785,29 +854,49 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
 
 <script>
 (() => {
-  /* ==================== 1. STATE & PERMANENT SYNC ==================== */
+  /* ==================== 1. STATE, KBC PRIZE TREE & PERMANENT SYNC ==================== */
   const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDxOgbjCa4N4bAcnA8rNaSfponcn9zmxeDMlNYuOrRJJOYrW-c_r6m5JGIGKlvxW-J5Q/exec';
   const LS_DECK_KEY   = 'quizvid_pro_9x16_v6';
   const LS_URL_KEY    = 'quizvid_pro_url_v6';
-  const LS_ASSETS_KEY = 'quizvid_pro_assets_v7';
+  const LS_ASSETS_KEY = 'quizvid_pro_kbc_v9';
+
+  const KBC_PRIZES = [
+    '₹1,000', '₹2,000', '₹3,000', '₹5,000', '₹10,000',
+    '₹20,000', '₹40,000', '₹80,000', '₹1,60,000', '₹3,20,000',
+    '₹6,40,000', '₹12,50,000', '₹25,00,000', '₹50,00,000', '₹1 CRORE', '₹7 CRORE'
+  ];
+  const KBC_MILESTONES = new Set([4, 9, 14, 15]);
+  const ALL_OPT_ANIMS = ['ltr', 'rtl', 'utd', 'dtu', 'popup', 'popdown'];
 
   let questions = [];
-  let meta = { title: 'Top GK & Computer Science MCQs', channel: '@AbhishekDigitalStudio' };
+  let meta = { title: 'KAUN BANEGA TOPPER — GK & CS', channel: '@AbhishekDigitalStudio' };
 
-  // Persistent Studio Assets (Live Camera Config + Custom PNG Logo + Watermark + Cheat Note Prefs)
   let brandAssets = {
-    camFacing: 'user',     // 'user' (Front) | 'environment' (Back Main)
-    camShape: 'circle',    // 'circle' | 'rounded' | 'portrait'
-    camSize: 128,
+    optTrigger: 'manual',       // 'manual' (Click View Options) | 'auto1s'
+    optStepMode: 'all',         // 'all' (All 4 staggered) | 'onebyone' (A->B->C->D)
+    optDelaySec: 1.0,           // 0 to 3 sec delay before options appear
+    optAnimStyle: 'mix',        // 'mix' | 'rtl' | 'ltr' | 'utd' | 'dtu' | 'popup' | 'popdown'
+    startTimerAfterOpts: true,  // Timer starts automatically right after options finish entering
+    kbcStyle: true,
+    lockMode: true,
+    showPrize: true,
+    bgmVol: 35,
+    sfxVol: 75,
+    micVol: 120,
+    synthBgm: true,
+    camFacing: 'user',
+    camShape: 'circle',
+    camSize: 124,
     camMirror: true,
     cheatShow: true,
-    cheatPos: 'bottom',    // 'bottom' | 'top'
+    cheatPos: 'bottom',
     logoDataUrl: '',
     logoPos: 'top-right',
-    logoSize: 82,
+    logoSize: 80,
     logoOpacity: 90,
     wmMode: 'diagonal',
-    wmOpacity: 11
+    wmOpacity: 11,
+    theme: 'kbc'
   };
   let logoImg = null;
 
@@ -822,20 +911,40 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
   let streak = 0;
   let wrongIds = new Set();
 
-  // Animation & Timer Clocks
-  let playMode = 'interactive'; // 'interactive' | 'auto'
-  let phase = 'thinking';       // 'thinking' | 'revealed'
+  // KBC Lifelines & Live Host Overlays
+  let lifelinesUsed = { fifty: false, poll: false, expert: false };
+  let pollOverlayData = null;
+  let expertOverlayData = null;
+  let showLadderOverlay = false;
+  let showIntroSlate = false;
+  let showExpLiveOverride = true;
+
+  // Real Host Stage State Machine:
+  // 'question_only' -> 'options_wait' (1s beat) -> 'options_entering' -> 'thinking' -> 'locked' -> 'revealed'
+  let playMode = 'interactive'; // 'interactive' (Host) | 'auto'
+  let phase = 'question_only';
   let isRunning = false;
   let phaseElapsedMs = 0;
-  let enterAnimMs = 0;
+  let qEnterAnimMs = 0;
+  let optWaitMs = 0;
   let revealAnimMs = 0;
+  let lockAnimMs = 0;
   let lastFrameTime = performance.now();
   let lastWholeSecondBeep = -1;
+
+  // Per-option animation tracking (each option has its own clock & distinct entrance style)
+  let optionVisibleCount = 0;        // 0..4
+  let optionAnimMs = [0, 0, 0, 0];   // Elapsed ms since each option started animating
+  let optionStarted = [false, false, false, false];
+  let optionAnimTypes = ['ltr', 'rtl', 'popup', 'dtu'];
+  let optionCascadeTimerMs = 0;
+  let optionsTargetCount = 0;        // 4 for 'all', increments 1..4 for 'onebyone'
 
   let selectedOption = -1;
   let hiddenOptions = new Set();
   let optionHitBoxes = [];
   let revealParticles = [];
+  let recFrameParity = 0;
 
   const starterQuestions = [
     { id: 101, category: 'Computer Science', q: 'Which data structure follows the LIFO (Last In, First Out) principle?', options: ['Queue', 'Stack', 'Linked List', 'Binary Tree'], ans: 1, exp: 'Stack में डेटा ऊपर (Top) से ही जुड़ता और हटता है।' },
@@ -848,12 +957,16 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     navigator.storage.persist().catch(() => {});
   }
 
+  function getCurrentPrizeLabel(idx = curIdx) {
+    return KBC_PRIZES[Math.min(idx, KBC_PRIZES.length - 1)];
+  }
+
   function showToast(msg) {
     const el = document.getElementById('toast');
     el.textContent = msg;
     el.style.display = 'block';
     clearTimeout(el._t);
-    el._t = setTimeout(() => el.style.display = 'none', 2600);
+    el._t = setTimeout(() => el.style.display = 'none', 2500);
   }
 
   function setSyncStatus(state, text) {
@@ -862,13 +975,441 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     chip.textContent = text;
   }
 
+  function assignOptionAnimationsForQuestion(qIndex) {
+    const style = brandAssets.optAnimStyle || 'mix';
+    if (style !== 'mix') {
+      optionAnimTypes = [style, style, style, style];
+      return;
+    }
+    // Rotate through all 6 dramatic animations so every question mixes Left->Right, Right->Left, Up->Down, Down->Up, Pop-Up, Pop-Down
+    const presets = [
+      ['ltr', 'rtl', 'utd', 'dtu'],
+      ['rtl', 'ltr', 'popup', 'popdown'],
+      ['utd', 'rtl', 'popdown', 'ltr'],
+      ['popup', 'ltr', 'dtu', 'rtl'],
+      ['dtu', 'popdown', 'ltr', 'popup'],
+      ['ltr', 'utd', 'rtl', 'popdown']
+    ];
+    optionAnimTypes = [...presets[qIndex % presets.length]];
+  }
+
+  /* ==================== 2. KBC STUDIO AUDIO ENGINE + SOUNDBOARD ==================== */
+  class KBCStudioAudioEngine {
+    constructor() {
+      this.ctx = null;
+      this.masterOut = null;
+      this.streamDest = null;
+      this.bgmBus = null;
+      this.sfxBus = null;
+      this.micGain = null;
+
+      this.bgmBuffer = null;
+      this.bgmFileName = '';
+      this.bgmSource = null;
+      this.bgmPlaying = false;
+
+      this.synthTimer = null;
+      this.synthStep = 0;
+
+      this.micStream = null;
+      this.micNode = null;
+      this.micEnabled = false;
+    }
+
+    ensure() {
+      if (!this.ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AC();
+        this.streamDest = this.ctx.createMediaStreamDestination();
+
+        const comp = this.ctx.createDynamicsCompressor();
+        comp.threshold.setValueAtTime(-14, this.ctx.currentTime);
+        comp.ratio.setValueAtTime(4, this.ctx.currentTime);
+        comp.connect(this.ctx.destination);
+        comp.connect(this.streamDest);
+        this.masterOut = comp;
+
+        this.bgmBus = this.ctx.createGain();
+        this.bgmBus.gain.setValueAtTime((brandAssets.bgmVol / 100) * 0.45, this.ctx.currentTime);
+        this.bgmBus.connect(this.masterOut);
+
+        this.sfxBus = this.ctx.createGain();
+        this.sfxBus.gain.setValueAtTime(brandAssets.sfxVol / 100, this.ctx.currentTime);
+        this.sfxBus.connect(this.masterOut);
+
+        this.micGain = this.ctx.createGain();
+        this.micGain.gain.setValueAtTime(brandAssets.micVol / 100, this.ctx.currentTime);
+        this.micGain.connect(this.streamDest);
+
+        // Sub-audible stereo carrier keeps audio timeline continuous from 0ms to stop
+        const carrier = this.ctx.createOscillator();
+        const cGain = this.ctx.createGain();
+        carrier.frequency.setValueAtTime(25, this.ctx.currentTime);
+        cGain.gain.setValueAtTime(0.00012, this.ctx.currentTime);
+        carrier.connect(cGain);
+        cGain.connect(this.streamDest);
+        carrier.start();
+      }
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+    }
+
+    setBgmVolume(pct) {
+      brandAssets.bgmVol = Math.max(0, Math.min(100, pct));
+      if (this.bgmBus && this.ctx) {
+        this.bgmBus.gain.setTargetAtTime((brandAssets.bgmVol / 100) * 0.45, this.ctx.currentTime, 0.04);
+      }
+    }
+
+    setSfxVolume(pct) {
+      brandAssets.sfxVol = Math.max(0, Math.min(100, pct));
+      if (this.sfxBus && this.ctx) {
+        this.sfxBus.gain.setTargetAtTime(brandAssets.sfxVol / 100, this.ctx.currentTime, 0.04);
+      }
+    }
+
+    setMicVolume(pct) {
+      brandAssets.micVol = Math.max(50, Math.min(200, pct));
+      if (this.micGain && this.ctx) {
+        this.micGain.gain.setTargetAtTime(brandAssets.micVol / 100, this.ctx.currentTime, 0.04);
+      }
+    }
+
+    async toggleMic() {
+      this.ensure();
+      if (this.micEnabled) {
+        if (this.micNode) { try { this.micNode.disconnect(); } catch (e) {} this.micNode = null; }
+        if (this.micStream) { this.micStream.getTracks().forEach(t => t.stop()); this.micStream = null; }
+        this.micEnabled = false;
+        return false;
+      } else {
+        try {
+          this.micStream = await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+          });
+          this.micNode = this.ctx.createMediaStreamSource(this.micStream);
+          this.micNode.connect(this.micGain);
+          this.micEnabled = true;
+          return true;
+        } catch (err) {
+          showToast('Microphone permission denied');
+          return false;
+        }
+      }
+    }
+
+    // Crisp Option Entrance Pop/Whoosh SFX
+    sfxOptionPop(index = 0) {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      const t = this.ctx.currentTime;
+      const baseFreqs = [330, 392, 440, 523.25];
+      const o = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      o.type = 'sine';
+      const f = baseFreqs[index % 4];
+      o.frequency.setValueAtTime(f * 0.72, t);
+      o.frequency.exponentialRampToValueAtTime(f, t + 0.08);
+      g.gain.setValueAtTime(0.001, t);
+      g.gain.linearRampToValueAtTime(0.16, t + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+      o.connect(g);
+      g.connect(this.sfxBus);
+      o.start(t);
+      o.stop(t + 0.16);
+      o.onended = () => { g.disconnect(); o.disconnect(); };
+    }
+
+    tick(urgent = false) {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      const t = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = urgent ? 'triangle' : 'sine';
+      const f = urgent ? 960 : 620;
+      osc.frequency.setValueAtTime(f, t);
+      osc.frequency.exponentialRampToValueAtTime(f * 0.42, t + 0.045);
+
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(urgent ? 0.28 : 0.16, t + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.055);
+
+      osc.connect(gain);
+      gain.connect(this.sfxBus);
+      osc.start(t);
+      osc.stop(t + 0.06);
+      osc.onended = () => { gain.disconnect(); osc.disconnect(); };
+    }
+
+    sfxLock() {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      const t = this.ctx.currentTime;
+
+      const sub = this.ctx.createOscillator();
+      const sGain = this.ctx.createGain();
+      sub.type = 'sine';
+      sub.frequency.setValueAtTime(140, t);
+      sub.frequency.exponentialRampToValueAtTime(42, t + 0.35);
+      sGain.gain.setValueAtTime(0.001, t);
+      sGain.gain.linearRampToValueAtTime(0.45, t + 0.015);
+      sGain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+      sub.connect(sGain);
+      sGain.connect(this.sfxBus);
+      sub.start(t);
+      sub.stop(t + 0.48);
+      sub.onended = () => { sGain.disconnect(); sub.disconnect(); };
+
+      [440, 659.25].forEach((freq, i) => {
+        const o = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(freq, t + i * 0.04);
+        g.gain.setValueAtTime(0.001, t + i * 0.04);
+        g.gain.linearRampToValueAtTime(0.14, t + i * 0.04 + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+        o.connect(g);
+        g.connect(this.sfxBus);
+        o.start(t + i * 0.04);
+        o.stop(t + 0.4);
+        o.onended = () => { g.disconnect(); o.disconnect(); };
+      });
+    }
+
+    // Live Host Drumroll SFX
+    sfxDrumroll() {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      const baseT = this.ctx.currentTime;
+      for (let i = 0; i < 16; i++) {
+        const t = baseT + i * 0.065;
+        const o = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(110 + i * 5, t);
+        o.frequency.exponentialRampToValueAtTime(65, t + 0.05);
+        const amp = 0.1 + (i / 16) * 0.22;
+        g.gain.setValueAtTime(0.001, t);
+        g.gain.linearRampToValueAtTime(amp, t + 0.008);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+        o.connect(g);
+        g.connect(this.sfxBus);
+        o.start(t);
+        o.stop(t + 0.065);
+        o.onended = () => { g.disconnect(); o.disconnect(); };
+      }
+    }
+
+    // Live Host Studio Applause SFX (Filtered Noise Claps)
+    sfxApplause() {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      const dur = 1.6;
+      const bufSize = Math.floor(this.ctx.sampleRate * dur);
+      const buf = this.ctx.createBuffer(1, bufSize, this.ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) {
+        const env = Math.sin((i / bufSize) * Math.PI);
+        const flutter = 0.65 + 0.35 * Math.sin(i / 420);
+        data[i] = (Math.random() * 2 - 1) * env * flutter;
+      }
+      const src = this.ctx.createBufferSource();
+      src.buffer = buf;
+      const bp = this.ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(1250, this.ctx.currentTime);
+      bp.Q.setValueAtTime(0.9, this.ctx.currentTime);
+      const g = this.ctx.createGain();
+      g.gain.setValueAtTime(0.28, this.ctx.currentTime);
+
+      src.connect(bp);
+      bp.connect(g);
+      g.connect(this.sfxBus);
+      src.start();
+      src.onended = () => { g.disconnect(); bp.disconnect(); src.disconnect(); };
+    }
+
+    chimeSuccess() {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((freq, i) => {
+        const t = this.ctx.currentTime + i * 0.055;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = i % 2 === 0 ? 'triangle' : 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.18, t + 0.012);
+        gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.45);
+        osc.connect(gain);
+        gain.connect(this.sfxBus);
+        osc.start(t);
+        osc.stop(t + 0.48);
+        osc.onended = () => { gain.disconnect(); osc.disconnect(); };
+      });
+    }
+
+    buzzWrong() {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      [220, 165, 110].forEach((freq, i) => {
+        const t = this.ctx.currentTime + i * 0.08;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(600, t);
+
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.16, t + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.25);
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.sfxBus);
+        osc.start(t);
+        osc.stop(t + 0.27);
+        osc.onended = () => { gain.disconnect(); filter.disconnect(); osc.disconnect(); };
+      });
+    }
+
+    sfxLifeline() {
+      if (!document.getElementById('cfgSoundTicks').checked) return;
+      this.ensure();
+      [392, 523.25, 783.99].forEach((freq, i) => {
+        const t = this.ctx.currentTime + i * 0.06;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.17, t + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+        osc.connect(gain);
+        gain.connect(this.sfxBus);
+        osc.start(t);
+        osc.stop(t + 0.3);
+        osc.onended = () => { gain.disconnect(); osc.disconnect(); };
+      });
+    }
+
+    async decodeBGM(file) {
+      this.ensure();
+      const buf = await file.arrayBuffer();
+      this.bgmBuffer = await this.ctx.decodeAudioData(buf);
+      this.bgmFileName = file.name;
+    }
+
+    _playSynthBeat() {
+      if (!this.ctx || !this.bgmPlaying) return;
+      const t = this.ctx.currentTime;
+      const step = this.synthStep % 8;
+      this.synthStep++;
+
+      if (step === 0 || step === 4) {
+        const o = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        o.type = 'sine';
+        const baseF = phase === 'locked' ? 73.4 : 65.4;
+        o.frequency.setValueAtTime(baseF * 1.4, t);
+        o.frequency.exponentialRampToValueAtTime(baseF, t + 0.18);
+        g.gain.setValueAtTime(0.001, t);
+        g.gain.linearRampToValueAtTime(0.42, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.42);
+        o.connect(g);
+        g.connect(this.bgmBus);
+        o.start(t);
+        o.stop(t + 0.45);
+        o.onended = () => { g.disconnect(); o.disconnect(); };
+      }
+
+      const notes = phase === 'locked'
+        ? [293.66, 349.23, 440.0, 349.23, 293.66, 329.63, 440.0, 466.16]
+        : [196.0, 233.08, 293.66, 233.08, 196.0, 261.63, 293.66, 233.08];
+      const o2 = this.ctx.createOscillator();
+      const f2 = this.ctx.createBiquadFilter();
+      const g2 = this.ctx.createGain();
+      o2.type = 'triangle';
+      o2.frequency.setValueAtTime(notes[step], t);
+      f2.type = 'lowpass';
+      f2.frequency.setValueAtTime(phase === 'locked' ? 900 : 520, t);
+
+      g2.gain.setValueAtTime(0.001, t);
+      g2.gain.linearRampToValueAtTime(0.11, t + 0.03);
+      g2.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+      o2.connect(f2);
+      f2.connect(g2);
+      g2.connect(this.bgmBus);
+      o2.start(t);
+      o2.stop(t + 0.42);
+      o2.onended = () => { g2.disconnect(); f2.disconnect(); o2.disconnect(); };
+    }
+
+    startBGM() {
+      this.stopBGM();
+      this.ensure();
+
+      if (this.bgmBuffer) {
+        this.bgmSource = this.ctx.createBufferSource();
+        this.bgmSource.buffer = this.bgmBuffer;
+        this.bgmSource.loop = true;
+        this.bgmSource.connect(this.bgmBus);
+        this.bgmSource.start(0);
+        this.bgmPlaying = true;
+      } else if (brandAssets.synthBgm) {
+        this.bgmPlaying = true;
+        this.synthStep = 0;
+        this._playSynthBeat();
+        this.synthTimer = setInterval(() => this._playSynthBeat(), 460);
+      }
+      updateBgmButtonsUI();
+    }
+
+    stopBGM() {
+      if (this.bgmSource) {
+        try { this.bgmSource.stop(); this.bgmSource.disconnect(); } catch (e) {}
+        this.bgmSource = null;
+      }
+      if (this.synthTimer) {
+        clearInterval(this.synthTimer);
+        this.synthTimer = null;
+      }
+      this.bgmPlaying = false;
+      updateBgmButtonsUI();
+    }
+
+    toggleBGM() {
+      if (this.bgmPlaying) this.stopBGM();
+      else this.startBGM();
+    }
+  }
+  const audio = new KBCStudioAudioEngine();
+
+  function updateBgmButtonsUI() {
+    const qBtn = document.getElementById('btnQuickBgm');
+    const dBtn = document.getElementById('btnToggleBgmLive');
+    if (audio.bgmPlaying) {
+      qBtn.classList.add('btn-bgm-on');
+      qBtn.textContent = '🎵 ON';
+      dBtn.classList.remove('btn-success');
+      dBtn.classList.add('btn-warning');
+      dBtn.textContent = '⏸ Pause BGM';
+    } else {
+      qBtn.classList.remove('btn-bgm-on');
+      qBtn.textContent = '🎵';
+      dBtn.classList.remove('btn-warning');
+      dBtn.classList.add('btn-success');
+      dBtn.textContent = '▶ Play BGM';
+    }
+  }
+
   /* ==================== LIVE FRONT & BACK CAMERA CONTROLLER ==================== */
   async function startLiveCamera(facingMode = brandAssets.camFacing) {
-    // Always stop previous stream first so Android devices release the sensor cleanly
     stopLiveCamera(false);
 
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      showToast('Camera API requires HTTPS or localhost');
+      showToast('Camera requires HTTPS (GitHub Pages) or localhost');
       return false;
     }
 
@@ -929,11 +1470,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     brandAssets.camFacing = nextFacing;
     document.getElementById('cfgCamFacing').value = nextFacing;
     saveBrandAssets();
-    if (camActive) {
-      await startLiveCamera(nextFacing);
-    } else {
-      await startLiveCamera(nextFacing);
-    }
+    await startLiveCamera(nextFacing);
   }
 
   function updateCameraUI() {
@@ -945,7 +1482,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     if (camActive) {
       const label = brandAssets.camFacing === 'environment' ? 'Back' : 'Front';
       dockBtn.classList.add('btn-cam-on');
-      dockBtn.textContent = `📹 ${label} ON`;
+      dockBtn.textContent = `📹 ${label}`;
       flipBtn.style.display = 'inline-flex';
       drawerBtn.classList.remove('btn-primary');
       drawerBtn.classList.add('btn-danger');
@@ -954,7 +1491,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       statusTxt.textContent = `LIVE: ${brandAssets.camFacing === 'environment' ? 'Back Main Camera' : 'Front Camera'} (Bottom-Left)`;
     } else {
       dockBtn.classList.remove('btn-cam-on');
-      dockBtn.textContent = '📷 Cam Off';
+      dockBtn.textContent = '📷 Cam';
       flipBtn.style.display = 'none';
       drawerBtn.classList.remove('btn-danger');
       drawerBtn.classList.add('btn-primary');
@@ -976,10 +1513,10 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
 
     if (brandAssets.cheatShow) {
       dockBtn.classList.add('btn-cheat-on');
-      dockBtn.textContent = '🕵️ Cheat ON';
+      dockBtn.textContent = '🕵️ Cheat';
     } else {
       dockBtn.classList.remove('btn-cheat-on');
-      dockBtn.textContent = '🕵️ Cheat Off';
+      dockBtn.textContent = '🕵️ Off';
     }
   }
 
@@ -989,7 +1526,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     const ansIdx = Math.max(0, Math.min(3, qObj.ans || 0));
     const ansVal = (qObj.options && qObj.options[ansIdx]) ? qObj.options[ansIdx] : '';
 
-    document.getElementById('cheatAnsText').textContent = `✅ ANS: ${letters[ansIdx]}) ${ansVal}`;
+    document.getElementById('cheatAnsText').textContent = `✅ ANS (${getCurrentPrizeLabel()}): ${letters[ansIdx]}) ${ansVal}`;
 
     const expEl = document.getElementById('cheatExpText');
     if (qObj.exp) {
@@ -1001,13 +1538,13 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
 
     const nextEl = document.getElementById('cheatNextText');
     if (curIdx < activePool.length - 1) {
-      nextEl.textContent = `⏭ Next Q${curIdx + 2}: ${activePool[curIdx + 1].q}`;
+      nextEl.textContent = `⏭ Next Q${curIdx + 2} (${getCurrentPrizeLabel(curIdx + 1)}): ${activePool[curIdx + 1].q}`;
     } else {
       nextEl.textContent = `🏁 Last question in active deck`;
     }
   }
 
-  /* ==================== LOGO PNG OPTIMIZER & BRAND PERSISTENCE ==================== */
+  /* ==================== LOGO PNG OPTIMIZER & PERSISTENCE ==================== */
   function resizePngToDataUrl(file, maxDim) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -1026,8 +1563,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
           const c = document.createElement('canvas');
           c.width = w;
           c.height = h;
-          const cx = c.getContext('2d');
-          cx.drawImage(img, 0, 0, w, h);
+          c.getContext('2d').drawImage(img, 0, 0, w, h);
           resolve(c.toDataURL('image/png'));
         };
         img.src = reader.result;
@@ -1053,7 +1589,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     try {
       localStorage.setItem(LS_ASSETS_KEY, JSON.stringify(brandAssets));
     } catch (e) {
-      showToast('Logo too large for browser storage; active for this session.');
+      showToast('Logo too large for storage; active for this session.');
     }
     rebuildBackgroundCache();
   }
@@ -1061,10 +1597,30 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
   function loadBrandAssets() {
     try {
       const raw = localStorage.getItem(LS_ASSETS_KEY);
-      if (raw) {
-        Object.assign(brandAssets, JSON.parse(raw));
-      }
+      if (raw) Object.assign(brandAssets, JSON.parse(raw));
     } catch (e) {}
+
+    document.getElementById('cfgOptTrigger').value = brandAssets.optTrigger;
+    document.getElementById('cfgOptStepMode').value = brandAssets.optStepMode;
+    document.getElementById('cfgOptDelay').value = brandAssets.optDelaySec;
+    document.getElementById('valOptDelay').textContent = Number(brandAssets.optDelaySec).toFixed(1);
+    document.getElementById('cfgOptAnim').value = brandAssets.optAnimStyle;
+    document.getElementById('cfgStartTimerAfterOpts').checked = brandAssets.startTimerAfterOpts;
+
+    document.getElementById('cfgKbcStyle').checked = brandAssets.kbcStyle;
+    document.getElementById('cfgLockMode').checked = brandAssets.lockMode;
+    document.getElementById('cfgShowPrize').checked = brandAssets.showPrize;
+    document.getElementById('cfgSynthBgm').checked = brandAssets.synthBgm;
+
+    document.getElementById('cfgBgmVol').value = brandAssets.bgmVol;
+    document.getElementById('quickBgmVol').value = brandAssets.bgmVol;
+    document.getElementById('valBgmVol').textContent = brandAssets.bgmVol;
+
+    document.getElementById('cfgSfxVol').value = brandAssets.sfxVol;
+    document.getElementById('valSfxVol').textContent = brandAssets.sfxVol;
+
+    document.getElementById('cfgMicVol').value = brandAssets.micVol;
+    document.getElementById('valMicVol').textContent = brandAssets.micVol;
 
     document.getElementById('cfgCamFacing').value = brandAssets.camFacing;
     document.getElementById('cfgCamShape').value = brandAssets.camShape;
@@ -1082,15 +1638,18 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     document.getElementById('cfgWmOpacity').value = brandAssets.wmOpacity;
     document.getElementById('valWmOpacity').textContent = brandAssets.wmOpacity;
 
+    if (brandAssets.theme) document.getElementById('cfgTheme').value = brandAssets.theme;
+
     updateLogoPreview();
     applyCheatNoteVisibility();
     updateCameraUI();
+    updateBgmButtonsUI();
     loadBrandImage(brandAssets.logoDataUrl, (img) => { logoImg = img; rebuildBackgroundCache(); });
   }
 
   let syncTimer = null;
   function saveLocalAndSync(pushCloud = true) {
-    meta.title = document.getElementById('cfgTitle').value.trim() || 'Live Quiz Session';
+    meta.title = document.getElementById('cfgTitle').value.trim() || 'KAUN BANEGA TOPPER';
     meta.channel = document.getElementById('cfgChannel').value.trim() || '';
     const url = document.getElementById('sheetApiUrl').value.trim() || DEFAULT_SCRIPT_URL;
     localStorage.setItem(LS_URL_KEY, url);
@@ -1171,168 +1730,11 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     }
   }
 
-  /* ==================== 2. STUDIO AUDIO ENGINE + LIVE MIC MIXER ==================== */
-  class StudioAudioEngine {
-    constructor() {
-      this.ctx = null;
-      this.masterOut = null;
-      this.streamDest = null;
-      this.bgmBuffer = null;
-      this.bgmSource = null;
-      this.bgmGain = null;
-      this.micStream = null;
-      this.micNode = null;
-      this.micEnabled = false;
-    }
-
-    ensure() {
-      if (!this.ctx) {
-        const AC = window.AudioContext || window.webkitAudioContext;
-        this.ctx = new AC();
-        this.streamDest = this.ctx.createMediaStreamDestination();
-
-        const comp = this.ctx.createDynamicsCompressor();
-        comp.threshold.setValueAtTime(-14, this.ctx.currentTime);
-        comp.ratio.setValueAtTime(4, this.ctx.currentTime);
-        comp.connect(this.ctx.destination);
-        comp.connect(this.streamDest);
-        this.masterOut = comp;
-
-        // Continuous sub-audible stereo carrier guarantees clean YouTube audio sync from frame 0
-        const carrier = this.ctx.createOscillator();
-        const cGain = this.ctx.createGain();
-        carrier.frequency.setValueAtTime(25, this.ctx.currentTime);
-        cGain.gain.setValueAtTime(0.00012, this.ctx.currentTime);
-        carrier.connect(cGain);
-        cGain.connect(this.streamDest);
-        carrier.start();
-      }
-      if (this.ctx.state === 'suspended') this.ctx.resume();
-    }
-
-    async toggleMic() {
-      this.ensure();
-      if (this.micEnabled) {
-        if (this.micNode) { try { this.micNode.disconnect(); } catch (e) {} this.micNode = null; }
-        if (this.micStream) { this.micStream.getTracks().forEach(t => t.stop()); this.micStream = null; }
-        this.micEnabled = false;
-        return false;
-      } else {
-        try {
-          this.micStream = await navigator.mediaDevices.getUserMedia({
-            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
-          });
-          this.micNode = this.ctx.createMediaStreamSource(this.micStream);
-          this.micNode.connect(this.streamDest);
-          this.micEnabled = true;
-          return true;
-        } catch (err) {
-          showToast('Microphone permission denied');
-          return false;
-        }
-      }
-    }
-
-    tick(urgent = false) {
-      if (!document.getElementById('cfgSoundTicks').checked) return;
-      this.ensure();
-      const t = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'sine';
-      const f = urgent ? 860 : 600;
-      osc.frequency.setValueAtTime(f, t);
-      osc.frequency.exponentialRampToValueAtTime(f * 0.45, t + 0.042);
-
-      gain.gain.setValueAtTime(0.001, t);
-      gain.gain.linearRampToValueAtTime(urgent ? 0.22 : 0.14, t + 0.004);
-      gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.05);
-
-      osc.connect(gain);
-      gain.connect(this.masterOut);
-      osc.start(t);
-      osc.stop(t + 0.055);
-      osc.onended = () => { gain.disconnect(); osc.disconnect(); };
-    }
-
-    chimeSuccess() {
-      if (!document.getElementById('cfgSoundTicks').checked) return;
-      this.ensure();
-      [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
-        const t = this.ctx.currentTime + i * 0.05;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, t);
-        gain.gain.setValueAtTime(0.001, t);
-        gain.gain.linearRampToValueAtTime(0.16, t + 0.008);
-        gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.32);
-        osc.connect(gain);
-        gain.connect(this.masterOut);
-        osc.start(t);
-        osc.stop(t + 0.34);
-        osc.onended = () => { gain.disconnect(); osc.disconnect(); };
-      });
-    }
-
-    buzzWrong() {
-      if (!document.getElementById('cfgSoundTicks').checked) return;
-      this.ensure();
-      [210, 155].forEach((freq, i) => {
-        const t = this.ctx.currentTime + i * 0.075;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, t);
-        gain.gain.setValueAtTime(0.001, t);
-        gain.gain.linearRampToValueAtTime(0.18, t + 0.008);
-        gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.17);
-        osc.connect(gain);
-        gain.connect(this.masterOut);
-        osc.start(t);
-        osc.stop(t + 0.19);
-        osc.onended = () => { gain.disconnect(); osc.disconnect(); };
-      });
-    }
-
-    async decodeBGM(file) {
-      this.ensure();
-      const buf = await file.arrayBuffer();
-      this.bgmBuffer = await this.ctx.decodeAudioData(buf);
-    }
-
-    startBGM() {
-      if (!this.bgmBuffer) return;
-      this.stopBGM();
-      this.ensure();
-      this.bgmSource = this.ctx.createBufferSource();
-      this.bgmSource.buffer = this.bgmBuffer;
-      this.bgmSource.loop = true;
-      this.bgmGain = this.ctx.createGain();
-      this.bgmGain.gain.setValueAtTime(0.11, this.ctx.currentTime);
-      this.bgmSource.connect(this.bgmGain);
-      this.bgmGain.connect(this.masterOut);
-      this.bgmSource.start(0);
-    }
-
-    stopBGM() {
-      if (this.bgmSource) {
-        try { this.bgmSource.stop(); this.bgmSource.disconnect(); } catch (e) {}
-        this.bgmSource = null;
-      }
-      if (this.bgmGain) {
-        try { this.bgmGain.disconnect(); } catch (e) {}
-        this.bgmGain = null;
-      }
-    }
-  }
-  const audio = new StudioAudioEngine();
-
-  /* ==================== 3. SMART AUTO-FIT 9:16 PORTRAIT LAYOUT ENGINE ==================== */
+  /* ==================== 3. KBC 9:16 PORTRAIT LAYOUT ENGINE ==================== */
   const canvas = document.getElementById('stageCanvas');
   const ctx = canvas.getContext('2d', { alpha: false });
-  const W = 720;  // Exact mod-16 9:16 HD width for YouTube Shorts
-  const H = 1280; // Exact mod-16 9:16 HD height for YouTube Shorts
+  const W = 720;
+  const H = 1280;
 
   const bgCanvas = document.createElement('canvas');
   bgCanvas.width = W;
@@ -1340,32 +1742,61 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
   const bgCtx = bgCanvas.getContext('2d', { alpha: false });
 
   const THEMES = {
-    obsidian: { bg1: '#050912', bg2: '#0f1b33', card: '#152340', border: '#2b4270', text: '#ffffff', muted: '#94a3b8', accent: '#38bdf8', correct: '#10b981', wrong: '#ef4444' },
-    emerald:  { bg1: '#03120e', bg2: '#082820', card: '#0f382c', border: '#1e634f', text: '#ffffff', muted: '#a7f3d0', accent: '#34d399', correct: '#eab308', wrong: '#ef4444' },
-    crimson:  { bg1: '#14050e', bg2: '#2a0e20', card: '#3b142d', border: '#682552', text: '#ffffff', muted: '#f5d0fe', accent: '#fb7185', correct: '#10b981', wrong: '#f59e0b' },
-    daylight: { bg1: '#f1f5f9', bg2: '#e2e8f0', card: '#ffffff', border: '#94a3b8', text: '#0f172a', muted: '#475569', accent: '#4f46e5', correct: '#059669', wrong: '#dc2626' }
+    kbc:      { bg1: '#070826', bg2: '#1b114d', card: '#0d1b54', card2: '#152b7a', border: '#d97706', gold: '#fde047', text: '#ffffff', muted: '#cbd5e1', accent: '#f59e0b', locked: '#ea580c', correct: '#059669', wrong: '#dc2626' },
+    obsidian: { bg1: '#050912', bg2: '#0f1b33', card: '#152340', card2: '#1d3057', border: '#2b4270', gold: '#38bdf8', text: '#ffffff', muted: '#94a3b8', accent: '#38bdf8', locked: '#f59e0b', correct: '#10b981', wrong: '#ef4444' },
+    emerald:  { bg1: '#03120e', bg2: '#082820', card: '#0f382c', card2: '#144d3c', border: '#1e634f', gold: '#fde047', text: '#ffffff', muted: '#a7f3d0', accent: '#34d399', locked: '#f59e0b', correct: '#eab308', wrong: '#ef4444' },
+    crimson:  { bg1: '#14050e', bg2: '#2a0e20', card: '#3b142d', card2: '#521b3e', border: '#682552', gold: '#fde047', text: '#ffffff', muted: '#f5d0fe', accent: '#fb7185', locked: '#f59e0b', correct: '#10b981', wrong: '#ef4444' },
+    daylight: { bg1: '#f1f5f9', bg2: '#e2e8f0', card: '#ffffff', card2: '#f8fafc', border: '#64748b', gold: '#4f46e5', text: '#0f172a', muted: '#475569', accent: '#4f46e5', locked: '#d97706', correct: '#059669', wrong: '#dc2626' }
   };
 
   const FONT_STACK = "'Segoe UI', 'Nirmala UI', 'Noto Sans Devanagari', system-ui, sans-serif";
   let cachedLayout = null;
 
-  // Pre-renders static gradient, grid, and background watermark once (0 FPS overhead)
   function rebuildBackgroundCache() {
-    const th = THEMES[document.getElementById('cfgTheme').value] || THEMES.obsidian;
-    const grad = bgCtx.createLinearGradient(0, 0, W, H);
-    grad.addColorStop(0, th.bg1);
-    grad.addColorStop(1, th.bg2);
+    const themeKey = document.getElementById('cfgTheme').value || 'kbc';
+    const th = THEMES[themeKey] || THEMES.kbc;
+
+    const grad = bgCtx.createRadialGradient(W / 2, 260, 40, W / 2, H / 2, H * 0.85);
+    grad.addColorStop(0, th.bg2);
+    grad.addColorStop(1, th.bg1);
     bgCtx.fillStyle = grad;
     bgCtx.fillRect(0, 0, W, H);
 
-    bgCtx.strokeStyle = th.border;
-    bgCtx.globalAlpha = 0.13;
-    bgCtx.lineWidth = 1;
-    for (let x = 0; x < W; x += 60) { bgCtx.beginPath(); bgCtx.moveTo(x, 0); bgCtx.lineTo(x, H); bgCtx.stroke(); }
-    for (let y = 0; y < H; y += 60) { bgCtx.beginPath(); bgCtx.moveTo(0, y); bgCtx.lineTo(W, y); bgCtx.stroke(); }
-    bgCtx.globalAlpha = 1;
+    if (brandAssets.kbcStyle) {
+      bgCtx.save();
+      const beamSpecs = [
+        { x0: W * 0.15, x1: W * 0.45, color: 'rgba(245, 158, 11, 0.09)' },
+        { x0: W * 0.85, x1: W * 0.55, color: 'rgba(99, 102, 241, 0.12)' },
+        { x0: W * 0.5,  x1: W * 0.5,  color: 'rgba(253, 224, 71, 0.06)' }
+      ];
+      beamSpecs.forEach(b => {
+        bgCtx.beginPath();
+        bgCtx.moveTo(b.x0, 0);
+        bgCtx.lineTo(b.x1 - 180, H);
+        bgCtx.lineTo(b.x1 + 180, H);
+        bgCtx.closePath();
+        bgCtx.fillStyle = b.color;
+        bgCtx.fill();
+      });
 
-    // Permanent Export Watermark Layer
+      bgCtx.strokeStyle = th.gold;
+      bgCtx.lineWidth = 1.5;
+      [110, 175, 250].forEach((r, idx) => {
+        bgCtx.globalAlpha = 0.12 - idx * 0.03;
+        bgCtx.beginPath();
+        bgCtx.arc(W / 2, 162, r, 0, Math.PI * 2);
+        bgCtx.stroke();
+      });
+      bgCtx.restore();
+    } else {
+      bgCtx.strokeStyle = th.border;
+      bgCtx.globalAlpha = 0.13;
+      bgCtx.lineWidth = 1;
+      for (let x = 0; x < W; x += 60) { bgCtx.beginPath(); bgCtx.moveTo(x, 0); bgCtx.lineTo(x, H); bgCtx.stroke(); }
+      for (let y = 0; y < H; y += 60) { bgCtx.beginPath(); bgCtx.moveTo(0, y); bgCtx.lineTo(W, y); bgCtx.stroke(); }
+      bgCtx.globalAlpha = 1;
+    }
+
     const wmText = (meta.channel || '@AbhishekDigitalStudio').trim();
     const wmAlpha = Math.max(0.04, Math.min(0.35, (brandAssets.wmOpacity || 11) / 100));
 
@@ -1430,65 +1861,88 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     return lines.length ? lines : [''];
   }
 
+  function kbcLozengePath(c, x, y, w, h, cut = 22) {
+    const ch = Math.min(cut, h / 2 - 2);
+    c.beginPath();
+    c.moveTo(x + ch, y);
+    c.lineTo(x + w - ch, y);
+    c.lineTo(x + w, y + h / 2);
+    c.lineTo(x + w - ch, y + h);
+    c.lineTo(x + ch, y + h);
+    c.lineTo(x, y + h / 2);
+    c.closePath();
+  }
+
+  function roundBox(c, x, y, w, h, r) {
+    c.beginPath();
+    if (c.roundRect) c.roundRect(x, y, w, h, r);
+    else c.rect(x, y, w, h);
+    c.closePath();
+  }
+
+  function drawCardShape(c, x, y, w, h, r = 18) {
+    if (brandAssets.kbcStyle) kbcLozengePath(c, x, y, w, h, Math.min(26, h * 0.34));
+    else roundBox(c, x, y, w, h, r);
+  }
+
   function computeSmartPortraitLayout() {
     const pad = 34;
-    const contentW = W - pad * 2; // 652px
+    const contentW = W - pad * 2;
     const qObj = activePool[curIdx] || starterQuestions[0];
-    const hasExp = Boolean(qObj.exp && document.getElementById('cfgShowExp').checked);
+    const hasExp = Boolean(qObj.exp && document.getElementById('cfgShowExp').checked && showExpLiveOverride);
     const hasCam = Boolean(camActive);
-    const camW = brandAssets.camSize || 128;
+    const camW = brandAssets.camSize || 124;
     const camH = brandAssets.camShape === 'portrait' ? Math.round(camW * 1.25) : camW;
 
-    // 1. Auto-fit Question Font
-    let qFontPx = 38;
-    let qLineH = 48;
+    let qFontPx = 36;
+    let qLineH = 46;
     let qLines = [];
-    for (const size of [38, 34, 30, 26]) {
+    const qTextMaxW = brandAssets.kbcStyle ? contentW - 76 : contentW - 44;
+    for (const size of [36, 32, 28, 25]) {
       qFontPx = size;
       qLineH = Math.round(size * 1.26);
       ctx.font = `800 ${qFontPx}px ${FONT_STACK}`;
-      qLines = wrapLines(ctx, qObj.q, contentW - 44);
+      qLines = wrapLines(ctx, qObj.q, qTextMaxW);
       if (qLines.length <= 4) break;
     }
     qLines = qLines.slice(0, 6);
 
-    const qBoxY = 206;
-    const qBoxH = Math.max(138, qLines.length * qLineH + 40);
+    const qBoxY = brandAssets.showPrize ? 236 : 206;
+    const qBoxH = Math.max(134, qLines.length * qLineH + 40);
 
-    // 2. Explanation Box (shifts right cleanly when Bottom-Left Live Camera is ON)
     const expX = hasCam ? (pad + camW + 14) : pad;
     const expW = hasCam ? (contentW - camW - 14) : contentW;
     let expLines = [];
     let expBoxH = 0;
     if (hasExp) {
-      ctx.font = `700 21px ${FONT_STACK}`;
+      ctx.font = `700 20px ${FONT_STACK}`;
       expLines = wrapLines(ctx, `💡 ${qObj.exp}`, expW - 28).slice(0, 4);
-      expBoxH = expLines.length * 28 + 22;
+      expBoxH = expLines.length * 27 + 22;
     }
 
-    // 3. Reserve bottom zone so options never touch Live Camera or Explanation
     const camBottomReserve = hasCam ? (camH + 22) : 0;
     const expBottomReserve = hasExp ? (expBoxH + 14) : 0;
     const bottomReserve = Math.max(camBottomReserve, expBottomReserve);
 
     const optStartY = qBoxY + qBoxH + 20;
     const bottomLimit = H - 54 - bottomReserve;
-    const availOptSpace = Math.max(336, bottomLimit - optStartY);
+    const availOptSpace = Math.max(324, bottomLimit - optStartY);
 
-    const optGap = Math.max(12, Math.min(20, Math.floor(availOptSpace * 0.04)));
-    const optH = Math.max(72, Math.min(102, Math.floor((availOptSpace - optGap * 3) / 4)));
+    const optGap = Math.max(11, Math.min(18, Math.floor(availOptSpace * 0.04)));
+    const optH = Math.max(70, Math.min(98, Math.floor((availOptSpace - optGap * 3) / 4)));
 
     optionHitBoxes = [];
+    const optTextMaxW = brandAssets.kbcStyle ? contentW - 134 : contentW - 108;
     const optLayouts = (qObj.options || ['A', 'B', 'C', 'D']).map((optText, idx) => {
       const ox = pad;
       const oy = optStartY + idx * (optH + optGap);
 
-      let fSize = 29;
+      let fSize = 28;
       let lines = [];
-      for (const s of [29, 25, 21]) {
+      for (const s of [28, 24, 20]) {
         fSize = s;
         ctx.font = `800 ${fSize}px ${FONT_STACK}`;
-        lines = wrapLines(ctx, optText, contentW - 108);
+        lines = wrapLines(ctx, optText, optTextMaxW);
         if (lines.length <= 2) break;
       }
       lines = lines.slice(0, 2);
@@ -1506,41 +1960,252 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     };
   }
 
-  function roundBox(c, x, y, w, h, r) {
-    c.beginPath();
-    if (c.roundRect) c.roundRect(x, y, w, h, r);
-    else c.rect(x, y, w, h);
-    c.closePath();
-  }
-
   function easeOutBack(x) {
     const c1 = 1.70158;
     const c3 = c1 + 1;
     return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
   }
 
+  function easeOutCubic(x) {
+    return 1 - Math.pow(1 - x, 3);
+  }
+
+  // Computes transform (dx, dy, scale, alpha) for each of the 6 rich option entrance animations
+  function getOptionEntranceTransform(type, rawProg) {
+    const p = Math.max(0, Math.min(1, rawProg));
+    const cubic = easeOutCubic(p);
+    const back = easeOutBack(p);
+    let dx = 0, dy = 0, scale = 1, alpha = Math.min(1, p * 1.45);
+
+    if (type === 'rtl') {
+      dx = (1 - back) * 520;
+    } else if (type === 'ltr') {
+      dx = -(1 - back) * 520;
+    } else if (type === 'utd') {
+      dy = -(1 - back) * 210;
+    } else if (type === 'dtu') {
+      dy = (1 - back) * 230;
+    } else if (type === 'popup') {
+      scale = 0.25 + 0.75 * back;
+    } else if (type === 'popdown') {
+      scale = 1.55 - 0.55 * cubic;
+      dy = -(1 - cubic) * 70;
+    }
+    return { dx, dy, scale, alpha };
+  }
+
   function spawnRevealParticles(cx, cy, color) {
     revealParticles = [];
-    for (let i = 0; i < 16; i++) {
-      const angle = (Math.PI * 2 * i) / 16;
-      const speed = 2.5 + Math.random() * 4.2;
+    for (let i = 0; i < 18; i++) {
+      const angle = (Math.PI * 2 * i) / 18;
+      const speed = 2.5 + Math.random() * 4.5;
       revealParticles.push({
-        x: cx + (Math.random() - 0.5) * 180,
+        x: cx + (Math.random() - 0.5) * 200,
         y: cy + (Math.random() - 0.5) * 40,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed - 1.5,
         r: 4 + Math.random() * 3.5,
         alpha: 1,
-        color
+        color: i % 2 === 0 ? color : '#fde047'
       });
     }
   }
 
-  // Draws Live Front/Back Camera Feed in Bottom-Left Half (Baked into MP4 Export)
+  /* ==================== KBC OVERLAY RENDERERS ==================== */
+  function drawIntroSlateOverlay(th) {
+    if (!showIntroSlate) return;
+    ctx.save();
+    ctx.fillStyle = 'rgba(4, 6, 22, 0.92)';
+    ctx.fillRect(0, 0, W, H);
+
+    // Golden Studio Rings
+    ctx.strokeStyle = th.gold;
+    [130, 200, 270].forEach((r, idx) => {
+      ctx.globalAlpha = 0.25 - idx * 0.06;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(W / 2, H * 0.42, r, 0, Math.PI * 2);
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = th.gold;
+    ctx.font = `900 44px ${FONT_STACK}`;
+    ctx.textAlign = 'center';
+    const titleLines = wrapLines(ctx, meta.title || 'KAUN BANEGA TOPPER', W - 110).slice(0, 3);
+    titleLines.forEach((ln, i) => ctx.fillText(ln, W / 2, H * 0.40 + i * 54));
+
+    kbcLozengePath(ctx, 130, H * 0.57, W - 260, 62, 22);
+    ctx.fillStyle = '#ea580c';
+    ctx.fill();
+    ctx.strokeStyle = '#fde047';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `900 26px ${FONT_STACK}`;
+    ctx.fillText(`NEXT: Q${curIdx + 1} · ${getCurrentPrizeLabel()}`, W / 2, H * 0.57 + 40);
+
+    ctx.fillStyle = th.muted;
+    ctx.font = `800 22px ${FONT_STACK}`;
+    ctx.fillText(meta.channel || '@AbhishekDigitalStudio', W / 2, H * 0.68);
+    ctx.restore();
+  }
+
+  function drawAudiencePollOverlay(th) {
+    if (!pollOverlayData) return;
+    const letters = ['A', 'B', 'C', 'D'];
+    const pW = 540, pH = 340;
+    const px = (W - pW) / 2, py = 410;
+    const prog = Math.min(1, pollOverlayData.animMs / 450);
+
+    ctx.save();
+    roundBox(ctx, px - 4, py - 4, pW + 8, pH + 8, 22);
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.25)';
+    ctx.fill();
+
+    roundBox(ctx, px, py, pW, pH, 20);
+    ctx.fillStyle = 'rgba(8, 14, 42, 0.96)';
+    ctx.fill();
+    ctx.strokeStyle = th.gold;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.fillStyle = th.gold;
+    ctx.font = `900 24px ${FONT_STACK}`;
+    ctx.textAlign = 'center';
+    ctx.fillText('📊 AUDIENCE POLL RESULT', W / 2, py + 42);
+
+    const chartBaseY = py + pH - 58;
+    const maxBarH = 185;
+    const barW = 74;
+    const gap = 36;
+    const startX = px + (pW - (4 * barW + 3 * gap)) / 2;
+
+    pollOverlayData.percents.forEach((pct, i) => {
+      const bx = startX + i * (barW + gap);
+      const bh = Math.round((pct / 100) * maxBarH * prog);
+      const by = chartBaseY - bh;
+
+      roundBox(ctx, bx, chartBaseY - maxBarH, barW, maxBarH, 10);
+      ctx.fillStyle = 'rgba(255,255,255,0.08)';
+      ctx.fill();
+
+      const bg = ctx.createLinearGradient(bx, by, bx, chartBaseY);
+      bg.addColorStop(0, '#fde047');
+      bg.addColorStop(1, '#d97706');
+      roundBox(ctx, bx, by, barW, Math.max(6, bh), 10);
+      ctx.fillStyle = bg;
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `900 22px ${FONT_STACK}`;
+      ctx.textAlign = 'center';
+      ctx.fillText(`${Math.round(pct * prog)}%`, bx + barW / 2, by - 10);
+
+      ctx.fillStyle = th.gold;
+      ctx.font = `900 26px ${FONT_STACK}`;
+      ctx.fillText(letters[i], bx + barW / 2, chartBaseY + 34);
+    });
+    ctx.restore();
+  }
+
+  function drawExpertOverlay(th) {
+    if (!expertOverlayData) return;
+    const pW = 580, pH = 178;
+    const px = (W - pW) / 2, py = 460;
+    const alpha = Math.min(1, expertOverlayData.animMs / 250);
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    roundBox(ctx, px - 4, py - 4, pW + 8, pH + 8, 22);
+    ctx.fillStyle = 'rgba(6, 182, 212, 0.28)';
+    ctx.fill();
+
+    roundBox(ctx, px, py, pW, pH, 18);
+    ctx.fillStyle = 'rgba(8, 16, 46, 0.96)';
+    ctx.fill();
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.fillStyle = '#38bdf8';
+    ctx.font = `900 22px ${FONT_STACK}`;
+    ctx.textAlign = 'center';
+    ctx.fillText('📞 EXPERT ADVICE LIFELINE', W / 2, py + 40);
+
+    ctx.fillStyle = '#fde047';
+    ctx.font = `900 30px ${FONT_STACK}`;
+    ctx.fillText(expertOverlayData.text, W / 2, py + 92);
+
+    if (expertOverlayData.sub) {
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = `700 20px ${FONT_STACK}`;
+      const lines = wrapLines(ctx, expertOverlayData.sub, pW - 44).slice(0, 2);
+      lines.forEach((ln, idx) => ctx.fillText(ln, W / 2, py + 130 + idx * 26));
+    }
+    ctx.restore();
+  }
+
+  function drawPrizeLadderOverlay(th) {
+    if (!showLadderOverlay) return;
+    const pW = 480, pH = 920;
+    const px = (W - pW) / 2, py = 180;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(3, 5, 18, 0.78)';
+    ctx.fillRect(0, 0, W, H);
+
+    roundBox(ctx, px, py, pW, pH, 24);
+    ctx.fillStyle = '#091033';
+    ctx.fill();
+    ctx.strokeStyle = th.gold;
+    ctx.lineWidth = 3.5;
+    ctx.stroke();
+
+    ctx.fillStyle = th.gold;
+    ctx.font = `900 26px ${FONT_STACK}`;
+    ctx.textAlign = 'center';
+    ctx.fillText('🏆 KBC PRIZE LADDER', W / 2, py + 46);
+
+    const rowH = 50;
+    const startY = py + 70;
+    const activeStep = Math.min(curIdx, KBC_PRIZES.length - 1);
+
+    for (let i = KBC_PRIZES.length - 1; i >= 0; i--) {
+      const visualRow = (KBC_PRIZES.length - 1) - i;
+      const ry = startY + visualRow * rowH;
+      const isCurrent = (i === activeStep);
+      const isPassed = (i < activeStep);
+      const isMilestone = KBC_MILESTONES.has(i);
+
+      if (isCurrent) {
+        kbcLozengePath(ctx, px + 24, ry + 3, pW - 48, rowH - 6, 16);
+        ctx.fillStyle = '#ea580c';
+        ctx.fill();
+        ctx.strokeStyle = '#fde047';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+      }
+
+      ctx.font = `${isCurrent || isMilestone ? '900' : '700'} 23px ${FONT_STACK}`;
+      ctx.fillStyle = isCurrent ? '#ffffff' : (isMilestone ? '#fde047' : (isPassed ? '#34d399' : '#94a3b8'));
+      ctx.textAlign = 'left';
+      ctx.fillText(`${String(i + 1).padStart(2, '0')}`, px + 52, ry + 33);
+
+      ctx.textAlign = 'center';
+      ctx.fillText(isPassed ? '◆' : (isCurrent ? '★' : '•'), px + 110, ry + 33);
+
+      ctx.textAlign = 'right';
+      ctx.fillText(KBC_PRIZES[i], px + pW - 52, ry + 33);
+    }
+    ctx.restore();
+  }
+
   function drawBottomLeftCamera(th) {
     if (!camActive || camVideo.readyState < 2 || !camVideo.videoWidth) return;
 
-    const boxW = brandAssets.camSize || 128;
+    const boxW = brandAssets.camSize || 124;
     const isPortrait = brandAssets.camShape === 'portrait';
     const boxH = isPortrait ? Math.round(boxW * 1.25) : boxW;
     const px = 30;
@@ -1554,8 +2219,8 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
 
       ctx.beginPath();
       ctx.arc(cx, cy, r + 4, 0, Math.PI * 2);
-      ctx.fillStyle = th.accent;
-      ctx.globalAlpha = 0.28;
+      ctx.fillStyle = th.gold;
+      ctx.globalAlpha = 0.3;
       ctx.fill();
       ctx.globalAlpha = 1;
 
@@ -1565,7 +2230,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     } else {
       const rad = 18;
       roundBox(ctx, px - 3, py - 3, boxW + 6, boxH + 6, rad + 2);
-      ctx.fillStyle = th.accent;
+      ctx.fillStyle = th.gold;
       ctx.globalAlpha = 0.25;
       ctx.fill();
       ctx.globalAlpha = 1;
@@ -1574,7 +2239,6 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       ctx.clip();
     }
 
-    // Center cover-crop for camera video
     const vw = camVideo.videoWidth;
     const vh = camVideo.videoHeight;
     const vidRatio = vw / Math.max(1, vh);
@@ -1588,7 +2252,6 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       sy = (vh - sh) / 2;
     }
 
-    // Mirror horizontally ONLY for front camera when Mirror option is ON
     const shouldMirror = brandAssets.camFacing === 'user' && brandAssets.camMirror;
     if (shouldMirror) {
       ctx.translate(px + boxW, py);
@@ -1599,9 +2262,8 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     }
     ctx.restore();
 
-    // Crisp outer border ring
     ctx.save();
-    ctx.strokeStyle = th.accent;
+    ctx.strokeStyle = th.gold;
     ctx.lineWidth = 3.5;
     if (brandAssets.camShape === 'circle') {
       ctx.beginPath();
@@ -1614,19 +2276,18 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     ctx.restore();
   }
 
-  // Draws Custom PNG Logo Overlay (Top-Right / Top-Left / Bottom-Right)
   function drawCustomLogo() {
     if (!logoImg || brandAssets.logoPos === 'center-ghost') return;
-    const maxW = brandAssets.logoSize || 82;
+    const maxW = brandAssets.logoSize || 80;
     const scale = maxW / Math.max(logoImg.naturalWidth, logoImg.naturalHeight);
     const dw = Math.round(logoImg.naturalWidth * scale);
     const dh = Math.round(logoImg.naturalHeight * scale);
 
     let lx = W - dw - 24;
-    let ly = 96;
+    let ly = 112;
     if (brandAssets.logoPos === 'top-left') {
       lx = 24;
-      ly = 96;
+      ly = 112;
     } else if (brandAssets.logoPos === 'bottom-right') {
       lx = W - dw - 26;
       ly = H - dh - 44;
@@ -1638,89 +2299,169 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     ctx.restore();
   }
 
-  /* ==================== 4. ZERO-BOTTLENECK BROADCAST RENDERER ==================== */
+  /* ==================== 4. BROADCAST 60FPS RENDERER ==================== */
   function drawPortraitFrame() {
     if (!cachedLayout) computeSmartPortraitLayout();
     const L = cachedLayout;
-    const th = THEMES[document.getElementById('cfgTheme').value] || THEMES.obsidian;
-    const thinkMax = Math.max(3, parseInt(document.getElementById('cfgThinkSec').value, 10) || 7);
+    const th = THEMES[document.getElementById('cfgTheme').value] || THEMES.kbc;
+    const thinkMax = Math.max(3, parseInt(document.getElementById('cfgThinkSec').value, 10) || 10);
     const total = Math.max(1, activePool.length);
 
-    // 1. Pre-baked Background + Watermark (Single Blit)
+    // 1. Pre-baked Background + Spotlights + Watermark
     ctx.drawImage(bgCanvas, 0, 0);
 
     // 2. Top Progress Bar
-    ctx.fillStyle = th.border;
-    ctx.fillRect(0, 0, W, 10);
-    ctx.fillStyle = th.accent;
-    ctx.fillRect(0, 0, W * ((curIdx + 1) / total), 10);
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.fillRect(0, 0, W, 9);
+    ctx.fillStyle = th.gold;
+    ctx.fillRect(0, 0, W * ((curIdx + 1) / total), 9);
 
     // 3. Top Header Row
-    ctx.fillStyle = th.accent;
-    ctx.font = `900 24px ${FONT_STACK}`;
+    ctx.fillStyle = th.gold;
+    ctx.font = `900 22px ${FONT_STACK}`;
     ctx.textAlign = 'left';
-    ctx.fillText(`QUESTION ${curIdx + 1} / ${total}`, L.pad, 48);
+    ctx.fillText(`Q ${curIdx + 1} / ${total}`, L.pad, 44);
 
     ctx.fillStyle = th.muted;
-    ctx.font = `800 20px ${FONT_STACK}`;
+    ctx.font = `800 19px ${FONT_STACK}`;
     ctx.textAlign = 'right';
-    ctx.fillText((L.qObj.category || 'GENERAL').toUpperCase(), W - L.pad, 48);
+    ctx.fillText((L.qObj.category || 'GENERAL').toUpperCase(), W - L.pad, 44);
 
     ctx.fillStyle = th.text;
-    ctx.globalAlpha = 0.85;
-    ctx.font = `700 19px ${FONT_STACK}`;
+    ctx.globalAlpha = 0.88;
+    ctx.font = `800 19px ${FONT_STACK}`;
     ctx.textAlign = 'center';
-    ctx.fillText(meta.title, W / 2, 80);
+    ctx.fillText(meta.title, W / 2, 74);
     ctx.globalAlpha = 1;
 
-    // 4. Center Countdown Ring
+    // 4. KBC Prize Pill + 3 Lifelines Strip
+    if (brandAssets.showPrize) {
+      const pLabel = `🏆 ${getCurrentPrizeLabel()}`;
+      kbcLozengePath(ctx, L.pad, 88, 232, 38, 14);
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.2)';
+      ctx.fill();
+      ctx.strokeStyle = th.gold;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = th.gold;
+      ctx.font = `900 20px ${FONT_STACK}`;
+      ctx.textAlign = 'center';
+      ctx.fillText(pLabel, L.pad + 116, 114);
+
+      const llItems = [
+        { label: '50:50', used: lifelinesUsed.fifty },
+        { label: 'POLL', used: lifelinesUsed.poll },
+        { label: 'EXPERT', used: lifelinesUsed.expert }
+      ];
+      llItems.forEach((ll, idx) => {
+        const lx = W - L.pad - (3 - idx) * 90 + 4;
+        const ly = 90;
+        const lw = 82;
+        const lh = 34;
+        roundBox(ctx, lx, ly, lw, lh, 17);
+        ctx.fillStyle = ll.used ? 'rgba(239, 68, 68, 0.14)' : 'rgba(21, 43, 122, 0.85)';
+        ctx.fill();
+        ctx.strokeStyle = ll.used ? '#ef4444' : th.gold;
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+
+        ctx.fillStyle = ll.used ? '#fca5a5' : '#ffffff';
+        ctx.font = `800 14px ${FONT_STACK}`;
+        ctx.textAlign = 'center';
+        ctx.fillText(ll.label, lx + lw / 2, ly + 22);
+
+        if (ll.used) {
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(lx + 10, ly + 6);
+          ctx.lineTo(lx + lw - 10, ly + lh - 6);
+          ctx.moveTo(lx + lw - 10, ly + 6);
+          ctx.lineTo(lx + 10, ly + lh - 6);
+          ctx.stroke();
+        }
+      });
+    }
+
+    // 5. Center KBC Ghadi (Countdown Ring — stays full until Options finish & Timer starts)
     const ringX = W / 2;
-    const ringY = 140;
+    const ringY = brandAssets.showPrize ? 174 : 142;
     const ringR = 42;
 
-    const remSec = phase === 'revealed' ? 0 : Math.max(0, thinkMax - phaseElapsedMs / 1000);
-    const frac = phase === 'revealed' ? 1 : Math.max(0, remSec / thinkMax);
+    const timerActiveStage = (phase === 'thinking');
+    const remSec = timerActiveStage ? Math.max(0, thinkMax - phaseElapsedMs / 1000) : thinkMax;
+    const frac = phase === 'revealed' || phase === 'locked'
+      ? 1
+      : (timerActiveStage ? Math.max(0, remSec / thinkMax) : 1);
+
+    ctx.beginPath();
+    ctx.arc(ringX, ringY, ringR + 5, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(253, 224, 71, 0.22)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
 
     ctx.beginPath();
     ctx.arc(ringX, ringY, ringR, 0, Math.PI * 2);
     ctx.fillStyle = th.card;
     ctx.fill();
-    ctx.strokeStyle = th.border;
+    ctx.strokeStyle = 'rgba(255,255,255,0.16)';
     ctx.lineWidth = 8;
     ctx.stroke();
 
     ctx.beginPath();
     ctx.arc(ringX, ringY, ringR, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * frac);
-    ctx.strokeStyle = phase === 'revealed' ? th.correct : (remSec <= 3 ? th.wrong : th.accent);
+    ctx.strokeStyle = phase === 'revealed'
+      ? th.correct
+      : (phase === 'locked'
+        ? th.locked
+        : (timerActiveStage && remSec <= 3 ? th.wrong : th.gold));
     ctx.lineWidth = 8;
     ctx.lineCap = 'round';
     ctx.stroke();
 
     ctx.fillStyle = th.text;
-    ctx.font = `900 30px ${FONT_STACK}`;
+    ctx.font = `900 28px ${FONT_STACK}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(phase === 'revealed' ? '✓' : Math.ceil(remSec), ringX, ringY + 2);
+    const ringLabel = phase === 'revealed'
+      ? '✓'
+      : (phase === 'locked' ? '🔒' : Math.ceil(remSec));
+    ctx.fillText(ringLabel, ringX, ringY + 2);
     ctx.textBaseline = 'alphabetic';
 
-    // Slide-in entrance progress (0 -> 1 over 220ms)
-    const enterProg = Math.min(1, enterAnimMs / 220);
-    const slideOffset = (1 - enterProg) * 26;
+    // 6. KBC Question Lozenge Card (Appears FIRST with clean scale-slide)
+    const qProg = Math.min(1, qEnterAnimMs / 340);
+    const qBack = easeOutBack(qProg);
 
-    // 5. Extra-Bold Question Card (Crisp Layered Depth — Zero shadowBlur CPU drain)
     ctx.save();
-    ctx.globalAlpha = enterProg;
-    ctx.translate(0, slideOffset);
+    ctx.globalAlpha = Math.min(1, qProg * 1.4);
+    const qCenterY = L.qBoxY + L.qBoxH / 2;
+    ctx.translate(W / 2, qCenterY);
+    ctx.scale(0.86 + 0.14 * qBack, 0.86 + 0.14 * qBack);
+    ctx.translate(-W / 2, -qCenterY);
 
-    roundBox(ctx, L.pad, L.qBoxY + 6, L.contentW, L.qBoxH, 20);
-    ctx.fillStyle = 'rgba(0,0,0,0.34)';
+    if (brandAssets.kbcStyle) {
+      ctx.strokeStyle = th.gold;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(0, qCenterY); ctx.lineTo(L.pad, qCenterY);
+      ctx.moveTo(W - L.pad, qCenterY); ctx.lineTo(W, qCenterY);
+      ctx.stroke();
+    }
+
+    drawCardShape(ctx, L.pad, L.qBoxY + 5, L.contentW, L.qBoxH, 20);
+    ctx.fillStyle = 'rgba(0,0,0,0.38)';
     ctx.fill();
 
-    roundBox(ctx, L.pad, L.qBoxY, L.contentW, L.qBoxH, 20);
-    ctx.fillStyle = th.card;
+    const qGrad = ctx.createLinearGradient(L.pad, L.qBoxY, L.pad, L.qBoxY + L.qBoxH);
+    qGrad.addColorStop(0, th.card2);
+    qGrad.addColorStop(1, th.card);
+    drawCardShape(ctx, L.pad, L.qBoxY, L.contentW, L.qBoxH, 20);
+    ctx.fillStyle = qGrad;
     ctx.fill();
-    ctx.strokeStyle = th.accent;
-    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = th.gold;
+    ctx.lineWidth = 3;
     ctx.stroke();
 
     ctx.fillStyle = th.text;
@@ -1732,93 +2473,138 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     });
     ctx.restore();
 
-    // 6. Options Stack with High-Zoom Answer Reveal
+    // 7. Animated Options Stack (Only drawn once Host triggers Options / after delay)
     const letters = ['A', 'B', 'C', 'D'];
     const zoomProg = phase === 'revealed' ? Math.min(1, revealAnimMs / 340) : 0;
     const elastic = easeOutBack(zoomProg);
 
     const drawOptionCard = (opt) => {
       const idx = opt.idx;
-      const optEnter = Math.min(1, Math.max(0, (enterAnimMs - idx * 35) / 200));
+      if (!optionStarted[idx]) return; // Hidden until triggered!
 
       if (hiddenOptions.has(idx) && phase !== 'revealed') {
-        roundBox(ctx, opt.ox, opt.oy, opt.optW, opt.optH, 16);
+        drawCardShape(ctx, opt.ox, opt.oy, opt.optW, opt.optH, 16);
         ctx.fillStyle = th.card;
-        ctx.globalAlpha = 0.2;
+        ctx.globalAlpha = 0.16;
         ctx.fill();
         ctx.globalAlpha = 1;
         return;
       }
 
+      const animProg = Math.min(1, optionAnimMs[idx] / 460);
+      const ent = getOptionEntranceTransform(optionAnimTypes[idx], animProg);
+
+      const isLockedPick = phase === 'locked' && selectedOption === idx;
       const isCorrect = phase === 'revealed' && idx === L.qObj.ans;
       const isWrongPick = phase === 'revealed' && selectedOption === idx && idx !== L.qObj.ans;
-      const isDimmed = phase === 'revealed' && !isCorrect && !isWrongPick;
+      const isDimmed = (phase === 'revealed' && !isCorrect && !isWrongPick) || (phase === 'locked' && !isLockedPick);
 
-      let scale = 1;
-      let alpha = optEnter;
+      let stateScale = 1;
+      let stateAlpha = 1;
       if (isCorrect) {
         const pulse = zoomProg >= 1 ? Math.sin(phaseElapsedMs / 200) * 0.012 : 0;
-        scale = 1 + 0.09 * elastic + pulse;
+        stateScale = 1 + 0.08 * elastic + pulse;
+      } else if (isLockedPick) {
+        stateScale = 1.04 + Math.sin(lockAnimMs / 130) * 0.016;
       } else if (isDimmed) {
-        scale = 1 - 0.035 * zoomProg;
-        alpha = (1 - 0.58 * zoomProg) * optEnter;
+        stateScale = phase === 'revealed' ? (1 - 0.03 * zoomProg) : 0.98;
+        stateAlpha = phase === 'revealed' ? (1 - 0.56 * zoomProg) : 0.58;
       }
 
-      const cx = opt.ox + opt.optW / 2;
-      const cy = opt.oy + opt.optH / 2 + (1 - optEnter) * 18;
+      const finalScale = ent.scale * stateScale;
+      const finalAlpha = ent.alpha * stateAlpha;
+      const cx = opt.ox + opt.optW / 2 + ent.dx;
+      const cy = opt.oy + opt.optH / 2 + ent.dy;
 
       ctx.save();
-      ctx.globalAlpha = alpha;
+      ctx.globalAlpha = Math.max(0, Math.min(1, finalAlpha));
       ctx.translate(cx, cy);
-      ctx.scale(scale, scale);
-      ctx.translate(-cx, -(opt.oy + opt.optH / 2));
+      ctx.scale(finalScale, finalScale);
+      ctx.translate(-(opt.ox + opt.optW / 2), -(opt.oy + opt.optH / 2));
 
-      if (isCorrect) {
-        roundBox(ctx, opt.ox - 6, opt.oy - 6, opt.optW + 12, opt.optH + 12, 22);
-        ctx.fillStyle = 'rgba(16, 185, 129, 0.28)';
+      if (brandAssets.kbcStyle && !isDimmed && animProg > 0.85) {
+        const midY = opt.oy + opt.optH / 2;
+        ctx.strokeStyle = isCorrect ? '#6ee7b7' : (isLockedPick ? '#fde047' : th.border);
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, midY); ctx.lineTo(opt.ox, midY);
+        ctx.moveTo(opt.ox + opt.optW, midY); ctx.lineTo(W, midY);
+        ctx.stroke();
+      }
+
+      if (isCorrect || isLockedPick) {
+        drawCardShape(ctx, opt.ox - 6, opt.oy - 6, opt.optW + 12, opt.optH + 12, 22);
+        ctx.fillStyle = isCorrect ? 'rgba(16, 185, 129, 0.30)' : 'rgba(245, 158, 11, 0.32)';
         ctx.fill();
       }
 
-      roundBox(ctx, opt.ox, opt.oy, opt.optW, opt.optH, 18);
-      ctx.fillStyle = isCorrect ? th.correct : (isWrongPick ? th.wrong : th.card);
+      drawCardShape(ctx, opt.ox, opt.oy, opt.optW, opt.optH, 18);
+      if (isCorrect) ctx.fillStyle = th.correct;
+      else if (isWrongPick) ctx.fillStyle = th.wrong;
+      else if (isLockedPick) ctx.fillStyle = th.locked;
+      else {
+        const og = ctx.createLinearGradient(opt.ox, opt.oy, opt.ox, opt.oy + opt.optH);
+        og.addColorStop(0, th.card2);
+        og.addColorStop(1, th.card);
+        ctx.fillStyle = og;
+      }
       ctx.fill();
 
-      ctx.lineWidth = isCorrect ? 4.5 : (isWrongPick ? 3.5 : 2);
-      ctx.strokeStyle = (isCorrect || isWrongPick) ? '#ffffff' : th.border;
+      ctx.lineWidth = (isCorrect || isLockedPick) ? 4 : (isWrongPick ? 3.5 : 2.2);
+      ctx.strokeStyle = (isCorrect || isWrongPick) ? '#ffffff' : (isLockedPick ? '#fde047' : th.gold);
       ctx.stroke();
 
-      const bSize = Math.min(54, opt.optH - 24);
-      const bx = opt.ox + 18;
+      const bSize = Math.min(48, opt.optH - 22);
+      const bx = opt.ox + (brandAssets.kbcStyle ? 30 : 18);
       const by = opt.oy + (opt.optH - bSize) / 2;
-      roundBox(ctx, bx, by, bSize, bSize, 13);
-      ctx.fillStyle = (isCorrect || isWrongPick) ? 'rgba(0,0,0,0.28)' : th.bg1;
-      ctx.fill();
 
-      ctx.fillStyle = (isCorrect || isWrongPick) ? '#ffffff' : th.accent;
-      ctx.font = `900 26px ${FONT_STACK}`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(isCorrect ? '✓' : letters[idx], bx + bSize / 2, by + bSize / 2 + 2);
+      if (brandAssets.kbcStyle) {
+        ctx.fillStyle = (isCorrect || isWrongPick || isLockedPick) ? '#ffffff' : th.gold;
+        ctx.font = `900 26px ${FONT_STACK}`;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        const prefix = isCorrect ? '✓' : (isLockedPick ? '🔒' : `${letters[idx]}:`);
+        ctx.fillText(prefix, bx, opt.oy + opt.optH / 2 + 2);
+      } else {
+        roundBox(ctx, bx, by, bSize, bSize, 12);
+        ctx.fillStyle = (isCorrect || isWrongPick || isLockedPick) ? 'rgba(0,0,0,0.28)' : th.bg1;
+        ctx.fill();
+        ctx.fillStyle = (isCorrect || isWrongPick || isLockedPick) ? '#ffffff' : th.accent;
+        ctx.font = `900 25px ${FONT_STACK}`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(isCorrect ? '✓' : letters[idx], bx + bSize / 2, by + bSize / 2 + 2);
+      }
       ctx.textAlign = 'left';
       ctx.textBaseline = 'alphabetic';
 
-      ctx.fillStyle = (isCorrect || isWrongPick) ? '#ffffff' : th.text;
+      ctx.fillStyle = (isCorrect || isWrongPick || isLockedPick) ? '#ffffff' : th.text;
       const activeFontPx = isCorrect ? opt.fSize + 2 : opt.fSize;
       ctx.font = `800 ${activeFontPx}px ${FONT_STACK}`;
-      const textX = bx + bSize + 18;
+      const textX = bx + (brandAssets.kbcStyle ? 46 : bSize + 18);
       if (opt.lines.length === 1) {
         ctx.fillText(opt.lines[0], textX, opt.oy + opt.optH / 2 + Math.round(activeFontPx * 0.34));
       } else {
-        ctx.fillText(opt.lines[0], textX, opt.oy + opt.optH / 2 - 5);
-        ctx.fillText(opt.lines[1], textX, opt.oy + opt.optH / 2 + activeFontPx);
+        ctx.fillText(opt.lines[0], textX, opt.oy + opt.optH / 2 - 4);
+        ctx.fillText(opt.lines[1], textX, opt.oy + opt.optH / 2 + activeFontPx - 1);
+      }
+
+      if (isLockedPick) {
+        ctx.fillStyle = '#fef08a';
+        ctx.font = `900 15px ${FONT_STACK}`;
+        ctx.textAlign = 'right';
+        ctx.fillText('LOCKED!', opt.ox + opt.optW - 30, opt.oy + opt.optH / 2 + 5);
+        ctx.textAlign = 'left';
       }
 
       ctx.restore();
     };
 
-    L.optLayouts.forEach(opt => { if (opt.idx !== L.qObj.ans) drawOptionCard(opt); });
+    L.optLayouts.forEach(opt => { if (opt.idx !== L.qObj.ans && opt.idx !== selectedOption) drawOptionCard(opt); });
+    if (selectedOption >= 0 && selectedOption !== L.qObj.ans && L.optLayouts[selectedOption]) drawOptionCard(L.optLayouts[selectedOption]);
     if (L.optLayouts[L.qObj.ans]) drawOptionCard(L.optLayouts[L.qObj.ans]);
 
+    // Celebration particles on reveal
     if (phase === 'revealed' && revealParticles.length) {
       revealParticles.forEach(p => {
         if (p.alpha <= 0.02) return;
@@ -1832,46 +2618,174 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       });
     }
 
-    // 7. Auto-Fit Explanation Card (Shifts Right Automatically When Live Camera is ON)
-    if (phase === 'revealed' && L.expLines.length) {
+    // 8. Explanation Card (Host can toggle live via 💡 Exp button)
+    if (phase === 'revealed' && L.expLines.length && showExpLiveOverride) {
       ctx.save();
       ctx.globalAlpha = Math.min(1, revealAnimMs / 240);
       roundBox(ctx, L.expX, L.expY, L.expW, L.expBoxH, 15);
-      ctx.fillStyle = 'rgba(6, 182, 212, 0.16)';
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.14)';
       ctx.fill();
-      ctx.strokeStyle = th.accent;
+      ctx.strokeStyle = th.gold;
       ctx.lineWidth = 2;
       ctx.stroke();
 
       ctx.fillStyle = th.text;
-      ctx.font = `700 21px ${FONT_STACK}`;
+      ctx.font = `700 20px ${FONT_STACK}`;
       ctx.textAlign = 'left';
       L.expLines.forEach((ln, i) => {
-        ctx.fillText(ln, L.expX + 14, L.expY + 30 + i * 28);
+        ctx.fillText(ln, L.expX + 14, L.expY + 29 + i * 27);
       });
       ctx.restore();
     }
 
-    // 8. Live Front/Back Camera (Bottom-Left) & Custom PNG Logo
+    // 9. KBC Lifeline & Broadcast Overlays
+    drawAudiencePollOverlay(th);
+    drawExpertOverlay(th);
+    drawPrizeLadderOverlay(th);
+    drawIntroSlateOverlay(th);
+
+    // 10. Live Bottom-Left Camera & Custom PNG Logo
     drawBottomLeftCamera(th);
     drawCustomLogo();
 
-    // 9. Footer Channel Watermark
+    // 11. Footer Channel Watermark
     ctx.fillStyle = th.muted;
     ctx.font = `800 19px ${FONT_STACK}`;
     ctx.textAlign = 'center';
     ctx.fillText(meta.channel || '@AbhishekDigitalStudio', W / 2, H - 16);
     ctx.textAlign = 'left';
+
+    // 12. CRITICAL RECORDING FIX: Constant 1×1 Pixel Heartbeat prevents CanvasCaptureStream from dropping static frames!
+    if (isRecording) {
+      recFrameParity = (recFrameParity + 1) & 1;
+      ctx.fillStyle = recFrameParity ? '#050819' : '#06091a';
+      ctx.fillRect(W - 1, H - 1, 1, 1);
+    }
   }
 
-  /* ==================== 5. DELTA-TIME MASTER LOOP ==================== */
+  /* ==================== 5. REAL HOST STAGE MACHINE & MASTER LOOP ==================== */
+  function revealNextOptionNow(idx) {
+    if (idx < 0 || idx > 3 || optionStarted[idx]) return;
+    optionStarted[idx] = true;
+    optionAnimMs[idx] = 0;
+    optionVisibleCount = Math.max(optionVisibleCount, idx + 1);
+    audio.sfxOptionPop(idx);
+  }
+
+  function triggerViewOptions() {
+    if (showIntroSlate) showIntroSlate = false;
+    if (phase === 'locked' || phase === 'revealed') return;
+    audio.ensure();
+
+    const stepMode = brandAssets.optStepMode || 'all';
+    if (stepMode === 'onebyone') {
+      if (optionVisibleCount < 4) {
+        phase = 'options_entering';
+        optionsTargetCount = optionVisibleCount + 1;
+        revealNextOptionNow(optionVisibleCount);
+        updateHostDirectorUI();
+      } else if (phase !== 'thinking') {
+        enterThinkingPhase(brandAssets.startTimerAfterOpts);
+      }
+      return;
+    }
+
+    // All-4 Staggered Cascade Mode
+    if (phase === 'question_only') {
+      const delayMs = Math.round((Number(brandAssets.optDelaySec) || 0) * 1000);
+      if (delayMs > 0) {
+        phase = 'options_wait';
+        optWaitMs = 0;
+        showToast(`⏳ Options arriving in ${Number(brandAssets.optDelaySec).toFixed(1)}s...`);
+      } else {
+        startAllOptionsCascade();
+      }
+      updateHostDirectorUI();
+    } else if (phase === 'options_wait') {
+      // Clicking again skips wait immediately
+      startAllOptionsCascade();
+    }
+  }
+
+  function startAllOptionsCascade() {
+    phase = 'options_entering';
+    optionsTargetCount = 4;
+    optionCascadeTimerMs = 0;
+    revealNextOptionNow(0);
+    updateHostDirectorUI();
+  }
+
+  function enterThinkingPhase(startTimerNow = true) {
+    phase = 'thinking';
+    phaseElapsedMs = 0;
+    lastWholeSecondBeep = -1;
+    isRunning = Boolean(startTimerNow);
+    lastFrameTime = performance.now();
+    updateHostDirectorUI();
+  }
+
   function masterLoop(now) {
     const dt = Math.min(100, now - lastFrameTime);
     lastFrameTime = now;
 
-    if (enterAnimMs < 500) enterAnimMs += dt;
+    if (qEnterAnimMs < 600) qEnterAnimMs += dt;
 
-    if (phase === 'revealed') {
+    // Advance per-option animation clocks
+    for (let i = 0; i < 4; i++) {
+      if (optionStarted[i] && optionAnimMs[i] < 600) {
+        optionAnimMs[i] += dt;
+      }
+    }
+
+    // Track exact active recording milliseconds (used for MP4 duration header repair!)
+    if (isRecording && mediaRecorder && mediaRecorder.state === 'recording') {
+      activeRecordedMs += dt;
+    }
+
+    if (pollOverlayData) {
+      pollOverlayData.animMs += dt;
+      pollOverlayData.ttlMs -= dt;
+      if (pollOverlayData.ttlMs <= 0) pollOverlayData = null;
+    }
+    if (expertOverlayData) {
+      expertOverlayData.animMs += dt;
+      expertOverlayData.ttlMs -= dt;
+      if (expertOverlayData.ttlMs <= 0) expertOverlayData = null;
+    }
+
+    // Stage transitions
+    if (!showLadderOverlay && !showIntroSlate) {
+      // Auto-trigger options after configured delay (in Auto Mode or when optTrigger === 'auto1s')
+      if (phase === 'question_only' && (playMode === 'auto' || brandAssets.optTrigger === 'auto1s')) {
+        optWaitMs += dt;
+        const delayMs = Math.max(250, Math.round((Number(brandAssets.optDelaySec) || 1) * 1000));
+        if (optWaitMs >= delayMs) {
+          startAllOptionsCascade();
+        }
+      } else if (phase === 'options_wait') {
+        optWaitMs += dt;
+        const delayMs = Math.round((Number(brandAssets.optDelaySec) || 1) * 1000);
+        if (optWaitMs >= delayMs) {
+          startAllOptionsCascade();
+        }
+      } else if (phase === 'options_entering') {
+        if (optionsTargetCount === 4 && optionVisibleCount < 4) {
+          optionCascadeTimerMs += dt;
+          const nextIdx = Math.min(3, Math.floor(optionCascadeTimerMs / 240));
+          if (nextIdx >= optionVisibleCount) {
+            revealNextOptionNow(optionVisibleCount);
+          }
+        }
+        // Once all 4 options are visible and last option finishes entering -> Start Timer!
+        if (optionVisibleCount === 4 && optionAnimMs[3] >= 460) {
+          enterThinkingPhase(brandAssets.startTimerAfterOpts || playMode === 'auto');
+        }
+      }
+    }
+
+    if (phase === 'locked') {
+      lockAnimMs += dt;
+    } else if (phase === 'revealed') {
       revealAnimMs += dt;
       if (revealParticles.length) {
         let alive = false;
@@ -1889,9 +2803,10 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       }
     }
 
-    if (isRunning) {
+    if (isRunning && !showLadderOverlay && !showIntroSlate) {
       phaseElapsedMs += dt;
-      const thinkMs = (Math.max(3, parseInt(document.getElementById('cfgThinkSec').value, 10) || 7)) * 1000;
+      const thinkMs = (Math.max(3, parseInt(document.getElementById('cfgThinkSec').value, 10) || 10)) * 1000;
+      const lockMs  = (Math.max(1, parseInt(document.getElementById('cfgLockSec').value, 10) || 2)) * 1000;
       const holdMs  = (Math.max(2, parseInt(document.getElementById('cfgHoldSec').value, 10) || 4)) * 1000;
 
       if (phase === 'thinking') {
@@ -1901,16 +2816,24 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
           audio.tick(remSec <= 3);
         }
         if (phaseElapsedMs >= thinkMs) {
-          triggerReveal(-1);
+          if (playMode === 'auto' && brandAssets.lockMode) {
+            lockOption(activePool[curIdx].ans, true);
+          } else {
+            triggerReveal(-1);
+          }
+        }
+      } else if (phase === 'locked') {
+        if (phaseElapsedMs >= lockMs) {
+          triggerReveal(selectedOption);
         }
       } else if (phase === 'revealed') {
         if (playMode === 'auto' && phaseElapsedMs >= holdMs) {
           if (curIdx < activePool.length - 1) {
-            loadQuestionAtIndex(curIdx + 1, true);
+            loadQuestionAtIndex(curIdx + 1);
           } else {
             pauseTimer();
             if (isRecording) stopRecordingVideo();
-            showToast('🎉 Broadcast Sequence Complete!');
+            showToast('🎉 KBC Broadcast Sequence Complete!');
           }
         }
       }
@@ -1920,63 +2843,224 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     requestAnimationFrame(masterLoop);
   }
 
-  function loadQuestionAtIndex(idx, forceStartTimer = null) {
+  function loadQuestionAtIndex(idx) {
     if (!activePool.length) return;
     curIdx = Math.max(0, Math.min(activePool.length - 1, idx));
     selectedOption = -1;
     hiddenOptions.clear();
     revealParticles = [];
-    phase = 'thinking';
-    phaseElapsedMs = 0;
-    enterAnimMs = 0;
+    pollOverlayData = null;
+    expertOverlayData = null;
+    showLadderOverlay = false;
+    showIntroSlate = false;
+    showExpLiveOverride = true;
+
+    qEnterAnimMs = 0;
+    optWaitMs = 0;
     revealAnimMs = 0;
+    lockAnimMs = 0;
+    phaseElapsedMs = 0;
     lastWholeSecondBeep = -1;
     lastFrameTime = performance.now();
+
+    optionVisibleCount = 0;
+    optionsTargetCount = 0;
+    optionAnimMs = [0, 0, 0, 0];
+    optionStarted = [false, false, false, false];
+    assignOptionAnimationsForQuestion(curIdx);
+
+    const skipWaitLegacy = document.getElementById('cfgAutoStartTimer').checked;
+    if (skipWaitLegacy) {
+      // Legacy instant options mode
+      for (let i = 0; i < 4; i++) { optionStarted[i] = true; optionAnimMs[i] = 460; }
+      optionVisibleCount = 4;
+      phase = 'thinking';
+      isRunning = true;
+    } else {
+      // Real KBC Host Default: Question appears FIRST, Options wait for Host click (or 1s Auto)
+      phase = 'question_only';
+      isRunning = false;
+    }
 
     computeSmartPortraitLayout();
     updateCheatNoteContent();
     updateHUD();
-
-    const shouldStart = forceStartTimer !== null
-      ? forceStartTimer
-      : document.getElementById('cfgAutoStartTimer').checked;
-
-    isRunning = Boolean(shouldStart);
-    updatePlayButtonUI();
+    updateHostDirectorUI();
   }
 
-  function togglePlayPause() {
+  // Master One-Button Host Cue (Spacebar / Big Director Button)
+  function hostAdvanceStep() {
     audio.ensure();
-    if (phase === 'revealed') {
-      if (curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1, true);
-      else loadQuestionAtIndex(0, true);
+    if (showIntroSlate) { showIntroSlate = false; updateHostDirectorUI(); return; }
+    if (showLadderOverlay) { showLadderOverlay = false; updateHostDirectorUI(); return; }
+
+    if (phase === 'question_only' || phase === 'options_wait') {
+      triggerViewOptions();
+    } else if (phase === 'options_entering') {
+      if (brandAssets.optStepMode === 'onebyone' && optionVisibleCount < 4) {
+        triggerViewOptions();
+      } else {
+        // Fast-complete options and start timer
+        for (let i = 0; i < 4; i++) { optionStarted[i] = true; optionAnimMs[i] = 460; }
+        optionVisibleCount = 4;
+        enterThinkingPhase(true);
+      }
+    } else if (phase === 'thinking') {
+      toggleTimerPlayPause();
+    } else if (phase === 'locked') {
+      triggerReveal(selectedOption);
+    } else if (phase === 'revealed') {
+      if (curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1);
+      else loadQuestionAtIndex(0);
+    }
+  }
+
+  function toggleTimerPlayPause() {
+    audio.ensure();
+    if (phase === 'question_only' || phase === 'options_wait' || phase === 'options_entering') {
+      // If host taps Timer before options, bring options in cleanly first
+      for (let i = 0; i < 4; i++) { optionStarted[i] = true; optionAnimMs[i] = 460; }
+      optionVisibleCount = 4;
+      enterThinkingPhase(true);
       return;
     }
+    if (phase !== 'thinking') return;
     isRunning = !isRunning;
     lastFrameTime = performance.now();
-    updatePlayButtonUI();
+    updateHostDirectorUI();
+  }
+
+  function resetCountdownTimer() {
+    if (optionVisibleCount < 4) {
+      for (let i = 0; i < 4; i++) { optionStarted[i] = true; optionAnimMs[i] = 460; }
+      optionVisibleCount = 4;
+    }
+    phase = 'thinking';
+    phaseElapsedMs = 0;
+    lastWholeSecondBeep = -1;
+    isRunning = true;
+    lastFrameTime = performance.now();
+    updateHostDirectorUI();
+    showToast('⏱ Countdown Timer Reset!');
   }
 
   function pauseTimer() {
     isRunning = false;
-    updatePlayButtonUI();
+    updateHostDirectorUI();
   }
 
-  function updatePlayButtonUI() {
-    const btn = document.getElementById('btnPlayPause');
-    if (phase === 'revealed') {
-      btn.textContent = '⏭ Next Q';
-    } else if (isRunning) {
-      btn.textContent = '⏸ Pause';
+  function updateHostDirectorUI() {
+    const heroBtn = document.getElementById('btnHostNextCue');
+    const optBtn = document.getElementById('btnViewOptions');
+    const timerBtn = document.getElementById('btnTimerToggle');
+    const revBtn = document.getElementById('btnRevealNow');
+    const stageHud = document.getElementById('hudStage');
+    const letters = ['A', 'B', 'C', 'D'];
+
+    // Update Lock A/B/C/D chips
+    ['btnLockA','btnLockB','btnLockC','btnLockD'].forEach((id, i) => {
+      document.getElementById(id).classList.toggle('locked', phase === 'locked' && selectedOption === i);
+    });
+
+    document.getElementById('btnShowIntroCard').classList.toggle('btn-active-pill', showIntroSlate);
+    document.getElementById('btnToggleExpLive').classList.toggle('btn-active-pill', showExpLiveOverride);
+
+    if (showIntroSlate) {
+      stageHud.textContent = 'INTRO SLATE';
+      heroBtn.textContent = '📢 Show Question';
+      return;
+    }
+
+    if (phase === 'question_only') {
+      stageHud.textContent = 'Q ONLY';
+      const lbl = brandAssets.optStepMode === 'onebyone' ? '👁 Show Option A' : '👁 View Options';
+      heroBtn.textContent = lbl;
+      optBtn.textContent = lbl;
+      timerBtn.textContent = '⏱ Start Timer';
+      revBtn.textContent = '✨ Reveal';
+    } else if (phase === 'options_wait') {
+      stageHud.textContent = 'WAIT 1s';
+      heroBtn.textContent = '⚡ Show Now';
+      optBtn.textContent = '⏳ Arriving...';
+      timerBtn.textContent = '⏱ Start Timer';
+    } else if (phase === 'options_entering') {
+      stageHud.textContent = `OPT ${optionVisibleCount}/4`;
+      if (brandAssets.optStepMode === 'onebyone' && optionVisibleCount < 4) {
+        const nextL = letters[optionVisibleCount];
+        heroBtn.textContent = `👁 Option ${nextL}`;
+        optBtn.textContent = `👁 Option ${nextL}`;
+      } else {
+        heroBtn.textContent = '⏱ Start Timer';
+        optBtn.textContent = '✅ Options In';
+      }
+    } else if (phase === 'thinking') {
+      stageHud.textContent = isRunning ? 'TIMER LIVE' : 'TIMER PAUSED';
+      heroBtn.textContent = isRunning ? '⏸ Pause Timer' : (phaseElapsedMs > 0 ? '▶ Resume Timer' : '▶ Start Timer');
+      timerBtn.textContent = isRunning ? '⏸ Pause' : '▶ Start';
+      optBtn.textContent = '✅ Options Live';
+      revBtn.textContent = '✨ Reveal';
+    } else if (phase === 'locked') {
+      stageHud.textContent = `LOCKED ${letters[selectedOption] || ''}`;
+      heroBtn.textContent = '✨ Reveal Answer';
+      revBtn.textContent = '✨ Unlock & Reveal';
+      timerBtn.textContent = '🔒 Locked';
+    } else if (phase === 'revealed') {
+      stageHud.textContent = 'REVEALED';
+      heroBtn.textContent = '⏭ Next Question';
+      revBtn.textContent = '✅ Revealed';
+      timerBtn.textContent = '⏱ Done';
+    }
+  }
+
+  // KBC "Lock Kiya Jaye!" Phase
+  function lockOption(chosenIdx, autoRevealAfterDelay = false) {
+    if (phase === 'revealed') return;
+    if (optionVisibleCount < 4) {
+      for (let i = 0; i < 4; i++) { optionStarted[i] = true; optionAnimMs[i] = 460; }
+      optionVisibleCount = 4;
+    }
+    if (phase === 'locked' && selectedOption === chosenIdx) {
+      triggerReveal(selectedOption);
+      return;
+    }
+    audio.ensure();
+    pollOverlayData = null;
+    expertOverlayData = null;
+    selectedOption = chosenIdx;
+    phase = 'locked';
+    phaseElapsedMs = 0;
+    lockAnimMs = 0;
+    lastFrameTime = performance.now();
+    audio.sfxLock();
+
+    isRunning = Boolean(autoRevealAfterDelay || playMode === 'auto');
+    updateHostDirectorUI();
+    showToast(`🔒 Option ${['A','B','C','D'][chosenIdx]} Lock Kiya Gaya!`);
+  }
+
+  function handleOptionSelection(idx) {
+    if (phase === 'revealed' || hiddenOptions.has(idx)) return;
+    if (optionVisibleCount < 4) {
+      for (let i = 0; i < 4; i++) { optionStarted[i] = true; optionAnimMs[i] = 460; }
+      optionVisibleCount = 4;
+    }
+    if (brandAssets.lockMode && phase !== 'locked') {
+      lockOption(idx, playMode === 'auto');
     } else {
-      btn.textContent = phaseElapsedMs > 0 ? '▶ Resume' : '▶ Start';
+      triggerReveal(idx);
     }
   }
 
   function triggerReveal(chosenIdx = -1) {
     if (phase === 'revealed') return;
+    if (optionVisibleCount < 4) {
+      for (let i = 0; i < 4; i++) { optionStarted[i] = true; optionAnimMs[i] = 460; }
+      optionVisibleCount = 4;
+    }
     audio.ensure();
-    selectedOption = chosenIdx;
+    pollOverlayData = null;
+    expertOverlayData = null;
+    selectedOption = chosenIdx >= 0 ? chosenIdx : selectedOption;
     phase = 'revealed';
     phaseElapsedMs = 0;
     revealAnimMs = 0;
@@ -1988,11 +3072,11 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       spawnRevealParticles(ansBox.x + ansBox.w / 2, ansBox.y + ansBox.h / 2, '#34d399');
     }
 
-    if (chosenIdx === qObj.ans) {
+    if (selectedOption === qObj.ans) {
       score++;
       streak++;
       audio.chimeSuccess();
-    } else if (chosenIdx >= 0) {
+    } else if (selectedOption >= 0) {
       streak = 0;
       wrongIds.add(qObj.id);
       audio.buzzWrong();
@@ -2002,10 +3086,78 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
 
     isRunning = (playMode === 'auto');
     updateHUD();
-    updatePlayButtonUI();
+    updateHostDirectorUI();
+  }
+
+  /* ==================== KBC LIFELINES ==================== */
+  function use5050Lifeline() {
+    if (phase === 'revealed' || hiddenOptions.size > 0) return;
+    if (optionVisibleCount < 4) {
+      for (let i = 0; i < 4; i++) { optionStarted[i] = true; optionAnimMs[i] = 460; }
+      optionVisibleCount = 4;
+      phase = 'thinking';
+    }
+    const ans = activePool[curIdx].ans;
+    const candidates = [0, 1, 2, 3].filter(i => i !== ans).sort(() => Math.random() - 0.5);
+    hiddenOptions.add(candidates[0]);
+    hiddenOptions.add(candidates[1]);
+    lifelinesUsed.fifty = true;
+    audio.sfxLifeline();
+    showToast('½ 50:50 Lifeline — 2 Wrong Options Removed!');
+  }
+
+  function useAudiencePollLifeline() {
+    if (phase === 'revealed') return;
+    const ans = activePool[curIdx].ans;
+    const percents = [0, 0, 0, 0];
+    const activeIndices = [0, 1, 2, 3].filter(i => !hiddenOptions.has(i));
+
+    let ansShare = 54 + Math.floor(Math.random() * 24);
+    percents[ans] = ansShare;
+    let rem = 100 - ansShare;
+    const others = activeIndices.filter(i => i !== ans);
+
+    others.forEach((idx, pos) => {
+      if (pos === others.length - 1) {
+        percents[idx] = rem;
+      } else {
+        const v = Math.floor(Math.random() * (rem + 1) * 0.65);
+        percents[idx] = v;
+        rem -= v;
+      }
+    });
+
+    lifelinesUsed.poll = true;
+    expertOverlayData = null;
+    pollOverlayData = { percents, animMs: 0, ttlMs: 6500 };
+    audio.sfxLifeline();
+    showToast('📊 Audience Poll Result on Screen!');
+  }
+
+  function useExpertLifeline() {
+    if (phase === 'revealed') return;
+    const letters = ['A', 'B', 'C', 'D'];
+    const qObj = activePool[curIdx];
+    const conf = 86 + Math.floor(Math.random() * 12);
+    lifelinesUsed.expert = true;
+    pollOverlayData = null;
+    expertOverlayData = {
+      text: `Option ${letters[qObj.ans]} (${conf}% Confident)`,
+      sub: qObj.exp ? qObj.exp : `Expert strongly recommends locking Option ${letters[qObj.ans]}.`,
+      animMs: 0,
+      ttlMs: 6500
+    };
+    audio.sfxLifeline();
+    showToast('📞 Expert Advice Active!');
+  }
+
+  function resetAllLifelines() {
+    lifelinesUsed = { fifty: false, poll: false, expert: false };
+    showToast('♻️ All 3 KBC Lifelines Reset!');
   }
 
   function updateHUD() {
+    document.getElementById('hudPrize').textContent = getCurrentPrizeLabel();
     document.getElementById('hudQIndex').textContent = `${curIdx + 1}/${activePool.length || 1}`;
     document.getElementById('hudScore').textContent = score;
     document.getElementById('hudStreak').textContent = `${streak}🔥`;
@@ -2022,14 +3174,23 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
 
   /* ==================== 6. CLICK, SWIPE & KEYBOARD SHORTCUTS ==================== */
   canvas.addEventListener('click', (e) => {
+    if (showIntroSlate) { showIntroSlate = false; updateHostDirectorUI(); return; }
+    if (showLadderOverlay) { showLadderOverlay = false; return; }
+    if (pollOverlayData) { pollOverlayData = null; return; }
+    if (expertOverlayData) { expertOverlayData = null; return; }
+    if (phase === 'question_only' || phase === 'options_wait') {
+      triggerViewOptions();
+      return;
+    }
     if (phase === 'revealed') return;
+
     const rect = canvas.getBoundingClientRect();
     const cx = (e.clientX - rect.left) * (canvas.width / rect.width);
     const cy = (e.clientY - rect.top) * (canvas.height / rect.height);
 
     for (const box of optionHitBoxes) {
-      if (cx >= box.x && cx <= box.x + box.w && cy >= box.y && cy <= box.y + box.h) {
-        if (!hiddenOptions.has(box.idx)) triggerReveal(box.idx);
+      if (optionStarted[box.idx] && cx >= box.x && cx <= box.x + box.w && cy >= box.y && cy <= box.y + box.h) {
+        handleOptionSelection(box.idx);
         return;
       }
     }
@@ -2043,8 +3204,8 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     if (!touchStartX || !e.changedTouches.length) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
     if (Math.abs(dx) > 75) {
-      if (dx < 0 && curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1, true);
-      else if (dx > 0 && curIdx > 0) loadQuestionAtIndex(curIdx - 1, true);
+      if (dx < 0 && curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1);
+      else if (dx > 0 && curIdx > 0) loadQuestionAtIndex(curIdx - 1);
     }
     touchStartX = 0;
   }, { passive: true });
@@ -2058,23 +3219,56 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
 
     if (k in optMap && phase !== 'revealed') {
       e.preventDefault();
-      const idx = optMap[k];
-      if (!hiddenOptions.has(idx)) triggerReveal(idx);
+      handleOptionSelection(optMap[k]);
     } else if (e.code === 'Space') {
       e.preventDefault();
-      togglePlayPause();
+      hostAdvanceStep();
+    } else if (k === 'O') {
+      e.preventDefault();
+      triggerViewOptions();
+    } else if (k === 'Q') {
+      e.preventDefault();
+      loadQuestionAtIndex(curIdx);
+    } else if (k === 'T') {
+      e.preventDefault();
+      toggleTimerPlayPause();
     } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
       e.preventDefault();
-      if (curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1, true);
+      if (phase === 'locked') triggerReveal(selectedOption);
+      else if (curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1);
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      if (curIdx > 0) loadQuestionAtIndex(curIdx - 1, true);
+      if (curIdx > 0) loadQuestionAtIndex(curIdx - 1);
     } else if (k === 'R') {
       e.preventDefault();
-      triggerReveal(-1);
+      triggerReveal(selectedOption);
     } else if (k === 'F') {
       e.preventDefault();
       use5050Lifeline();
+    } else if (k === 'P') {
+      e.preventDefault();
+      useAudiencePollLifeline();
+    } else if (k === 'E') {
+      e.preventDefault();
+      useExpertLifeline();
+    } else if (k === 'L') {
+      e.preventDefault();
+      showLadderOverlay = !showLadderOverlay;
+    } else if (k === 'I') {
+      e.preventDefault();
+      showIntroSlate = !showIntroSlate;
+      updateHostDirectorUI();
+    } else if (k === 'X') {
+      e.preventDefault();
+      showExpLiveOverride = !showExpLiveOverride;
+      computeSmartPortraitLayout();
+      updateHostDirectorUI();
+    } else if (k === 'D') {
+      e.preventDefault();
+      audio.sfxDrumroll();
+    } else if (k === 'K') {
+      e.preventDefault();
+      audio.sfxApplause();
     } else if (k === 'C') {
       e.preventDefault();
       brandAssets.cheatShow = !brandAssets.cheatShow;
@@ -2083,26 +3277,126 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     }
   });
 
-  function use5050Lifeline() {
-    if (phase === 'revealed' || hiddenOptions.size > 0) return;
-    const ans = activePool[curIdx].ans;
-    const candidates = [0, 1, 2, 3].filter(i => i !== ans).sort(() => Math.random() - 0.5);
-    hiddenOptions.add(candidates[0]);
-    hiddenOptions.add(candidates[1]);
-    audio.tick(false);
-  }
-
-  /* ==================== 7. YOUTUBE-READY MP4 HARDWARE RECORDER ==================== */
+  /* ==================== 7. DURATION-FIXED YOUTUBE MP4 RECORDER ==================== */
   let mediaRecorder = null;
   let activeCanvasStream = null;
+  let recFramePump = null;
   let recChunks = [];
   let isRecording = false;
   let recSeconds = 0;
+  let activeRecordedMs = 0;
   let recClockInterval = null;
   let lastVideoUrl = null;
 
+  // Pure-JS Lossless In-Place MP4 Duration Header Repair (Fixes "shows 3 sec" bug in Android/YouTube/VLC)
+  function patchMp4DurationInPlace(arrayBuffer, durationMs) {
+    if (!arrayBuffer || durationMs < 500) return arrayBuffer;
+    const view = new DataView(arrayBuffer);
+    const len = arrayBuffer.byteLength;
+    let movieTimescale = 1000;
+    let needsPatch = false;
+
+    const readType = (o) => String.fromCharCode(
+      view.getUint8(o), view.getUint8(o + 1), view.getUint8(o + 2), view.getUint8(o + 3)
+    );
+
+    const setUint64 = (o, val) => {
+      const hi = Math.floor(val / 4294967296);
+      const lo = Math.floor(val % 4294967296);
+      view.setUint32(o, hi, false);
+      view.setUint32(o + 4, lo, false);
+    };
+
+    const getUint64 = (o) => view.getUint32(o, false) * 4294967296 + view.getUint32(o + 4, false);
+
+    // Pass 1: Locate mvhd timescale & check if reported duration is broken (0 or off by > 1.5s)
+    function inspectBoxes(start, end) {
+      let pos = start;
+      while (pos + 8 <= end) {
+        let size = view.getUint32(pos, false);
+        const type = readType(pos + 4);
+        let hdr = 8;
+        if (size === 1 && pos + 16 <= end) { size = getUint64(pos + 8); hdr = 16; }
+        else if (size === 0) { size = end - pos; }
+        if (size < hdr || pos + size > end) break;
+
+        if (type === 'moov') {
+          inspectBoxes(pos + hdr, pos + size);
+        } else if (type === 'mvhd' && pos + hdr + 20 <= pos + size) {
+          const ver = view.getUint8(pos + hdr);
+          if (ver === 0) {
+            movieTimescale = view.getUint32(pos + hdr + 12, false) || 1000;
+            const dur = view.getUint32(pos + hdr + 16, false);
+            const durMs = (dur / movieTimescale) * 1000;
+            if (dur === 0 || Math.abs(durMs - durationMs) > 1500) needsPatch = true;
+          } else if (ver === 1 && pos + hdr + 32 <= pos + size) {
+            movieTimescale = view.getUint32(pos + hdr + 20, false) || 1000;
+            const dur = getUint64(pos + hdr + 24);
+            const durMs = (dur / movieTimescale) * 1000;
+            if (dur === 0 || Math.abs(durMs - durationMs) > 1500) needsPatch = true;
+          }
+        }
+        pos += size;
+      }
+    }
+
+    // Pass 2: Patch mvhd, mehd, tkhd, and mdhd durations in-place (zero byte shift, 100% lossless)
+    function patchBoxes(start, end) {
+      let pos = start;
+      const movieUnits = Math.max(1, Math.round((durationMs / 1000) * movieTimescale));
+      while (pos + 8 <= end) {
+        let size = view.getUint32(pos, false);
+        const type = readType(pos + 4);
+        let hdr = 8;
+        if (size === 1 && pos + 16 <= end) { size = getUint64(pos + 8); hdr = 16; }
+        else if (size === 0) { size = end - pos; }
+        if (size < hdr || pos + size > end) break;
+
+        if (type === 'moov' || type === 'trak' || type === 'mdia' || type === 'mvex') {
+          patchBoxes(pos + hdr, pos + size);
+        } else if (type === 'mvhd') {
+          const ver = view.getUint8(pos + hdr);
+          if (ver === 0 && pos + hdr + 20 <= pos + size) {
+            view.setUint32(pos + hdr + 16, Math.min(0xFFFFFFFE, movieUnits), false);
+          } else if (ver === 1 && pos + hdr + 32 <= pos + size) {
+            setUint64(pos + hdr + 24, movieUnits);
+          }
+        } else if (type === 'mehd') {
+          const ver = view.getUint8(pos + hdr);
+          if (ver === 0 && pos + hdr + 8 <= pos + size) {
+            view.setUint32(pos + hdr + 4, Math.min(0xFFFFFFFE, movieUnits), false);
+          } else if (ver === 1 && pos + hdr + 12 <= pos + size) {
+            setUint64(pos + hdr + 4, movieUnits);
+          }
+        } else if (type === 'tkhd') {
+          const ver = view.getUint8(pos + hdr);
+          if (ver === 0 && pos + hdr + 24 <= pos + size) {
+            view.setUint32(pos + hdr + 20, Math.min(0xFFFFFFFE, movieUnits), false);
+          } else if (ver === 1 && pos + hdr + 36 <= pos + size) {
+            setUint64(pos + hdr + 28, movieUnits);
+          }
+        } else if (type === 'mdhd') {
+          const ver = view.getUint8(pos + hdr);
+          if (ver === 0 && pos + hdr + 20 <= pos + size) {
+            const ts = view.getUint32(pos + hdr + 12, false) || 1000;
+            view.setUint32(pos + hdr + 16, Math.min(0xFFFFFFFE, Math.round((durationMs / 1000) * ts)), false);
+          } else if (ver === 1 && pos + hdr + 32 <= pos + size) {
+            const ts = view.getUint32(pos + hdr + 20, false) || 1000;
+            setUint64(pos + hdr + 24, Math.round((durationMs / 1000) * ts));
+          }
+        }
+        pos += size;
+      }
+    }
+
+    try {
+      inspectBoxes(0, len);
+      if (needsPatch) patchBoxes(0, len);
+    } catch (e) {}
+    return arrayBuffer;
+  }
+
   function getYouTubeBestMimeType() {
-    // Strictly prioritize YouTube-verified MP4 (H.264 + AAC) first, then YouTube-verified WebM (VP9/VP8 + Opus)
     const types = [
       'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
       'video/mp4;codecs=avc1.4d002a,mp4a.40.2',
@@ -2126,22 +3420,39 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     const isMp4 = mime.includes('mp4');
     const badge = document.getElementById('exportFormatBadge');
     const detail = document.getElementById('exportCodecDetail');
-    badge.textContent = isMp4 ? '✅ YouTube MP4 (H.264 + AAC)' : '✅ YouTube WebM (VP9/VP8 + Opus)';
-    detail.textContent = `720×1280 · 9:16 HD · ${mime || 'Default Stream'} · Direct YouTube Upload Ready`;
+    badge.textContent = isMp4 ? '✅ YouTube MP4 (Duration-Fixed)' : '✅ YouTube WebM (Constant-FPS)';
+    detail.textContent = `720×1280 · 9:16 HD · ${mime || 'Default'} · Constant Frame Pump Active`;
   }
 
   function startRecordingVideo() {
     if (isRecording) return;
     audio.ensure();
-    if (audio.bgmBuffer) audio.startBGM();
-
-    // Ensure at least one fresh frame is painted before stream capture starts
-    drawPortraitFrame();
+    if (!audio.bgmPlaying && (audio.bgmBuffer || brandAssets.synthBgm) && brandAssets.bgmVol > 0) {
+      audio.startBGM();
+    }
 
     const fps = parseInt(document.getElementById('cfgFps').value, 10) || 30;
     const bitrate = parseInt(document.getElementById('cfgBitrate').value, 10) || 6000000;
 
+    isRecording = true;
+    activeRecordedMs = 0;
+    recSeconds = 0;
+    drawPortraitFrame();
+
     activeCanvasStream = canvas.captureStream(fps);
+    const vTrack = activeCanvasStream.getVideoTracks()[0];
+
+    // Constant frame pump guarantees zero dropped/stalled video frames when stage is still!
+    clearInterval(recFramePump);
+    recFramePump = setInterval(() => {
+      if (isRecording && mediaRecorder && mediaRecorder.state === 'recording') {
+        drawPortraitFrame();
+        if (vTrack && typeof vTrack.requestFrame === 'function') {
+          try { vTrack.requestFrame(); } catch (e) {}
+        }
+      }
+    }, Math.round(1000 / fps));
+
     const tracks = [...activeCanvasStream.getVideoTracks()];
     if (audio.streamDest) {
       tracks.push(...audio.streamDest.stream.getAudioTracks());
@@ -2161,9 +3472,10 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       if (ev.data && ev.data.size > 0) recChunks.push(ev.data);
     };
 
-    mediaRecorder.onstop = () => {
+    mediaRecorder.onstop = async () => {
       audio.stopBGM();
       clearInterval(recClockInterval);
+      clearInterval(recFramePump);
       if (activeCanvasStream) {
         activeCanvasStream.getTracks().forEach(t => t.stop());
         activeCanvasStream = null;
@@ -2172,24 +3484,32 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       const finalMime = mediaRecorder.mimeType || mime || 'video/webm';
       const isMp4 = finalMime.toLowerCase().includes('mp4');
       const ext = isMp4 ? 'mp4' : 'webm';
-      const blob = new Blob(recChunks, { type: finalMime });
+      let blob = new Blob(recChunks, { type: finalMime });
       recChunks = [];
+
+      // Patch MP4 duration box in-place so Android/YouTube/VLC ALWAYS show exact full length
+      if (isMp4 && activeRecordedMs > 500) {
+        try {
+          const buf = await blob.arrayBuffer();
+          const fixedBuf = patchMp4DurationInPlace(buf, activeRecordedMs);
+          blob = new Blob([fixedBuf], { type: finalMime });
+        } catch (e) {}
+      }
 
       if (lastVideoUrl) URL.revokeObjectURL(lastVideoUrl);
       lastVideoUrl = URL.createObjectURL(blob);
 
+      const totalSec = Math.max(1, Math.round(activeRecordedMs / 1000));
       const dl = document.getElementById('btnDownloadVideo');
       dl.href = lastVideoUrl;
-      dl.download = `${(meta.title || 'quiz_shorts').replace(/[^a-z0-9]/gi, '_').toLowerCase()}_9x16_yt.${ext}`;
-      dl.textContent = `⬇ Download ${ext.toUpperCase()}`;
+      dl.download = `${(meta.title || 'kbc_quiz').replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${totalSec}s_9x16.${ext}`;
+      dl.textContent = `⬇ Download ${ext.toUpperCase()} (${totalSec}s)`;
       dl.style.display = 'inline-flex';
-      showToast(`🎬 YouTube-Ready ${ext.toUpperCase()} saved! Cheat Note was excluded.`);
+      showToast(`🎬 ${totalSec}s YouTube-Ready ${ext.toUpperCase()} saved! Duration verified.`);
     };
 
-    // 1000ms timeslice avoids micro-fragmentation for smoother YouTube ingestion
-    mediaRecorder.start(1000);
-    isRecording = true;
-    recSeconds = 0;
+    // Start WITHOUT fragmented timeslice so browser writes a clean, complete media container header!
+    mediaRecorder.start();
 
     document.getElementById('btnDownloadVideo').style.display = 'none';
     document.getElementById('btnRecStart').style.display = 'none';
@@ -2211,7 +3531,9 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       }
     }, 1000);
 
-    loadQuestionAtIndex(curIdx, true);
+    // Keep Host in full control: only reset question cleanly without forcing options/timer prematurely
+    if (playMode === 'auto') loadQuestionAtIndex(curIdx);
+    showToast('⏺ Recording Started — Use Host Controls to Run Show!');
   }
 
   function togglePauseRecording() {
@@ -2226,7 +3548,6 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
       btn.textContent = '▶ Resume';
     } else if (mediaRecorder.state === 'paused') {
       mediaRecorder.resume();
-      if (!isRunning) togglePlayPause();
       ind.classList.remove('paused');
       document.getElementById('recStateLabel').textContent = 'REC';
       btn.textContent = '⏸ Pause';
@@ -2236,6 +3557,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
   function stopRecordingVideo() {
     if (!mediaRecorder) return;
     isRecording = false;
+    clearInterval(recFramePump);
     if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
     document.getElementById('recIndicator').classList.remove('active');
     document.getElementById('btnRecStart').style.display = 'inline-flex';
@@ -2336,7 +3658,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     if (topics.includes(prev)) sel.value = prev;
 
     curIdx = 0;
-    loadQuestionAtIndex(0, false);
+    loadQuestionAtIndex(0);
   }
 
   function renderBankDrawer() {
@@ -2353,7 +3675,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
         <div class="q-card">
           <div class="q-card-top">
             <div class="q-card-title" onclick="jumpToQuestion(${realIdx})">
-              <span style="color:var(--accent)">#${realIdx + 1}</span> [${escapeHtml(item.category || 'General')}] ${escapeHtml(item.q)}
+              <span style="color:var(--gold-light)">#${realIdx + 1}</span> [${escapeHtml(item.category || 'General')}] ${escapeHtml(item.q)}
             </div>
             <div style="display:flex; gap:4px;">
               <button class="btn btn-sm" onclick="editBankItem(${realIdx})">✏️</button>
@@ -2375,7 +3697,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
   window.jumpToQuestion = (idx) => {
     document.getElementById('topicFilterSelect').value = 'ALL';
     rebuildActivePool();
-    loadQuestionAtIndex(idx, false);
+    loadQuestionAtIndex(idx);
     closeAllDrawers();
   };
 
@@ -2426,7 +3748,108 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     else document.exitFullscreen().catch(() => {});
   };
 
-  // Live Camera Controls (Dock + Drawer)
+  // Host Director Bar Bindings
+  document.getElementById('btnHostNextCue').onclick = hostAdvanceStep;
+  document.getElementById('btnShowQOnly').onclick = () => {
+    document.getElementById('cfgAutoStartTimer').checked = false;
+    loadQuestionAtIndex(curIdx);
+    showToast('📢 Showing Question Only — Click "View Options" when ready!');
+  };
+  document.getElementById('btnViewOptions').onclick = triggerViewOptions;
+  document.getElementById('btnTimerToggle').onclick = toggleTimerPlayPause;
+  document.getElementById('btnTimerReset').onclick = resetCountdownTimer;
+
+  document.getElementById('btnLockA').onclick = () => handleOptionSelection(0);
+  document.getElementById('btnLockB').onclick = () => handleOptionSelection(1);
+  document.getElementById('btnLockC').onclick = () => handleOptionSelection(2);
+  document.getElementById('btnLockD').onclick = () => handleOptionSelection(3);
+  document.getElementById('btnRevealNow').onclick = () => triggerReveal(selectedOption);
+
+  document.getElementById('btnToggleExpLive').onclick = () => {
+    showExpLiveOverride = !showExpLiveOverride;
+    computeSmartPortraitLayout();
+    updateHostDirectorUI();
+    showToast(showExpLiveOverride ? '💡 Explanation Card Enabled' : '💡 Explanation Card Hidden');
+  };
+  document.getElementById('btnShowIntroCard').onclick = () => {
+    showIntroSlate = !showIntroSlate;
+    if (showIntroSlate) audio.sfxLifeline();
+    updateHostDirectorUI();
+  };
+  document.getElementById('btnSfxDrum').onclick = () => audio.sfxDrumroll();
+  document.getElementById('btnSfxClap').onclick = () => audio.sfxApplause();
+
+  // Host Animation Settings Bindings
+  document.getElementById('cfgOptTrigger').onchange = (e) => { brandAssets.optTrigger = e.target.value; saveBrandAssets(); };
+  document.getElementById('cfgOptStepMode').onchange = (e) => {
+    brandAssets.optStepMode = e.target.value;
+    saveBrandAssets();
+    updateHostDirectorUI();
+  };
+  document.getElementById('cfgOptDelay').oninput = (e) => {
+    brandAssets.optDelaySec = parseFloat(e.target.value) || 0;
+    document.getElementById('valOptDelay').textContent = brandAssets.optDelaySec.toFixed(1);
+    saveBrandAssets();
+  };
+  document.getElementById('cfgOptAnim').onchange = (e) => {
+    brandAssets.optAnimStyle = e.target.value;
+    assignOptionAnimationsForQuestion(curIdx);
+    saveBrandAssets();
+  };
+  document.getElementById('cfgStartTimerAfterOpts').onchange = (e) => {
+    brandAssets.startTimerAfterOpts = e.target.checked;
+    saveBrandAssets();
+  };
+
+  // KBC Controls
+  document.getElementById('cfgKbcStyle').onchange = (e) => { brandAssets.kbcStyle = e.target.checked; saveBrandAssets(); };
+  document.getElementById('cfgLockMode').onchange = (e) => { brandAssets.lockMode = e.target.checked; saveBrandAssets(); };
+  document.getElementById('cfgShowPrize').onchange = (e) => { brandAssets.showPrize = e.target.checked; saveBrandAssets(); };
+  document.getElementById('btnResetLifelines').onclick = resetAllLifelines;
+
+  const toggleLadderHandler = () => {
+    showLadderOverlay = !showLadderOverlay;
+    if (showLadderOverlay) {
+      closeAllDrawers();
+      audio.sfxLifeline();
+    }
+  };
+  document.getElementById('btnLadder').onclick = toggleLadderHandler;
+  document.getElementById('btnDrawerLadder').onclick = toggleLadderHandler;
+
+  // BGM & Audio Mixer Volume Controls
+  const syncBgmVol = (val) => {
+    const v = parseInt(val, 10) || 0;
+    document.getElementById('cfgBgmVol').value = v;
+    document.getElementById('quickBgmVol').value = v;
+    document.getElementById('valBgmVol').textContent = v;
+    audio.setBgmVolume(v);
+    saveBrandAssets();
+  };
+  document.getElementById('cfgBgmVol').oninput = (e) => syncBgmVol(e.target.value);
+  document.getElementById('quickBgmVol').oninput = (e) => syncBgmVol(e.target.value);
+
+  document.getElementById('cfgSfxVol').oninput = (e) => {
+    const v = parseInt(e.target.value, 10) || 0;
+    document.getElementById('valSfxVol').textContent = v;
+    audio.setSfxVolume(v);
+    saveBrandAssets();
+  };
+  document.getElementById('cfgMicVol').oninput = (e) => {
+    const v = parseInt(e.target.value, 10) || 100;
+    document.getElementById('valMicVol').textContent = v;
+    audio.setMicVolume(v);
+    saveBrandAssets();
+  };
+  document.getElementById('cfgSynthBgm').onchange = (e) => {
+    brandAssets.synthBgm = e.target.checked;
+    saveBrandAssets();
+    if (!e.target.checked && !audio.bgmBuffer) audio.stopBGM();
+  };
+  document.getElementById('btnQuickBgm').onclick = () => audio.toggleBGM();
+  document.getElementById('btnToggleBgmLive').onclick = () => audio.toggleBGM();
+
+  // Live Camera Controls
   const toggleCameraHandler = () => {
     if (camActive) stopLiveCamera(true);
     else startLiveCamera(brandAssets.camFacing);
@@ -2441,21 +3864,15 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     saveBrandAssets();
     if (camActive) startLiveCamera(brandAssets.camFacing);
   };
-  document.getElementById('cfgCamShape').onchange = (e) => {
-    brandAssets.camShape = e.target.value;
-    saveBrandAssets();
-  };
+  document.getElementById('cfgCamShape').onchange = (e) => { brandAssets.camShape = e.target.value; saveBrandAssets(); };
   document.getElementById('cfgCamSize').oninput = (e) => {
-    brandAssets.camSize = parseInt(e.target.value, 10) || 128;
+    brandAssets.camSize = parseInt(e.target.value, 10) || 124;
     document.getElementById('valCamSize').textContent = brandAssets.camSize;
     saveBrandAssets();
   };
-  document.getElementById('cfgCamMirror').onchange = (e) => {
-    brandAssets.camMirror = e.target.checked;
-    saveBrandAssets();
-  };
+  document.getElementById('cfgCamMirror').onchange = (e) => { brandAssets.camMirror = e.target.checked; saveBrandAssets(); };
 
-  // Creator Cheat Note & YouTube Guide Controls
+  // Cheat Note & YouTube Guide Controls
   const toggleCheatHandler = () => {
     brandAssets.cheatShow = !brandAssets.cheatShow;
     applyCheatNoteVisibility();
@@ -2477,7 +3894,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     document.getElementById('ytSafeOverlay').classList.toggle('active', e.target.checked);
   };
 
-  // Custom PNG Logo & Watermark Controls
+  // Logo & Watermark Controls
   document.getElementById('logoUploadInput').onchange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -2495,7 +3912,6 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     }
     e.target.value = '';
   };
-
   document.getElementById('btnClearLogo').onclick = () => {
     brandAssets.logoDataUrl = '';
     logoImg = null;
@@ -2503,13 +3919,9 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     saveBrandAssets();
     showToast('Logo removed');
   };
-
-  document.getElementById('cfgLogoPos').onchange = (e) => {
-    brandAssets.logoPos = e.target.value;
-    saveBrandAssets();
-  };
+  document.getElementById('cfgLogoPos').onchange = (e) => { brandAssets.logoPos = e.target.value; saveBrandAssets(); };
   document.getElementById('cfgLogoSize').oninput = (e) => {
-    brandAssets.logoSize = parseInt(e.target.value, 10) || 82;
+    brandAssets.logoSize = parseInt(e.target.value, 10) || 80;
     document.getElementById('valLogoSize').textContent = brandAssets.logoSize;
     saveBrandAssets();
   };
@@ -2518,46 +3930,43 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     document.getElementById('valLogoOpacity').textContent = brandAssets.logoOpacity;
     saveBrandAssets();
   };
-  document.getElementById('cfgWatermarkMode').onchange = (e) => {
-    brandAssets.wmMode = e.target.value;
-    saveBrandAssets();
-  };
+  document.getElementById('cfgWatermarkMode').onchange = (e) => { brandAssets.wmMode = e.target.value; saveBrandAssets(); };
   document.getElementById('cfgWmOpacity').oninput = (e) => {
     brandAssets.wmOpacity = parseInt(e.target.value, 10) || 11;
     document.getElementById('valWmOpacity').textContent = brandAssets.wmOpacity;
     saveBrandAssets();
   };
 
-  // Mode & Playback Controls
+  // Mode, Navigation & Lifelines
   document.getElementById('modeInteractiveBtn').onclick = () => {
     playMode = 'interactive';
     document.getElementById('modeInteractiveBtn').classList.add('active');
     document.getElementById('modeAutoBtn').classList.remove('active');
-    showToast('🎓 Teach Mode Active');
+    showToast('🎓 Real Host Mode Active — Full Manual Control');
   };
   document.getElementById('modeAutoBtn').onclick = () => {
     playMode = 'auto';
     document.getElementById('modeAutoBtn').classList.add('active');
     document.getElementById('modeInteractiveBtn').classList.remove('active');
-    showToast('🤖 Auto-Video Sequence Mode Active');
+    showToast('🤖 Auto-Show Mode Active (Q → 1s → Options → Timer → Reveal)');
   };
 
-  document.getElementById('btnPlayPause').onclick = togglePlayPause;
-  document.getElementById('btnRevealNow').onclick = () => triggerReveal(-1);
   document.getElementById('btn5050').onclick = use5050Lifeline;
-  document.getElementById('btnPrevQ').onclick = () => { if (curIdx > 0) loadQuestionAtIndex(curIdx - 1, true); };
-  document.getElementById('btnNextQ').onclick = () => { if (curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1, true); };
+  document.getElementById('btnPoll').onclick = useAudiencePollLifeline;
+  document.getElementById('btnExpert').onclick = useExpertLifeline;
+  document.getElementById('btnPrevQ').onclick = () => { if (curIdx > 0) loadQuestionAtIndex(curIdx - 1); };
+  document.getElementById('btnNextQ').onclick = () => { if (curIdx < activePool.length - 1) loadQuestionAtIndex(curIdx + 1); };
 
   document.getElementById('btnMicToggle').onclick = async () => {
     const active = await audio.toggleMic();
     const btn = document.getElementById('btnMicToggle');
     if (active) {
       btn.classList.add('btn-mic-on');
-      btn.textContent = '🎙️ Mic LIVE';
-      showToast('🎙️ Mic Live: Your voice will be recorded in the video!');
+      btn.textContent = '🎙️ LIVE';
+      showToast('🎙️ Mic Live: Your voice will be recorded in the MP4!');
     } else {
       btn.classList.remove('btn-mic-on');
-      btn.textContent = '🎙️ Mic Off';
+      btn.textContent = '🎙️ Mic';
       showToast('🔇 Microphone Muted');
     }
   };
@@ -2685,7 +4094,7 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     const url = URL.createObjectURL(new Blob([JSON.stringify({ meta, questions }, null, 2)], { type: 'application/json' }));
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'quizvid-deck.json';
+    a.download = 'quizvid-kbc-deck.json';
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
@@ -2700,13 +4109,13 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     const url = URL.createObjectURL(new Blob([rows.join('\n')], { type: 'text/csv' }));
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'quizvid-deck.csv';
+    a.download = 'quizvid-kbc-deck.csv';
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   ['cfgTitle', 'cfgChannel'].forEach(id => document.getElementById(id).oninput = () => saveLocalAndSync(true));
-  document.getElementById('cfgTheme').onchange = rebuildBackgroundCache;
+  document.getElementById('cfgTheme').onchange = (e) => { brandAssets.theme = e.target.value; saveBrandAssets(); };
   document.getElementById('cfgShowExp').onchange = computeSmartPortraitLayout;
 
   document.getElementById('bgmUpload').onchange = async (e) => {
@@ -2714,16 +4123,23 @@ Exp: CPU कंप्यूटर का मुख्य प्रोसेस�
     if (!file) return;
     try {
       await audio.decodeBGM(file);
-      document.getElementById('bgmStatusText').textContent = `Loaded: ${file.name}`;
-      showToast('Background music ready!');
+      document.getElementById('bgmStatusText').textContent = `Custom BGM Ready: ${file.name}`;
+      showToast('🎵 Custom BGM loaded! Use slider to adjust volume.');
+      if (audio.bgmPlaying) audio.startBGM();
     } catch (err) {
       showToast('Failed to decode audio file');
     }
+    e.target.value = '';
   };
+
   document.getElementById('btnStopBgm').onclick = () => {
     audio.stopBGM();
     audio.bgmBuffer = null;
-    document.getElementById('bgmStatusText').textContent = 'No background music loaded';
+    audio.bgmFileName = '';
+    document.getElementById('bgmStatusText').textContent = brandAssets.synthBgm
+      ? 'Using Built-in Royalty-Free KBC Suspense BGM'
+      : 'No background music loaded';
+    showToast('Custom BGM cleared');
   };
 
   /* ==================== 10. INIT ==================== */
